@@ -325,14 +325,6 @@ class _RestaurantPageState extends State<RestaurantPage> {
                   ),
                 ),
                 const HeightSpacer(height: 20),
-                const Padding(
-                  padding: EdgeInsets.only(left: 30, right: 30),
-                  child: SearchBar(
-                    trailing: [
-                      Icon(Icons.search),
-                    ],
-                  ),
-                ),
                 ListView.builder(
                     padding: const EdgeInsets.only(bottom: 30),
                     physics: const NeverScrollableScrollPhysics(),

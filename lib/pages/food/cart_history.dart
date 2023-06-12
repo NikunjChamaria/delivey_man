@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/server.dart';
 import 'package:delivery_man/constants/textstyle.dart';
+import 'package:delivery_man/constants/width_spacer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -50,7 +51,13 @@ class _CartHistoryState extends State<CartHistory> {
     return snapshot;
   }
 
-  Future<void> getRestaurantDetails() async {}
+  Future<void> postFav(String userEmail, String time, bool isFav) async {
+    // ignore: unused_local_variable
+    var data = await http.post(Uri.parse(POSTFAV),
+        headers: {"Content-Type": "application/json"},
+        body:
+            jsonEncode({'userEmail': userEmail, 'time': time, 'isFav': isFav}));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +66,7 @@ class _CartHistoryState extends State<CartHistory> {
     return Scaffold(
       backgroundColor: backGround,
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(
@@ -83,17 +90,22 @@ class _CartHistoryState extends State<CartHistory> {
                   future: getData(),
                   builder: (context, AsyncSnapshot<Map?> snapshot) {
                     return snapshot.connectionState == ConnectionState.waiting
-                        ? Text("yo")
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: white,
+                            ),
+                          )
                         : ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: snapshot.data!.isEmpty
                                 ? 0
                                 : snapshot.data!.length,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
                               var keys = snapshot.data!.keys.toList();
-                              print(snapshot.data![keys[index]]);
-                              print(keys[index]);
+                              bool isFav = keys[index]['isFav'];
+                              //print(snapshot.data![keys[0]]);
+                              //print(keys[0]);
                               return Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(
                                     5, 5, 5, 5),
@@ -169,7 +181,7 @@ class _CartHistoryState extends State<CartHistory> {
                                               Padding(
                                                 padding:
                                                     const EdgeInsetsDirectional
-                                                        .fromSTEB(95, 0, 0, 0),
+                                                        .fromSTEB(50, 0, 0, 0),
                                                 child: Column(
                                                   mainAxisSize:
                                                       MainAxisSize.max,
@@ -200,6 +212,36 @@ class _CartHistoryState extends State<CartHistory> {
                                                       mainAxisSize:
                                                           MainAxisSize.max,
                                                       children: [
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              isFav = !isFav;
+                                                              postFav(
+                                                                  keys[index][
+                                                                      'userEmail'],
+                                                                  keys[index]
+                                                                      ['time'],
+                                                                  isFav);
+                                                            });
+                                                          },
+                                                          child: isFav
+                                                              ? const Icon(
+                                                                  Icons
+                                                                      .favorite,
+                                                                  color: Colors
+                                                                      .pink,
+                                                                  size: 30,
+                                                                )
+                                                              : const Icon(
+                                                                  Icons
+                                                                      .favorite_border,
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  size: 30,
+                                                                ),
+                                                        ),
+                                                        const WidthSpacer(
+                                                            width: 10),
                                                         GestureDetector(
                                                           onTap: () async {
                                                             List response = [];
@@ -281,9 +323,10 @@ class _CartHistoryState extends State<CartHistory> {
                                                                     color: Colors
                                                                             .grey[
                                                                         400]!),
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
+                                                                borderRadius:
+                                                                    const BorderRadius
+                                                                            .all(
+                                                                        Radius.circular(
                                                                             10)),
                                                                 boxShadow: [
                                                                   BoxShadow(

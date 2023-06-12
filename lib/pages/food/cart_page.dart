@@ -71,10 +71,15 @@ class _CartPageState extends State<CartPage> {
     //print(response);
   }
 
-  void onTap1(String key, num n, dynamic a) async {
-    widget.itemCount.update(key, (val) => val + a, ifAbsent: () => 1);
-    if (widget.itemCount[key] == 0) {
-      widget.itemCount.remove(key);
+  void onTap1(String key, num n, int a) async {
+    if (itemCount.containsKey(key)) {
+      int i = itemCount[key];
+      itemCount[key] = i + 1;
+    } else {
+      itemCount[key] = 1;
+    }
+    if (itemCount[key] == 0) {
+      itemCount.remove(key);
     }
     setState(() {
       widget.totalAmount = widget.totalAmount + (n * a);
@@ -253,8 +258,7 @@ class _CartPageState extends State<CartPage> {
                                                   ),
                                                 ),
                                                 Text(
-                                                    widget
-                                                        .itemCount[keys[index]]
+                                                    itemCount[keys[index]]
                                                         .toString(),
                                                     style: appstyle(black, 14,
                                                         FontWeight.normal)),
@@ -278,7 +282,7 @@ class _CartPageState extends State<CartPage> {
                                       ),
                                     ),
                                     Text(
-                                        '\$${price(keys[index]).toInt() * widget.itemCount[keys[index]]!.toInt()}',
+                                        '\$${price(keys[index]).toInt() * itemCount[keys[index]]!.toInt()}',
                                         style: appstyle(
                                             black, 14, FontWeight.normal)),
                                   ],
