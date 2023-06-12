@@ -10,7 +10,11 @@ const cartHistorySchema=new Schema({
     items:Map,
     time:String,
     amount:Number,
-    price:Array
+    price:Array,
+    isFav:{
+        type:Boolean,
+        default:false
+    }
     
 });
 

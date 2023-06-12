@@ -22,3 +22,23 @@ exports.getData=async(req,res,next)=>{
         throw error;
     }
 }
+
+exports.getFav=async(req,res,next)=>{
+    try {
+        const {userEmail}=req.body;
+        const result= await CartHistoryModel.find({'userEmail':userEmail,isFav:true});
+        res.send(result);
+    } catch (error) {
+        throw error;
+    }
+}
+
+exports.postFav=async(req,res,next)=>{
+    try {
+        const {userEmail,time,isFav}=req.body;
+        const result=await CartHistoryModel.findOneAndUpdate({'userEmail':userEmail,'time':time},{'isFav':isFav});
+        res.send({'status':"yo"});
+    } catch (error) {
+        throw error;
+    }
+}

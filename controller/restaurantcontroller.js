@@ -39,3 +39,13 @@ exports.getData2=async(req,res,next)=>{
         throw error;
     }
 }
+
+exports.search=async(req,res,next)=>{
+    try {
+        const {text}=req.body;
+        const result=await RestaurantModel.find({'resName': new RegExp(text,'i')});
+        res.send(result);
+    } catch (error) {
+        throw error;
+    }
+}
