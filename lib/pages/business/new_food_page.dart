@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:delivery_man/constants/server.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
@@ -436,23 +437,17 @@ class _NewFoodPageState extends State<NewFoodPage> {
               Center(
                 child: GestureDetector(
                   onTap: () async {
-                    SharedPreferences preferences =
-                        await SharedPreferences.getInstance();
-                    var token = preferences.getString('token');
-
-                    String email = JwtDecoder.decode(token!)['email'];
-
-                    /*var req = {
+                    var req = {
                       'resName': widget.resName,
                       'rating': num.parse(rating.text),
                       'name': foodName.text,
                       'comments': num.parse(comments.text),
                       'price': num.parse(price.text),
-                    };*/
+                    };
                     // ignore: unused_local_variable
-                    /*var data = await http.post(Uri.parse(FOOD),
+                    var data = await http.post(Uri.parse(FOOD),
                         headers: {"Content-Type": "application/json"},
-                        body: jsonEncode(req));*/
+                        body: jsonEncode(req));
                     //print(req);
 
                     uploadImage();

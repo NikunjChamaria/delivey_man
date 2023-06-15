@@ -9,22 +9,26 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences preferences = await SharedPreferences.getInstance();
-
+  String token = preferences.getString('token') == null
+      ? ""
+      : preferences.getString('token')!;
+  bool check = token == "" ? false : true;
   runApp(MyApp(
-    token: preferences.getString('token'),
+    isToken: check,
+    token: token,
   ));
 }
 
 class MyApp extends StatelessWidget {
+  final bool isToken;
   final token;
-  MyApp({super.key, required this.token});
+  const MyApp({super.key, required this.isToken, required this.token});
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: (JwtDecoder.isExpired(token)) == false
-          ? HomeWidget(token: token)
-          : const HomePageWidget(),
+      home:
+          (isToken) == true ? HomeWidget(token: token) : const HomePageWidget(),
       //initialRoute: RouteHelper.auth,
       getPages: RouteHelper.routes,
     );

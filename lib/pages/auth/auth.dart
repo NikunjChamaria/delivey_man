@@ -19,13 +19,15 @@ class AuthenticateSoloAltWidget extends StatefulWidget {
       _AuthenticateSoloAltWidgetState();
 }
 
-class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget> {
+class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
+    with TickerProviderStateMixin {
   TextEditingController emailAddressController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController emailAddressCreateController = TextEditingController();
   TextEditingController passwordCreateController = TextEditingController();
   TextEditingController nameCreateController = TextEditingController();
   TextEditingController phoneCreateController = TextEditingController();
+
   late bool passwordCreateVisibility;
   late bool passwordVisibility;
   late bool nameCreateVisibility;
@@ -33,7 +35,6 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget> {
   late SharedPreferences preferences;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
@@ -55,7 +56,6 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget> {
     nameCreateController.dispose();
     phoneCreateController.dispose();
 
-    _unfocusNode.dispose();
     super.dispose();
   }
 
@@ -117,8 +117,8 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget> {
 
   @override
   Widget build(BuildContext context) {
+    TabController tabController = TabController(length: 2, vsync: this);
     return GestureDetector(
-      onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: const Color(0xFF212425),
@@ -154,24 +154,25 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget> {
                   initialIndex: 0,
                   child: Column(
                     children: [
-                      const Align(
-                        alignment: Alignment(0, 0),
+                      Align(
+                        alignment: const Alignment(0, 0),
                         child: TabBar(
+                          controller: tabController,
                           indicatorColor: white,
                           isScrollable: true,
-                          labelStyle: TextStyle(
+                          labelStyle: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                               color: white),
-                          unselectedLabelStyle: TextStyle(
+                          unselectedLabelStyle: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                               color: white),
                           labelColor: white,
-                          unselectedLabelColor: Color(0xFF4E5657),
-                          labelPadding:
-                              EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
-                          tabs: [
+                          unselectedLabelColor: const Color(0xFF4E5657),
+                          labelPadding: const EdgeInsetsDirectional.fromSTEB(
+                              24, 0, 24, 0),
+                          tabs: const [
                             Tab(
                               text: 'Sign In',
                             ),
@@ -185,6 +186,7 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget> {
                       ),
                       Expanded(
                         child: TabBarView(
+                          controller: tabController,
                           children: [
                             SingleChildScrollView(
                               child: Padding(
@@ -504,440 +506,359 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget> {
                                 ),
                               ),
                             ),
-                            GetBuilder(builder: (_authcontroller) {
-                              return SingleChildScrollView(
-                                child: Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(
-                                      24, 24, 24, 24),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(20, 20, 20, 0),
-                                        child: TextFormField(
-                                          controller:
-                                              emailAddressCreateController,
-                                          obscureText: false,
-                                          decoration: InputDecoration(
-                                            labelText: 'Email Address',
-                                            labelStyle: const TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.normal),
-                                            hintText: 'Enter your email...',
-                                            hintStyle: const TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.normal),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Colors.white,
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
+                            SingleChildScrollView(
+                              child: Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                    24, 24, 24, 24),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              20, 20, 20, 0),
+                                      child: TextFormField(
+                                        controller:
+                                            emailAddressCreateController,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Email Address',
+                                          labelStyle: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal),
+                                          hintText: 'Enter your email...',
+                                          hintStyle: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Colors.white,
+                                              width: 1,
                                             ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Color(0x00000000),
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            errorBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Color(0x00000000),
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            focusedErrorBorder:
-                                                OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Color(0x00000000),
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            filled: true,
-                                            fillColor: Colors.white,
-                                            contentPadding:
-                                                const EdgeInsetsDirectional
-                                                    .fromSTEB(20, 24, 20, 24),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
                                           ),
-                                          style: const TextStyle(
-                                            color: Color(0xFF0F1113),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
                                           ),
-                                          maxLines: null,
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          contentPadding:
+                                              const EdgeInsetsDirectional
+                                                  .fromSTEB(20, 24, 20, 24),
                                         ),
+                                        style: const TextStyle(
+                                          color: Color(0xFF0F1113),
+                                        ),
+                                        maxLines: null,
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(20, 12, 20, 0),
-                                        child: TextFormField(
-                                          controller: passwordCreateController,
-                                          obscureText: passwordCreateVisibility,
-                                          decoration: InputDecoration(
-                                            labelText: 'Password',
-                                            labelStyle: const TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.normal),
-                                            hintText: 'Enter your password...',
-                                            hintStyle: const TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.normal),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Colors.white,
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              20, 12, 20, 0),
+                                      child: TextFormField(
+                                        controller: passwordCreateController,
+                                        obscureText: passwordCreateVisibility,
+                                        decoration: InputDecoration(
+                                          labelText: 'Password',
+                                          labelStyle: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal),
+                                          hintText: 'Enter your password...',
+                                          hintStyle: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Colors.white,
+                                              width: 1,
                                             ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Color(0x00000000),
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            errorBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Color(0x00000000),
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            focusedErrorBorder:
-                                                OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Color(0x00000000),
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            filled: true,
-                                            fillColor: Colors.white,
-                                            contentPadding:
-                                                const EdgeInsetsDirectional
-                                                    .fromSTEB(20, 24, 20, 24),
-                                            suffixIcon: InkWell(
-                                              onTap: () => setState(
-                                                () => passwordCreateVisibility =
-                                                    passwordCreateVisibility,
-                                              ),
-                                              focusNode: FocusNode(
-                                                  skipTraversal: true),
-                                              child: Icon(
-                                                passwordCreateVisibility
-                                                    ? Icons.visibility_outlined
-                                                    : Icons
-                                                        .visibility_off_outlined,
-                                                color: lightGrey,
-                                                size: 20,
-                                              ),
-                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
                                           ),
-                                          style: const TextStyle(
-                                            color: Color(0xFF0F1113),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          contentPadding:
+                                              const EdgeInsetsDirectional
+                                                  .fromSTEB(20, 24, 20, 24),
+                                          suffixIcon: InkWell(
+                                            onTap: () => setState(
+                                              () => passwordCreateVisibility =
+                                                  passwordCreateVisibility,
+                                            ),
+                                            focusNode:
+                                                FocusNode(skipTraversal: true),
+                                            child: Icon(
+                                              passwordCreateVisibility
+                                                  ? Icons.visibility_outlined
+                                                  : Icons
+                                                      .visibility_off_outlined,
+                                              color: lightGrey,
+                                              size: 20,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(20, 12, 20, 0),
-                                        child: TextFormField(
-                                          controller: nameCreateController,
-                                          obscureText: nameCreateVisibility,
-                                          decoration: InputDecoration(
-                                            labelText: 'Name',
-                                            labelStyle: const TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.normal),
-                                            hintText: 'Enter your name...',
-                                            hintStyle: const TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.normal),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Colors.white,
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Color(0x00000000),
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            errorBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Color(0x00000000),
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            focusedErrorBorder:
-                                                OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Color(0x00000000),
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            filled: true,
-                                            fillColor: Colors.white,
-                                            contentPadding:
-                                                const EdgeInsetsDirectional
-                                                    .fromSTEB(20, 24, 20, 24),
-                                            suffixIcon: InkWell(
-                                              onTap: () => setState(
-                                                () => nameCreateVisibility =
-                                                    nameCreateVisibility,
-                                              ),
-                                              focusNode: FocusNode(
-                                                  skipTraversal: true),
-                                              child: Icon(
-                                                nameCreateVisibility
-                                                    ? Icons.visibility_outlined
-                                                    : Icons
-                                                        .visibility_off_outlined,
-                                                color: lightGrey,
-                                                size: 14,
-                                              ),
-                                            ),
-                                          ),
-                                          style: const TextStyle(
-                                            color: Color(0xFF0F1113),
-                                          ),
+                                        style: const TextStyle(
+                                          color: Color(0xFF0F1113),
                                         ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(20, 12, 20, 0),
-                                        child: TextFormField(
-                                          controller: phoneCreateController,
-                                          obscureText: phoneCreateVisibility,
-                                          decoration: InputDecoration(
-                                            labelText: 'Phone',
-                                            labelStyle: const TextStyle(
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              20, 12, 20, 0),
+                                      child: TextFormField(
+                                        controller: nameCreateController,
+                                        obscureText: nameCreateVisibility,
+                                        decoration: InputDecoration(
+                                          labelText: 'Name',
+                                          labelStyle: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal),
+                                          hintText: 'Enter your name...',
+                                          hintStyle: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Colors.white,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          contentPadding:
+                                              const EdgeInsetsDirectional
+                                                  .fromSTEB(20, 24, 20, 24),
+                                          suffixIcon: InkWell(
+                                            onTap: () => setState(
+                                              () => nameCreateVisibility =
+                                                  nameCreateVisibility,
+                                            ),
+                                            focusNode:
+                                                FocusNode(skipTraversal: true),
+                                            child: Icon(
+                                              nameCreateVisibility
+                                                  ? Icons.visibility_outlined
+                                                  : Icons
+                                                      .visibility_off_outlined,
+                                              color: lightGrey,
+                                              size: 14,
+                                            ),
+                                          ),
+                                        ),
+                                        style: const TextStyle(
+                                          color: Color(0xFF0F1113),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              20, 12, 20, 0),
+                                      child: TextFormField(
+                                        controller: phoneCreateController,
+                                        obscureText: phoneCreateVisibility,
+                                        decoration: InputDecoration(
+                                          labelText: 'Phone',
+                                          labelStyle: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal),
+                                          hintText: 'Enter your phone...',
+                                          hintStyle: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Colors.white,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          contentPadding:
+                                              const EdgeInsetsDirectional
+                                                  .fromSTEB(20, 24, 20, 24),
+                                          suffixIcon: InkWell(
+                                            onTap: () => setState(
+                                              () => phoneCreateVisibility =
+                                                  phoneCreateVisibility,
+                                            ),
+                                            focusNode:
+                                                FocusNode(skipTraversal: true),
+                                            child: Icon(
+                                              phoneCreateVisibility
+                                                  ? Icons.visibility_outlined
+                                                  : Icons
+                                                      .visibility_off_outlined,
+                                              color: lightGrey,
+                                              size: 14,
+                                            ),
+                                          ),
+                                        ),
+                                        style: const TextStyle(
+                                          color: Color(0xFF0F1113),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              0, 24, 0, 0),
+                                      child: CustomButton(
+                                          onTap: () {
+                                            registerUser();
+                                            //Get.toNamed(RouteHelper.homw);
+                                          },
+                                          text: "Create Account",
+                                          width: 230,
+                                          height: 50,
+                                          color: white,
+                                          color2: black,
+                                          textSize: 20),
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          20, 0, 20, 12),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 24, 0, 0),
+                                            child: Text(
+                                              'Sign up using a social account',
+                                              style: TextStyle(
+                                                color: Color(0x98FFFFFF),
                                                 fontSize: 14,
-                                                fontWeight: FontWeight.normal),
-                                            hintText: 'Enter your phone...',
-                                            hintStyle: const TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.normal),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Colors.white,
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Color(0x00000000),
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            errorBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Color(0x00000000),
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            focusedErrorBorder:
-                                                OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Color(0x00000000),
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            filled: true,
-                                            fillColor: Colors.white,
-                                            contentPadding:
-                                                const EdgeInsetsDirectional
-                                                    .fromSTEB(20, 24, 20, 24),
-                                            suffixIcon: InkWell(
-                                              onTap: () => setState(
-                                                () => phoneCreateVisibility =
-                                                    phoneCreateVisibility,
-                                              ),
-                                              focusNode: FocusNode(
-                                                  skipTraversal: true),
-                                              child: Icon(
-                                                phoneCreateVisibility
-                                                    ? Icons.visibility_outlined
-                                                    : Icons
-                                                        .visibility_off_outlined,
-                                                color: lightGrey,
-                                                size: 14,
+                                                fontWeight: FontWeight.normal,
                                               ),
                                             ),
                                           ),
-                                          style: const TextStyle(
-                                            color: Color(0xFF0F1113),
-                                          ),
-                                        ),
+                                        ],
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(0, 24, 0, 0),
-                                        child: CustomButton(
-                                            onTap: () {
-                                              registerUser();
-                                              //Get.toNamed(RouteHelper.homw);
-                                            },
-                                            text: "Create Account",
-                                            width: 230,
-                                            height: 50,
-                                            color: white,
-                                            color2: black,
-                                            textSize: 20),
-                                      ),
-                                      const Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            20, 0, 20, 12),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 24, 0, 0),
-                                              child: Text(
-                                                'Sign up using a social account',
-                                                style: TextStyle(
-                                                  color: Color(0x98FFFFFF),
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.normal,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(24, 8, 24, 8),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            InkWell(
-                                              splashColor: Colors.transparent,
-                                              focusColor: Colors.transparent,
-                                              hoverColor: Colors.transparent,
-                                              highlightColor:
-                                                  Colors.transparent,
-                                              onTap: () {},
-                                              child: Container(
-                                                width: 50,
-                                                height: 50,
-                                                decoration: const BoxDecoration(
-                                                  color: Color(0xFF616155),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      blurRadius: 5,
-                                                      color: Color(0x3314181B),
-                                                      offset: Offset(0, 2),
-                                                    )
-                                                  ],
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                alignment:
-                                                    const AlignmentDirectional(
-                                                        0, 0),
-                                                child: const FaIcon(
-                                                  FontAwesomeIcons.google,
-                                                  color: white,
-                                                  size: 24,
-                                                ),
-                                              ),
-                                            ),
-                                            InkWell(
-                                              splashColor: Colors.transparent,
-                                              focusColor: Colors.transparent,
-                                              hoverColor: Colors.transparent,
-                                              highlightColor:
-                                                  Colors.transparent,
-                                              onTap: () {},
-                                              child: Container(
-                                                width: 50,
-                                                height: 50,
-                                                decoration: const BoxDecoration(
-                                                  color: Color(0xFF616155),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      blurRadius: 5,
-                                                      color: Color(0x3314181B),
-                                                      offset: Offset(0, 2),
-                                                    )
-                                                  ],
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                alignment:
-                                                    const AlignmentDirectional(
-                                                        0, 0),
-                                                child: const FaIcon(
-                                                  FontAwesomeIcons.apple,
-                                                  color: white,
-                                                  size: 24,
-                                                ),
-                                              ),
-                                            ),
-                                            InkWell(
-                                              splashColor: Colors.transparent,
-                                              focusColor: Colors.transparent,
-                                              hoverColor: Colors.transparent,
-                                              highlightColor:
-                                                  Colors.transparent,
-                                              onTap: () {},
-                                              child: Container(
-                                                width: 50,
-                                                height: 50,
-                                                decoration: const BoxDecoration(
-                                                  color: Color(0xFF616155),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      blurRadius: 5,
-                                                      color: Color(0x3314181B),
-                                                      offset: Offset(0, 2),
-                                                    )
-                                                  ],
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                alignment:
-                                                    const AlignmentDirectional(
-                                                        0, 0),
-                                                child: const FaIcon(
-                                                  FontAwesomeIcons.facebookF,
-                                                  color: white,
-                                                  size: 24,
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              24, 8, 24, 8),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          InkWell(
+                                            splashColor: Colors.transparent,
+                                            focusColor: Colors.transparent,
+                                            hoverColor: Colors.transparent,
+                                            highlightColor: Colors.transparent,
+                                            onTap: () {},
+                                            child: Container(
                                               width: 50,
                                               height: 50,
                                               decoration: const BoxDecoration(
@@ -954,20 +875,103 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget> {
                                               alignment:
                                                   const AlignmentDirectional(
                                                       0, 0),
-                                              child: const Icon(
-                                                Icons.phone_sharp,
+                                              child: const FaIcon(
+                                                FontAwesomeIcons.google,
                                                 color: white,
                                                 size: 24,
                                               ),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                          InkWell(
+                                            splashColor: Colors.transparent,
+                                            focusColor: Colors.transparent,
+                                            hoverColor: Colors.transparent,
+                                            highlightColor: Colors.transparent,
+                                            onTap: () {},
+                                            child: Container(
+                                              width: 50,
+                                              height: 50,
+                                              decoration: const BoxDecoration(
+                                                color: Color(0xFF616155),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    blurRadius: 5,
+                                                    color: Color(0x3314181B),
+                                                    offset: Offset(0, 2),
+                                                  )
+                                                ],
+                                                shape: BoxShape.circle,
+                                              ),
+                                              alignment:
+                                                  const AlignmentDirectional(
+                                                      0, 0),
+                                              child: const FaIcon(
+                                                FontAwesomeIcons.apple,
+                                                color: white,
+                                                size: 24,
+                                              ),
+                                            ),
+                                          ),
+                                          InkWell(
+                                            splashColor: Colors.transparent,
+                                            focusColor: Colors.transparent,
+                                            hoverColor: Colors.transparent,
+                                            highlightColor: Colors.transparent,
+                                            onTap: () {},
+                                            child: Container(
+                                              width: 50,
+                                              height: 50,
+                                              decoration: const BoxDecoration(
+                                                color: Color(0xFF616155),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    blurRadius: 5,
+                                                    color: Color(0x3314181B),
+                                                    offset: Offset(0, 2),
+                                                  )
+                                                ],
+                                                shape: BoxShape.circle,
+                                              ),
+                                              alignment:
+                                                  const AlignmentDirectional(
+                                                      0, 0),
+                                              child: const FaIcon(
+                                                FontAwesomeIcons.facebookF,
+                                                color: white,
+                                                size: 24,
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 50,
+                                            height: 50,
+                                            decoration: const BoxDecoration(
+                                              color: Color(0xFF616155),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  blurRadius: 5,
+                                                  color: Color(0x3314181B),
+                                                  offset: Offset(0, 2),
+                                                )
+                                              ],
+                                              shape: BoxShape.circle,
+                                            ),
+                                            alignment:
+                                                const AlignmentDirectional(
+                                                    0, 0),
+                                            child: const Icon(
+                                              Icons.phone_sharp,
+                                              color: white,
+                                              size: 24,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                              );
-                            })
+                              ),
+                            )
                           ],
                         ),
                       ),

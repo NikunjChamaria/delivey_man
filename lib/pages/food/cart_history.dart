@@ -64,7 +64,6 @@ class _CartHistoryState extends State<CartHistory> {
 
   @override
   Widget build(BuildContext context) {
-    final unfocusNode = FocusNode();
     final search = TextEditingController();
     return Scaffold(
       backgroundColor: backGround,
@@ -76,7 +75,6 @@ class _CartHistoryState extends State<CartHistory> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               SearchBar(
-                focusNode: unfocusNode,
                 onTap: () {},
                 controller: search,
                 leading: const Icon(Icons.search),
@@ -232,7 +230,7 @@ class _CartHistoryState extends State<CartHistory> {
                                               Padding(
                                                 padding:
                                                     const EdgeInsetsDirectional
-                                                        .fromSTEB(40, 0, 0, 0),
+                                                        .fromSTEB(20, 0, 0, 0),
                                                 child: Column(
                                                   mainAxisSize:
                                                       MainAxisSize.max,

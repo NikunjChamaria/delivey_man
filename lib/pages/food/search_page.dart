@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -47,7 +49,6 @@ class _SearchPageState extends State<SearchPage> {
 
   void postSearch(String userEmail, String resName, String foodName,
       String imageUrl) async {
-    // ignore: unused_local_variable
     var response = await http.post(Uri.parse(POSTSEARCH),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
@@ -83,12 +84,10 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    final unfocusNode = FocusNode();
-
     @override
     void dispose() {
       search.dispose();
-      unfocusNode.dispose();
+
       super.dispose();
     }
 
@@ -413,6 +412,7 @@ class _SearchPageState extends State<SearchPage> {
                                                     }));
                                                 var data =
                                                     jsonDecode(response1.body);
+
                                                 var response2 = await http.post(
                                                     Uri.parse(FOOD2),
                                                     headers: {

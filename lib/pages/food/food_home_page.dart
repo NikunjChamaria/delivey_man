@@ -23,7 +23,6 @@ class FoodHomePage extends StatefulWidget {
 
 class _FoodHomePageState extends State<FoodHomePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
@@ -35,7 +34,6 @@ class _FoodHomePageState extends State<FoodHomePage> {
 
   @override
   void dispose() {
-    _unfocusNode.dispose();
     super.dispose();
   }
 
@@ -66,7 +64,6 @@ class _FoodHomePageState extends State<FoodHomePage> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
         child: Scaffold(
             key: scaffoldKey,
             backgroundColor: const Color(0xFF212425),

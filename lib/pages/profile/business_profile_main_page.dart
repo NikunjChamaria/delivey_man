@@ -194,7 +194,28 @@ class _BusinessProfileMainPageState extends State<BusinessProfileMainPage> {
                               ),
                             );
                           });
-                })
+                }),
+            const HeightSpacer(height: 20),
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  Get.toNamed(RouteHelper.businessProfileSigIn);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      color: white),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      "Add a new business",
+                      style: appstyle(black, 18, FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const HeightSpacer(height: 20),
           ],
         ),
       ),

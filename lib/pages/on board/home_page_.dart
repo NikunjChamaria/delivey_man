@@ -21,7 +21,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
   PageController pageViewController = PageController();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final _unfocusNode = FocusNode();
+
   PageController get pageViewCurrentIndex => pageViewController =
       (pageViewController.hasClients && pageViewController.page != null
           ? pageViewController.page!.round()
@@ -36,14 +36,12 @@ class _HomePageWidgetState extends State<HomePageWidget>
   void dispose() {
     pageViewController.dispose();
 
-    _unfocusNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: backGround,
