@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:typed_data';
+import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/height_spacer.dart';
@@ -80,10 +82,34 @@ class _FavouritePageState extends State<FavouritePage> {
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             var keys = snapshot.data!.keys.toList();
+                            Future<Uint8List> downloadImage() async {
+                              var data = await http.post(
+                                Uri.parse(DOWNLOADIMAGE),
+                                headers: {"Content-Type": "application/json"},
+                                body: jsonEncode({
+                                  'ownerEmail': snapshot.data![keys[index]]
+                                      ['ownerEmail'],
+                                  'resName': snapshot.data![keys[index]]
+                                      ['resName']
+                                }),
+                              );
+
+                              var response = jsonDecode(data.body);
+                              //print(response[0]['image']['data']['data']);
+                              List<dynamic> yo =
+                                  response[0]['image']['data']['data'];
+                              List<int> bufferInt =
+                                  yo.map((e) => e as int).toList();
+
+                              Uint8List imageData =
+                                  Uint8List.fromList(bufferInt);
+                              return imageData;
+                            }
+
                             return Container(
                               decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
                                   color: white,
                                   border: Border.all(color: black, width: 1)),
                               margin: const EdgeInsets.only(
@@ -101,11 +127,39 @@ class _FavouritePageState extends State<FavouritePage> {
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(12)),
-                                          child: CachedNetworkImage(
-                                            imageUrl: snapshot
-                                                .data![keys[index]]['imageUrl'],
-                                            fit: BoxFit.cover,
-                                          ),
+                                          child: FutureBuilder(
+                                              future: downloadImage(),
+                                              builder: (context,
+                                                  AsyncSnapshot<Uint8List?>
+                                                      snapshot1) {
+                                                return snapshot1
+                                                            .connectionState ==
+                                                        ConnectionState.done
+                                                    ? Container(
+                                                        decoration: const BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            10))),
+                                                        child:
+                                                            CachedMemoryImage(
+                                                          uniqueKey: snapshot
+                                                                      .data![
+                                                                  keys[index]]
+                                                              ['resName'],
+                                                          bytes: snapshot1.data,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      )
+                                                    : CachedNetworkImage(
+                                                        imageUrl:
+                                                            'https://cdn-icons-png.flaticon.com/512/147/147144.png?w=360',
+                                                        width: double.infinity,
+                                                        height: 190,
+                                                        fit: BoxFit.cover,
+                                                      );
+                                              }),
                                         ),
                                         const WidthSpacer(width: 10),
                                         Column(

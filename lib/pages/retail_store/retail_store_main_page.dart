@@ -197,7 +197,7 @@ class _RetailStoreMainPageState extends State<RetailStoreMainPage> {
                             ),
                             CustomButton(
                                 onTap: () {
-                                  Get.toNamed(RouteHelper.getFood());
+                                  Get.toNamed(RouteHelper.food);
                                   scaffoldKey.currentState!.closeDrawer();
                                 },
                                 text: "Food",
@@ -259,7 +259,7 @@ class _RetailStoreMainPageState extends State<RetailStoreMainPage> {
                             ),
                             CustomButton(
                                 onTap: () {
-                                  Get.toNamed(RouteHelper.getRetail());
+                                  Get.toNamed(RouteHelper.retail);
                                   scaffoldKey.currentState!.closeDrawer();
                                 },
                                 text: "Retail Store",

@@ -1,3 +1,5 @@
+import 'package:delivery_man/pages/business/business_page.dart';
+import 'package:delivery_man/pages/business/new_food_page.dart';
 import 'package:delivery_man/pages/food/cart_page.dart';
 import 'package:delivery_man/pages/food/category_page.dart';
 import 'package:delivery_man/pages/food/chekout_page.dart';
@@ -5,6 +7,9 @@ import 'package:delivery_man/pages/food/food_main_page.dart';
 import 'package:delivery_man/pages/food/restaurant_page.dart';
 import 'package:delivery_man/pages/home/home.dart';
 import 'package:delivery_man/pages/on%20board/home_page_.dart';
+import 'package:delivery_man/pages/profile/business_porfile_sign_in.dart';
+import 'package:delivery_man/pages/profile/business_profile_main_page.dart';
+import 'package:delivery_man/pages/profile/edit_profile.dart';
 import 'package:delivery_man/pages/profile/profile.dart';
 import 'package:delivery_man/pages/retail_store/retail_store_main_page.dart';
 import 'package:get/get.dart';
@@ -22,16 +27,11 @@ class RouteHelper {
   static const String cart = '/cart';
   static const String checkout = '/checkout';
   static const String category = '/category';
-
-  static String getInitial() => onBoard;
-  static String getAuth() => auth;
-  static String getHome(String token) => homw;
-  static String getFood() => food;
-  static String getRetail() => retail;
-  static String getProfile() => profile;
-  static String getRestaurant() => restaurant;
-  static String getCart() => cart;
-  static String getCheckOut() => checkout;
+  static const String editProfile = '/editProfile';
+  static const String businessProfileSigIn = '/businessProfileSigIn';
+  static const String businessProfileMainPage = '/businessProfileMainPage';
+  static const String businessPage = '/businessPage';
+  static const String newFoodPage = '/newFoodPage';
 
   static List<GetPage> routes = [
     GetPage(
@@ -99,6 +99,34 @@ class RouteHelper {
         page: () {
           String foodType = Get.arguments['foodType'];
           return CategoryPage(foodType: foodType);
+        },
+        transition: Transition.rightToLeftWithFade),
+    GetPage(
+        name: editProfile,
+        page: () => const EditProfile(),
+        transition: Transition.rightToLeftWithFade),
+    GetPage(
+        name: businessProfileSigIn,
+        page: () => const BusinessProfileCreate(),
+        transition: Transition.rightToLeftWithFade),
+    GetPage(
+        name: businessProfileMainPage,
+        page: () => const BusinessProfileMainPage(),
+        transition: Transition.rightToLeftWithFade),
+    GetPage(
+        name: businessPage,
+        page: () {
+          Map restaurant = Get.arguments['restaurant'];
+          return BusinessPage(
+            restaurant: restaurant,
+          );
+        },
+        transition: Transition.rightToLeftWithFade),
+    GetPage(
+        name: newFoodPage,
+        page: () {
+          String resName = Get.arguments['resName'];
+          return NewFoodPage(resName: resName);
         },
         transition: Transition.rightToLeftWithFade),
   ];

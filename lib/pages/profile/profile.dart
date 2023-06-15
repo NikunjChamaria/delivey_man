@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/route.dart';
 import 'package:delivery_man/constants/textstyle.dart';
@@ -7,6 +9,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
+import '../../constants/server.dart';
 
 // ignore: must_be_immutable
 class ProfilePage extends StatefulWidget {
@@ -155,7 +160,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             CustomButton(
                                 onTap: () {
-                                  Get.toNamed(RouteHelper.getFood());
+                                  Get.toNamed(RouteHelper.food);
                                   scaffoldKey.currentState!.closeDrawer();
                                 },
                                 text: "Food",
@@ -191,7 +196,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             CustomButton(
                                 onTap: () {
-                                  Get.toNamed(RouteHelper.getRetail());
+                                  Get.toNamed(RouteHelper.retail);
                                   scaffoldKey.currentState!.closeDrawer();
                                 },
                                 text: "Retail Store",
@@ -351,45 +356,12 @@ class _ProfilePageState extends State<ProfilePage> {
             padding: EdgeInsets.zero,
             shrinkWrap: true,
             scrollDirection: Axis.vertical,
+            physics: const NeverScrollableScrollPhysics(),
             children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 50,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF212425),
-                      shape: BoxShape.rectangle,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding:
-                              const EdgeInsetsDirectional.fromSTEB(24, 0, 0, 0),
-                          child: Text(
-                            'Edit Profile',
-                            style: appstyle(white, 14, FontWeight.normal),
-                          ),
-                        ),
-                        const Expanded(
-                          child: Align(
-                            alignment: AlignmentDirectional(0.9, 0),
-                            child: Icon(
-                              Icons.arrow_forward_ios,
-                              color: Colors.white,
-                              size: 18,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 1, 0, 0),
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(RouteHelper.editProfile);
+                },
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
@@ -407,7 +379,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             padding: const EdgeInsetsDirectional.fromSTEB(
                                 24, 0, 0, 0),
                             child: Text(
-                              'Food Booking History',
+                              'Edit Profile',
                               style: appstyle(white, 14, FontWeight.normal),
                             ),
                           ),
@@ -427,43 +399,59 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 1, 0, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF212425),
-                        shape: BoxShape.rectangle,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                24, 0, 0, 0),
-                            child: Text(
-                              'Switch to Business Profile',
-                              style: appstyle(white, 14, FontWeight.normal),
-                            ),
-                          ),
-                          const Expanded(
-                            child: Align(
-                              alignment: AlignmentDirectional(0.9, 0),
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.white,
-                                size: 18,
+              GestureDetector(
+                onTap: () async {
+                  SharedPreferences preferences =
+                      await SharedPreferences.getInstance();
+                  var token = preferences.getString('token');
+
+                  String email = JwtDecoder.decode(token!)['email'];
+                  var data = await http.post(Uri.parse(RESTAURANT3),
+                      headers: {"Content-Type": "application/json"},
+                      body: jsonEncode({"ownerEmail": email}));
+                  List response = jsonDecode(data.body);
+                  response.isEmpty
+                      ? Get.toNamed(RouteHelper.businessProfileSigIn)
+                      : Get.toNamed(RouteHelper.businessProfileMainPage);
+                },
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 1, 0, 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF212425),
+                          shape: BoxShape.rectangle,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  24, 0, 0, 0),
+                              child: Text(
+                                'Switch to Business Profile',
+                                style: appstyle(white, 14, FontWeight.normal),
                               ),
                             ),
-                          ),
-                        ],
+                            const Expanded(
+                              child: Align(
+                                alignment: AlignmentDirectional(0.9, 0),
+                                child: Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                  size: 18,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               Padding(

@@ -641,7 +641,7 @@ class _CartPageState extends State<CartPage> {
       bottomNavigationBar: GestureDetector(
         onTap: () {
           saveHistory();
-          Get.toNamed(RouteHelper.getCheckOut());
+          Get.toNamed(RouteHelper.checkout);
         },
         child: Padding(
           padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),

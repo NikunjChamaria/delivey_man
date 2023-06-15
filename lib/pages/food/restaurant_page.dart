@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/height_spacer.dart';
@@ -22,40 +24,31 @@ class RestaurantPage extends StatefulWidget {
 
 class _RestaurantPageState extends State<RestaurantPage> {
   bool isCartEmpty = true;
-  List? response;
+
   int cartItem = 0;
   int cartITEM = 0;
   num totalAmount = 0;
   Map<String, int> itemCount = {};
 
-  @override
-  void initState() {
-    super.initState();
+  List? response1;
 
-    downloadFood();
-  }
-
-  void downloadFood() async {
+  Future<List> downloadFood() async {
+    List response = [];
     var data = await http.post(Uri.parse(FOOD1),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({"resName": widget.restaurant['resName']}));
 
     if (data.statusCode == 200) {
       if (mounted) {
-        setState(() {
-          response = json.decode(data.body);
-        });
+        response = json.decode(data.body);
+
+        response1 = json.decode(data.body);
       }
     }
+    //print(response1);
+    return response;
 
     //print(response);
-  }
-
-  @override
-  void dispose() {
-    downloadFood();
-    response;
-    super.dispose();
   }
 
   String getFoodType(List list) {
@@ -81,21 +74,31 @@ class _RestaurantPageState extends State<RestaurantPage> {
     print(itemCount);
   }
 
-  int price(String key) {
-    for (var a in response!) {
-      if (a['name'] == key.trim()) {
-        return a['price'];
-      }
-    }
-    return 0;
-  }
-
   void onTap2() {
     print("y0");
   }
 
   @override
   Widget build(BuildContext context) {
+    Future<Uint8List> downloadImage() async {
+      var data = await http.post(
+        Uri.parse(DOWNLOADIMAGE),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({
+          'ownerEmail': widget.restaurant['ownerEmail'],
+          'resName': widget.restaurant['resName']
+        }),
+      );
+
+      var response = jsonDecode(data.body);
+      //print(response[0]['image']['data']['data']);
+      List<dynamic> yo = response[0]['image']['data']['data'];
+      List<int> bufferInt = yo.map((e) => e as int).toList();
+
+      Uint8List imageData = Uint8List.fromList(bufferInt);
+      return imageData;
+    }
+
     return Scaffold(
         backgroundColor: backGround,
         body: CustomScrollView(
@@ -109,11 +112,23 @@ class _RestaurantPageState extends State<RestaurantPage> {
               stretch: true,
               backgroundColor: backGround,
               flexibleSpace: FlexibleSpaceBar(
-                background: CachedNetworkImage(
-                  imageUrl: widget.restaurant['imageUrl'],
-                  width: double.maxFinite,
-                  fit: BoxFit.cover,
-                ),
+                background: FutureBuilder(
+                    future: downloadImage(),
+                    builder: (context, AsyncSnapshot<Uint8List?> snapshot1) {
+                      return snapshot1.connectionState == ConnectionState.done
+                          ? CachedMemoryImage(
+                              uniqueKey: widget.restaurant['resName'],
+                              bytes: snapshot1.data,
+                              fit: BoxFit.fill,
+                            )
+                          : CachedNetworkImage(
+                              imageUrl:
+                                  'https://cdn-icons-png.flaticon.com/512/147/147144.png?w=360',
+                              width: double.infinity,
+                              height: 190,
+                              fit: BoxFit.cover,
+                            );
+                    }),
               ),
               expandedHeight: 300,
               bottom: PreferredSize(
@@ -325,15 +340,54 @@ class _RestaurantPageState extends State<RestaurantPage> {
                   ),
                 ),
                 const HeightSpacer(height: 20),
-                ListView.builder(
-                    padding: const EdgeInsets.only(bottom: 30),
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: response == null ? 0 : response!.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return response == null
-                          ? const SizedBox.shrink()
-                          : Padding(
+                FutureBuilder(
+                    future: downloadFood(),
+                    builder: (context, AsyncSnapshot<List?> snapshot) {
+                      //print(snapshot.data);
+                      return ListView.builder(
+                          padding: const EdgeInsets.only(bottom: 30),
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount:
+                              snapshot.hasData ? snapshot.data!.length : 0,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            int price(String key) {
+                              for (var a in snapshot.data!) {
+                                if (a['name'] == key.trim()) {
+                                  return a['price'];
+                                }
+                              }
+                              return 0;
+                            }
+
+                            Future<Uint8List> downloadImage() async {
+                              var req = {
+                                'ownerEmail': widget.restaurant['ownerEmail'],
+                                'resName': widget.restaurant['resName'],
+                                'foodName': snapshot.data![index]['name']
+                              };
+                              //print(req);
+                              var data = await http.post(
+                                Uri.parse(DOWNLOADFOODIMAGE),
+                                headers: {"Content-Type": "application/json"},
+                                body: jsonEncode(req),
+                              );
+
+                              var response = jsonDecode(data.body);
+                              //print(response);
+                              //print(response[0]['image']['data']['data']);
+                              List<dynamic> yo =
+                                  response[0]['image']['data']['data'];
+                              List<int> bufferInt =
+                                  yo.map((e) => e as int).toList();
+                              //print(bufferInt);
+
+                              Uint8List imageData =
+                                  Uint8List.fromList(bufferInt);
+                              return imageData;
+                            }
+
+                            return Padding(
                               padding: const EdgeInsetsDirectional.fromSTEB(
                                   5, 30, 5, 0),
                               child: Container(
@@ -408,12 +462,12 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                             ],
                                           ),
                                           Text(
-                                            response![index]['name'],
+                                            snapshot.data![index]['name'],
                                             style: appstyle(
                                                 black, 16, FontWeight.w700),
                                           ),
                                           Text(
-                                            '\$${response![index]['price']}',
+                                            '\$${snapshot.data![index]['price']}',
                                             style: appstyle(
                                                 black, 16, FontWeight.w300),
                                           ),
@@ -436,13 +490,13 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                                 glowColor: Colors.orange,
                                               ),
                                               Text(
-                                                response![index]['rating']
+                                                snapshot.data![index]['rating']
                                                     .toString(),
                                                 style: appstyle(
                                                     black, 14, FontWeight.w400),
                                               ),
                                               Text(
-                                                  '(${response![index]['comments']})',
+                                                  '(${snapshot.data![index]['comments']})',
                                                   style: appstyle(black, 14,
                                                       FontWeight.w400)),
                                             ],
@@ -504,13 +558,34 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                               child: ClipRRect(
                                                 borderRadius:
                                                     BorderRadius.circular(8),
-                                                child: CachedNetworkImage(
-                                                  imageUrl: response![index]
-                                                      ['imageUrl'],
-                                                  width: 250,
-                                                  height: 20,
-                                                  fit: BoxFit.cover,
-                                                ),
+                                                child: FutureBuilder(
+                                                    future: downloadImage(),
+                                                    builder: (context,
+                                                        AsyncSnapshot<
+                                                                Uint8List?>
+                                                            snapshot1) {
+                                                      return snapshot1
+                                                                  .connectionState ==
+                                                              ConnectionState
+                                                                  .done
+                                                          ? CachedMemoryImage(
+                                                              uniqueKey:
+                                                                  snapshot.data![
+                                                                          index]
+                                                                      ['name'],
+                                                              bytes: snapshot1
+                                                                  .data,
+                                                              fit: BoxFit.fill,
+                                                            )
+                                                          : CachedNetworkImage(
+                                                              imageUrl:
+                                                                  'https://cdn-icons-png.flaticon.com/512/147/147144.png?w=360',
+                                                              width: double
+                                                                  .infinity,
+                                                              height: 190,
+                                                              fit: BoxFit.cover,
+                                                            );
+                                                    }),
                                               ),
                                             ),
                                           ),
@@ -542,19 +617,20 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                                       HitTestBehavior.opaque,
                                                   onTap: () {
                                                     itemCount.containsKey(
-                                                            response![index]
-                                                                ['name'])
+                                                            snapshot.data![
+                                                                index]['name'])
                                                         ? onTap2
                                                         : onTap1(
-                                                            response![index]
-                                                                ['name'],
-                                                            response![index]
-                                                                ['price'],
+                                                            snapshot.data![
+                                                                index]['name'],
+                                                            snapshot.data![
+                                                                index]['price'],
                                                             1);
                                                   },
                                                   child:
                                                       itemCount.containsKey(
-                                                              response![index]
+                                                              snapshot.data![
+                                                                      index]
                                                                   ['name'])
                                                           ? Padding(
                                                               padding:
@@ -571,10 +647,10 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                                                   GestureDetector(
                                                                     onTap: () {
                                                                       onTap1(
-                                                                          response![index]
+                                                                          snapshot.data![index]
                                                                               [
                                                                               'name'],
-                                                                          response![index]
+                                                                          snapshot.data![index]
                                                                               [
                                                                               'price'],
                                                                           1);
@@ -588,7 +664,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                                                   WidthSpacer(
                                                                       width: 5),
                                                                   Text(
-                                                                    itemCount[response![index]
+                                                                    itemCount[snapshot.data![index]
                                                                             [
                                                                             'name']]
                                                                         .toString(),
@@ -603,10 +679,10 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                                                   GestureDetector(
                                                                     onTap: () {
                                                                       onTap1(
-                                                                          response![index]
+                                                                          snapshot.data![index]
                                                                               [
                                                                               'name'],
-                                                                          response![index]
+                                                                          snapshot.data![index]
                                                                               [
                                                                               'price'],
                                                                           -1);
@@ -648,6 +724,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                 ),
                               ),
                             );
+                          });
                     })
               ],
             ))
@@ -660,7 +737,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                   Get.toNamed(RouteHelper.cart, arguments: {
                     'restaurant': widget.restaurant,
                     'itemCount': itemCount,
-                    'response': response,
+                    'response': response1,
                     'totalAmount': totalAmount
                   });
                 },

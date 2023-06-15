@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/height_spacer.dart';
@@ -66,26 +68,8 @@ class _SearchPageState extends State<SearchPage> {
           'userEmail': email,
         }));
     var data = jsonDecode(response.body);
-    print(data);
+    //print(data);
     return data;
-  }
-
-  Future<String> getImageUrl(String name, bool isRes) async {
-    String imageUrl = "";
-    var response = isRes
-        ? await http.post(Uri.parse(RESTAURANT2),
-            headers: {"Content-Type": "application/json"},
-            body: jsonEncode({
-              'resName': name,
-            }))
-        : await http.post(Uri.parse(FOOD1),
-            headers: {"Content-Type": "application/json"},
-            body: jsonEncode({
-              'resName': name,
-            }));
-    var data = jsonDecode(response.body);
-    imageUrl = data['imageUrl'];
-    return imageUrl;
   }
 
   void goWithRes(String resName) async {
@@ -163,7 +147,7 @@ class _SearchPageState extends State<SearchPage> {
                             )
                           ],
                         ),
-                        HeightSpacer(height: 20),
+                        const HeightSpacer(height: 20),
                         FutureBuilder(
                             future: getSearch(),
                             builder: (context, AsyncSnapshot<List?> snapshot) {
@@ -176,6 +160,98 @@ class _SearchPageState extends State<SearchPage> {
                                           : 0,
                                       shrinkWrap: true,
                                       itemBuilder: ((context, index) {
+                                        Future<Uint8List>
+                                            downloadImage() async {
+                                          var response1 = await http.post(
+                                              Uri.parse(RESTAURANT2),
+                                              headers: {
+                                                "Content-Type":
+                                                    "application/json"
+                                              },
+                                              body: jsonEncode({
+                                                'resName': snapshot.data![index]
+                                                    ['resName']
+                                              }));
+                                          var data = jsonDecode(response1.body);
+                                          var data1 = await http.post(
+                                            Uri.parse(DOWNLOADIMAGE),
+                                            headers: {
+                                              "Content-Type": "application/json"
+                                            },
+                                            body: jsonEncode({
+                                              'ownerEmail': data[0]
+                                                  ['ownerEmail'],
+                                              'resName': snapshot.data![index]
+                                                  ['resName']
+                                            }),
+                                          );
+
+                                          var response = jsonDecode(data1.body);
+                                          //print(response[0]['image']['data']['data']);
+                                          List<dynamic> yo = response[0]
+                                              ['image']['data']['data'];
+                                          List<int> bufferInt =
+                                              yo.map((e) => e as int).toList();
+
+                                          Uint8List imageData =
+                                              Uint8List.fromList(bufferInt);
+                                          return imageData;
+                                        }
+
+                                        Future<Uint8List>
+                                            downloadImage1() async {
+                                          var response1 = await http.post(
+                                              Uri.parse(RESTAURANT2),
+                                              headers: {
+                                                "Content-Type":
+                                                    "application/json"
+                                              },
+                                              body: jsonEncode({
+                                                'resName': snapshot.data![index]
+                                                    ['resName']
+                                              }));
+                                          var data = jsonDecode(response1.body);
+                                          var response2 = await http.post(
+                                              Uri.parse(FOOD2),
+                                              headers: {
+                                                "Content-Type":
+                                                    "application/json"
+                                              },
+                                              body: jsonEncode({
+                                                'resName': snapshot.data![index]
+                                                    ['resName'],
+                                                'name': snapshot.data![index]
+                                                    ['foodName']
+                                              }));
+                                          var data3 =
+                                              jsonDecode(response1.body);
+                                          var data1 = await http.post(
+                                            Uri.parse(DOWNLOADFOODIMAGE),
+                                            headers: {
+                                              "Content-Type": "application/json"
+                                            },
+                                            body: jsonEncode({
+                                              'ownerEmail': data[0]
+                                                  ['ownerEmail'],
+                                              'resName': snapshot.data![index]
+                                                  ['resName'],
+                                              'foodName': snapshot.data![index]
+                                                  ['foodName']
+                                            }),
+                                          );
+
+                                          var response = jsonDecode(data1.body);
+                                          //print(response[0]['image']['data']['data']);
+                                          List<dynamic> yo = response[0]
+                                              ['image']['data']['data'];
+                                          List<int> bufferInt =
+                                              yo.map((e) => e as int).toList();
+
+                                          Uint8List imageData =
+                                              Uint8List.fromList(bufferInt);
+                                          return imageData;
+                                        }
+
                                         return GestureDetector(
                                           onTap: () async {
                                             snapshot.data![index]["foodName"] ==
@@ -193,9 +269,73 @@ class _SearchPageState extends State<SearchPage> {
                                                 Container(
                                                   height: 50,
                                                   width: 50,
-                                                  child: Image.network(
-                                                      snapshot.data![index]
-                                                          ["imageUrl"]),
+                                                  child: snapshot.data![index]
+                                                              ["foodName"] ==
+                                                          ""
+                                                      ? FutureBuilder(
+                                                          future:
+                                                              downloadImage(),
+                                                          builder: ((context,
+                                                              AsyncSnapshot<
+                                                                      Uint8List?>
+                                                                  snapshot1) {
+                                                            return snapshot1
+                                                                        .connectionState ==
+                                                                    ConnectionState
+                                                                        .done
+                                                                ? CachedMemoryImage(
+                                                                    uniqueKey: snapshot
+                                                                            .data![index]
+                                                                        [
+                                                                        'resName'],
+                                                                    bytes:
+                                                                        snapshot1
+                                                                            .data,
+                                                                    fit: BoxFit
+                                                                        .fill,
+                                                                  )
+                                                                : CachedNetworkImage(
+                                                                    imageUrl:
+                                                                        'https://cdn-icons-png.flaticon.com/512/147/147144.png?w=360',
+                                                                    width: double
+                                                                        .infinity,
+                                                                    height: 190,
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  );
+                                                          }))
+                                                      : FutureBuilder(
+                                                          future:
+                                                              downloadImage1(),
+                                                          builder: (context,
+                                                              AsyncSnapshot<
+                                                                      Uint8List?>
+                                                                  snapshot1) {
+                                                            return snapshot1
+                                                                        .connectionState ==
+                                                                    ConnectionState
+                                                                        .done
+                                                                ? CachedMemoryImage(
+                                                                    uniqueKey: snapshot
+                                                                            .data![index]
+                                                                        [
+                                                                        'foodName'],
+                                                                    bytes:
+                                                                        snapshot1
+                                                                            .data,
+                                                                    fit: BoxFit
+                                                                        .fill,
+                                                                  )
+                                                                : CachedNetworkImage(
+                                                                    imageUrl:
+                                                                        'https://cdn-icons-png.flaticon.com/512/147/147144.png?w=360',
+                                                                    width: double
+                                                                        .infinity,
+                                                                    height: 190,
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  );
+                                                          }),
                                                 ),
                                                 const WidthSpacer(width: 10),
                                                 Column(
@@ -257,7 +397,70 @@ class _SearchPageState extends State<SearchPage> {
                                             itemCount: snapshot.data!.length,
                                             shrinkWrap: true,
                                             itemBuilder: ((context, index) {
-                                              print(snapshot.data);
+                                              //print(snapshot.data);
+                                              Future<Uint8List>
+                                                  downloadImage1() async {
+                                                var response1 = await http.post(
+                                                    Uri.parse(RESTAURANT2),
+                                                    headers: {
+                                                      "Content-Type":
+                                                          "application/json"
+                                                    },
+                                                    body: jsonEncode({
+                                                      'resName':
+                                                          snapshot.data![index]
+                                                              ['resName']
+                                                    }));
+                                                var data =
+                                                    jsonDecode(response1.body);
+                                                var response2 = await http.post(
+                                                    Uri.parse(FOOD2),
+                                                    headers: {
+                                                      "Content-Type":
+                                                          "application/json"
+                                                    },
+                                                    body: jsonEncode({
+                                                      'resName':
+                                                          snapshot.data![index]
+                                                              ['resName'],
+                                                      'name':
+                                                          snapshot.data![index]
+                                                              ['foodName']
+                                                    }));
+                                                var data3 =
+                                                    jsonDecode(response1.body);
+                                                var data1 = await http.post(
+                                                  Uri.parse(DOWNLOADFOODIMAGE),
+                                                  headers: {
+                                                    "Content-Type":
+                                                        "application/json"
+                                                  },
+                                                  body: jsonEncode({
+                                                    'ownerEmail': data[0]
+                                                        ['ownerEmail'],
+                                                    'resName':
+                                                        snapshot.data![index]
+                                                            ['resName'],
+                                                    'foodName': snapshot
+                                                        .data![index]['name']
+                                                  }),
+                                                );
+
+                                                var response =
+                                                    jsonDecode(data1.body);
+                                                //print(response[0]['image']['data']['data']);
+                                                List<dynamic> yo = response[0]
+                                                    ['image']['data']['data'];
+                                                List<int> bufferInt = yo
+                                                    .map((e) => e as int)
+                                                    .toList();
+
+                                                Uint8List imageData =
+                                                    Uint8List.fromList(
+                                                        bufferInt);
+                                                return imageData;
+                                              }
+
                                               return GestureDetector(
                                                 onTap: () async {
                                                   SharedPreferences
@@ -309,11 +512,38 @@ class _SearchPageState extends State<SearchPage> {
                                                       Container(
                                                         height: 50,
                                                         width: 50,
-                                                        child: CachedNetworkImage(
-                                                            imageUrl: snapshot
-                                                                        .data![
-                                                                    index]
-                                                                ["imageUrl"]),
+                                                        child: FutureBuilder(
+                                                            future:
+                                                                downloadImage1(),
+                                                            builder: (context,
+                                                                AsyncSnapshot<
+                                                                        Uint8List?>
+                                                                    snapshot1) {
+                                                              return snapshot1
+                                                                          .connectionState ==
+                                                                      ConnectionState
+                                                                          .done
+                                                                  ? CachedMemoryImage(
+                                                                      uniqueKey:
+                                                                          snapshot.data![index]
+                                                                              [
+                                                                              'name'],
+                                                                      bytes: snapshot1
+                                                                          .data,
+                                                                      fit: BoxFit
+                                                                          .fill,
+                                                                    )
+                                                                  : CachedNetworkImage(
+                                                                      imageUrl:
+                                                                          'https://cdn-icons-png.flaticon.com/512/147/147144.png?w=360',
+                                                                      width: double
+                                                                          .infinity,
+                                                                      height:
+                                                                          190,
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    );
+                                                            }),
                                                       ),
                                                       const WidthSpacer(
                                                           width: 10),
@@ -375,6 +605,50 @@ class _SearchPageState extends State<SearchPage> {
                                             itemCount: snapshot.data!.length,
                                             shrinkWrap: true,
                                             itemBuilder: ((context, index) {
+                                              Future<Uint8List>
+                                                  downloadImage() async {
+                                                var response1 = await http.post(
+                                                    Uri.parse(RESTAURANT2),
+                                                    headers: {
+                                                      "Content-Type":
+                                                          "application/json"
+                                                    },
+                                                    body: jsonEncode({
+                                                      'resName':
+                                                          snapshot.data![index]
+                                                              ['resName']
+                                                    }));
+                                                var data =
+                                                    jsonDecode(response1.body);
+                                                var data1 = await http.post(
+                                                  Uri.parse(DOWNLOADIMAGE),
+                                                  headers: {
+                                                    "Content-Type":
+                                                        "application/json"
+                                                  },
+                                                  body: jsonEncode({
+                                                    'ownerEmail': data[0]
+                                                        ['ownerEmail'],
+                                                    'resName': snapshot
+                                                        .data![index]['resName']
+                                                  }),
+                                                );
+
+                                                var response =
+                                                    jsonDecode(data1.body);
+                                                //print(response[0]['image']['data']['data']);
+                                                List<dynamic> yo = response[0]
+                                                    ['image']['data']['data'];
+                                                List<int> bufferInt = yo
+                                                    .map((e) => e as int)
+                                                    .toList();
+
+                                                Uint8List imageData =
+                                                    Uint8List.fromList(
+                                                        bufferInt);
+                                                return imageData;
+                                              }
+
                                               return GestureDetector(
                                                 onTap: () async {
                                                   SharedPreferences
@@ -409,11 +683,38 @@ class _SearchPageState extends State<SearchPage> {
                                                       Container(
                                                         height: 50,
                                                         width: 50,
-                                                        child: CachedNetworkImage(
-                                                            imageUrl: snapshot
-                                                                        .data![
-                                                                    index]
-                                                                ["imageUrl"]),
+                                                        child: FutureBuilder(
+                                                            future:
+                                                                downloadImage(),
+                                                            builder: ((context,
+                                                                AsyncSnapshot<
+                                                                        Uint8List?>
+                                                                    snapshot1) {
+                                                              return snapshot1
+                                                                          .connectionState ==
+                                                                      ConnectionState
+                                                                          .done
+                                                                  ? CachedMemoryImage(
+                                                                      uniqueKey:
+                                                                          snapshot.data![index]
+                                                                              [
+                                                                              'resName'],
+                                                                      bytes: snapshot1
+                                                                          .data,
+                                                                      fit: BoxFit
+                                                                          .fill,
+                                                                    )
+                                                                  : CachedNetworkImage(
+                                                                      imageUrl:
+                                                                          'https://cdn-icons-png.flaticon.com/512/147/147144.png?w=360',
+                                                                      width: double
+                                                                          .infinity,
+                                                                      height:
+                                                                          190,
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    );
+                                                            })),
                                                       ),
                                                       const WidthSpacer(
                                                           width: 10),

@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/server.dart';
@@ -38,6 +40,7 @@ class _CartHistoryState extends State<CartHistory> {
         headers: {"Content-Type": "application/json"}, body: jsonEncode(req));
 
     response = json.decode(data.body);
+    response = response.reversed.toList();
 
     for (var n in response) {
       var req = {'resName': n['restaurant']};
@@ -106,6 +109,30 @@ class _CartHistoryState extends State<CartHistory> {
                               bool isFav = keys[index]['isFav'];
                               //print(snapshot.data![keys[0]]);
                               //print(keys[0]);
+                              Future<Uint8List> downloadImage() async {
+                                var data = await http.post(
+                                  Uri.parse(DOWNLOADIMAGE),
+                                  headers: {"Content-Type": "application/json"},
+                                  body: jsonEncode({
+                                    'ownerEmail': snapshot.data![keys[index]]
+                                        ['ownerEmail'],
+                                    'resName': snapshot.data![keys[index]]
+                                        ['resName'],
+                                  }),
+                                );
+
+                                var response = jsonDecode(data.body);
+                                //print(response[0]['image']['data']['data']);
+                                List<dynamic> yo =
+                                    response[0]['image']['data']['data'];
+                                List<int> bufferInt =
+                                    yo.map((e) => e as int).toList();
+
+                                Uint8List imageData =
+                                    Uint8List.fromList(bufferInt);
+                                return imageData;
+                              }
+
                               return Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(
                                     5, 5, 5, 5),
@@ -137,14 +164,38 @@ class _CartHistoryState extends State<CartHistory> {
                                               ClipRRect(
                                                 borderRadius:
                                                     BorderRadius.circular(8),
-                                                child: CachedNetworkImage(
-                                                  imageUrl: snapshot
-                                                          .data![keys[index]]
-                                                      ['imageUrl'],
-                                                  width: 40,
-                                                  height: 40,
-                                                  fit: BoxFit.cover,
-                                                ),
+                                                child: FutureBuilder(
+                                                    future: downloadImage(),
+                                                    builder: (context,
+                                                        AsyncSnapshot<
+                                                                Uint8List?>
+                                                            snapshot1) {
+                                                      return snapshot1
+                                                                  .connectionState ==
+                                                              ConnectionState
+                                                                  .done
+                                                          ? Container(
+                                                              width: 50,
+                                                              height: 50,
+                                                              child:
+                                                                  CachedMemoryImage(
+                                                                uniqueKey: snapshot
+                                                                            .data![
+                                                                        keys[
+                                                                            index]]
+                                                                    ['resName'],
+                                                                bytes: snapshot1
+                                                                    .data!,
+                                                              ),
+                                                            )
+                                                          : CachedNetworkImage(
+                                                              imageUrl:
+                                                                  'https://cdn-icons-png.flaticon.com/512/147/147144.png?w=360',
+                                                              height: 50,
+                                                              width: 50,
+                                                              fit: BoxFit.cover,
+                                                            );
+                                                    }),
                                               ),
                                               Padding(
                                                 padding:
@@ -181,7 +232,7 @@ class _CartHistoryState extends State<CartHistory> {
                                               Padding(
                                                 padding:
                                                     const EdgeInsetsDirectional
-                                                        .fromSTEB(50, 0, 0, 0),
+                                                        .fromSTEB(40, 0, 0, 0),
                                                 child: Column(
                                                   mainAxisSize:
                                                       MainAxisSize.max,
@@ -200,7 +251,10 @@ class _CartHistoryState extends State<CartHistory> {
                                                             const BoxDecoration(
                                                                 color: white),
                                                         child: Text(
-                                                          'Delivered',
+                                                          keys[index][
+                                                                  'isDelivered']
+                                                              ? 'Delivered'
+                                                              : 'Preparing',
                                                           style: appstyle(
                                                               black,
                                                               12,

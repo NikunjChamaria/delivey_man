@@ -16,9 +16,13 @@ const RESTAURANT1 = "${url}restaurant1";
 
 const RESTAURANT2 = "${url}restaurant2";
 
+const RESTAURANT3 = "${url}restaurant3";
+
 const FOOD = "${url}food";
 
 const FOOD1 = "${url}food1";
+
+const FOOD2 = "${url}food2";
 
 const CATEGORY = "${url}category";
 
@@ -30,6 +34,10 @@ const FAVORDER = "${url}favOrder";
 
 const POSTFAV = "${url}postFav";
 
+const PREPARING = "${url}preparing";
+
+const DELIVERED = "${url}delivered";
+
 const SEARCHRES = "${url}searchRes";
 
 const SEARCHFOOD = "${url}searchFood";
@@ -37,3 +45,11 @@ const SEARCHFOOD = "${url}searchFood";
 const POSTSEARCH = "${url}postSearch";
 
 const GETSEARCH = "${url}getSearch";
+
+const UPLOADIMAGE = "${url}uploadImage";
+
+const DOWNLOADIMAGE = "${url}downloadImage";
+
+const UPLOADFOODIMAGE = "${url}uploadFoodImage";
+
+const DOWNLOADFOODIMAGE = "${url}downloadFoodImage";

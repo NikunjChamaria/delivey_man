@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/height_spacer.dart';
@@ -22,8 +24,6 @@ class FoodHomePage extends StatefulWidget {
 class _FoodHomePageState extends State<FoodHomePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
-  List? response;
-  List? response1;
 
   @override
   void initState() {
@@ -39,24 +39,28 @@ class _FoodHomePageState extends State<FoodHomePage> {
     super.dispose();
   }
 
-  void downloadData() async {
+  Future<List?> downloadData() async {
+    List? response;
     var data = await http.get(
       Uri.parse(RESTAURANT),
       headers: {"Content-Type": "application/json"},
     );
-    setState(() {
-      response = json.decode(data.body);
-    });
+
+    response = json.decode(data.body);
+
+    return response;
   }
 
-  void downloadData1() async {
+  Future<List?> downloadData1() async {
+    List? response1;
     var data = await http.get(
       Uri.parse(CATEGORY),
       headers: {"Content-Type": "application/json"},
     );
-    setState(() {
-      response1 = json.decode(data.body);
-    });
+
+    response1 = json.decode(data.body);
+
+    return response1;
   }
 
   @override
@@ -109,46 +113,65 @@ class _FoodHomePageState extends State<FoodHomePage> {
                     padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
                     child: SizedBox(
                       height: 100,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: response1 == null ? 0 : response1!.length,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                Get.toNamed(RouteHelper.category, arguments: {
-                                  'foodType': response1![index]['foodType']
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    12, 0, 0, 0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      width: 64,
-                                      height: 64,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xB0969696),
-                                        image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: CachedNetworkImageProvider(
-                                            response1![index]['imageUrl'],
+                      child: FutureBuilder(
+                          future: downloadData1(),
+                          builder: (context, AsyncSnapshot<List?> snapshot) {
+                            return snapshot.connectionState ==
+                                    ConnectionState.waiting
+                                ? const Center(
+                                    child: CircularProgressIndicator(
+                                      color: white,
+                                    ),
+                                  )
+                                : ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: snapshot.data!.length,
+                                    itemBuilder: (context, index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed(RouteHelper.category,
+                                              arguments: {
+                                                'foodType': snapshot
+                                                    .data![index]['foodType']
+                                              });
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsetsDirectional
+                                              .fromSTEB(12, 0, 0, 0),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width: 64,
+                                                height: 64,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      const Color(0xB0969696),
+                                                  image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image:
+                                                        CachedNetworkImageProvider(
+                                                      snapshot.data![index]
+                                                          ['imageUrl'],
+                                                    ),
+                                                  ),
+                                                  shape: BoxShape.circle,
+                                                ),
+                                              ),
+                                              const HeightSpacer(height: 5),
+                                              Text(
+                                                  snapshot.data![index]
+                                                      ['foodType'],
+                                                  textAlign: TextAlign.center,
+                                                  style: appstyle(white, 12,
+                                                      FontWeight.normal)),
+                                            ],
                                           ),
                                         ),
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                    const HeightSpacer(height: 5),
-                                    Text(response1![index]['foodType'],
-                                        textAlign: TextAlign.center,
-                                        style: appstyle(
-                                            white, 12, FontWeight.normal)),
-                                  ],
-                                ),
-                              ),
-                            );
+                                      );
+                                    });
                           }),
                     ),
                   ),
@@ -216,186 +239,305 @@ class _FoodHomePageState extends State<FoodHomePage> {
                     ),
                   ),
                   const HeightSpacer(height: 20),
-                  ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: response == null ? 0 : response!.length,
-                      itemBuilder: (context, index) {
-                        return response == null
-                            ? SizedBox.shrink()
-                            : GestureDetector(
-                                onTap: () {
-                                  Get.toNamed(RouteHelper.restaurant,
-                                      arguments: {
-                                        'restaurant': response![index]
-                                      });
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.only(
-                                      bottom: 30, left: 20, right: 20),
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.9,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        blurRadius: 4,
-                                        color: Color(0x32000000),
-                                        offset: Offset(0, 2),
-                                      )
-                                    ],
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: const BorderRadius.only(
-                                          bottomLeft: Radius.circular(0),
-                                          bottomRight: Radius.circular(0),
-                                          topLeft: Radius.circular(8),
-                                          topRight: Radius.circular(8),
-                                        ),
-                                        child: CachedNetworkImage(
-                                          imageUrl: response![index]
-                                              ['imageUrl'],
-                                          width: double.infinity,
-                                          height: 190,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(16, 12, 16, 8),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                  response![index]['resName'],
-                                                  style: appstyle(
-                                                      const Color(0xFF101213),
-                                                      20,
-                                                      FontWeight.w500)),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(16, 0, 16, 8),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                  response![index]['location'],
-                                                  style: appstyle(
-                                                      const Color(0xFF57636C),
-                                                      14,
-                                                      FontWeight.normal)),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        height: 40,
-                                        decoration: const BoxDecoration(),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsetsDirectional
-                                                      .fromSTEB(16, 0, 24, 12),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  const Icon(
-                                                    Icons.star_rounded,
-                                                    color: Color(0xFF212425),
-                                                    size: 24,
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                            4, 0, 0, 0),
-                                                    child: Text(
-                                                        response![index]
-                                                                ['rating']
-                                                            .toString(),
-                                                        style: appstyle(
-                                                            const Color(
-                                                                0xFF101213),
-                                                            14,
-                                                            FontWeight.normal)),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                            8, 0, 0, 0),
-                                                    child: Text('Rating',
-                                                        style: appstyle(
-                                                            const Color(
-                                                                0xFF57636C),
-                                                            14,
-                                                            FontWeight.normal)),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsetsDirectional
-                                                      .fromSTEB(16, 0, 24, 12),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  const Icon(
-                                                    Icons.location_pin,
-                                                    color: Color(0xFF212425),
-                                                    size: 24,
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                            4, 0, 0, 0),
-                                                    child: Text(
-                                                        response![index]['dist']
-                                                            .toString(),
-                                                        style: appstyle(
-                                                            const Color(
-                                                                0xFF101213),
-                                                            14,
-                                                            FontWeight.normal)),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                            8, 0, 0, 0),
-                                                    child: Text('Km',
-                                                        style: appstyle(
-                                                            const Color(
-                                                                0xFF57636C),
-                                                            14,
-                                                            FontWeight.normal)),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                  FutureBuilder(
+                      future: downloadData(),
+                      builder: (context, AsyncSnapshot<List?> snapshot) {
+                        return snapshot.connectionState ==
+                                ConnectionState.waiting
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: white,
                                 ),
-                              );
+                              )
+                            : ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (context, index) {
+                                  Future<Uint8List> downloadImage() async {
+                                    var data = await http.post(
+                                      Uri.parse(DOWNLOADIMAGE),
+                                      headers: {
+                                        "Content-Type": "application/json"
+                                      },
+                                      body: jsonEncode({
+                                        'ownerEmail': snapshot.data![index]
+                                            ['ownerEmail'],
+                                        'resName': snapshot.data![index]
+                                            ['resName']
+                                      }),
+                                    );
+
+                                    var response = jsonDecode(data.body);
+                                    //print(response[0]['image']['data']['data']);
+                                    List<dynamic> yo =
+                                        response[0]['image']['data']['data'];
+                                    List<int> bufferInt =
+                                        yo.map((e) => e as int).toList();
+
+                                    Uint8List imageData =
+                                        Uint8List.fromList(bufferInt);
+                                    return imageData;
+                                  }
+
+                                  return snapshot.data == null
+                                      ? const SizedBox.shrink()
+                                      : GestureDetector(
+                                          onTap: () {
+                                            Get.toNamed(RouteHelper.restaurant,
+                                                arguments: {
+                                                  'restaurant':
+                                                      snapshot.data![index]
+                                                });
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.only(
+                                                bottom: 30,
+                                                left: 20,
+                                                right: 20),
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.9,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  blurRadius: 4,
+                                                  color: Color(0x32000000),
+                                                  offset: Offset(0, 2),
+                                                )
+                                              ],
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                    bottomLeft:
+                                                        Radius.circular(0),
+                                                    bottomRight:
+                                                        Radius.circular(0),
+                                                    topLeft: Radius.circular(8),
+                                                    topRight:
+                                                        Radius.circular(8),
+                                                  ),
+                                                  child: FutureBuilder(
+                                                      future: downloadImage(),
+                                                      builder: (context,
+                                                          AsyncSnapshot<
+                                                                  Uint8List?>
+                                                              snapshot1) {
+                                                        return snapshot1
+                                                                    .connectionState ==
+                                                                ConnectionState
+                                                                    .done
+                                                            ? CachedMemoryImage(
+                                                                uniqueKey: snapshot
+                                                                            .data![
+                                                                        index]
+                                                                    ['resName'],
+                                                                bytes: snapshot1
+                                                                    .data,
+                                                                fit:
+                                                                    BoxFit.fill,
+                                                              )
+                                                            : CachedNetworkImage(
+                                                                imageUrl:
+                                                                    'https://cdn-icons-png.flaticon.com/512/147/147144.png?w=360',
+                                                                width: double
+                                                                    .infinity,
+                                                                height: 190,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              );
+                                                      }),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                          16, 12, 16, 8),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Text(
+                                                            snapshot.data![
+                                                                    index]
+                                                                ['resName'],
+                                                            style: appstyle(
+                                                                const Color(
+                                                                    0xFF101213),
+                                                                20,
+                                                                FontWeight
+                                                                    .w500)),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                          16, 0, 16, 8),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Text(
+                                                            snapshot.data![
+                                                                    index]
+                                                                ['location'],
+                                                            style: appstyle(
+                                                                const Color(
+                                                                    0xFF57636C),
+                                                                14,
+                                                                FontWeight
+                                                                    .normal)),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Container(
+                                                  height: 40,
+                                                  decoration:
+                                                      const BoxDecoration(),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                16, 0, 24, 12),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            const Icon(
+                                                              Icons
+                                                                  .star_rounded,
+                                                              color: Color(
+                                                                  0xFF212425),
+                                                              size: 24,
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsetsDirectional
+                                                                          .fromSTEB(
+                                                                      4,
+                                                                      0,
+                                                                      0,
+                                                                      0),
+                                                              child: Text(
+                                                                  snapshot
+                                                                      .data![
+                                                                          index]
+                                                                          [
+                                                                          'rating']
+                                                                      .toString(),
+                                                                  style: appstyle(
+                                                                      const Color(
+                                                                          0xFF101213),
+                                                                      14,
+                                                                      FontWeight
+                                                                          .normal)),
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsetsDirectional
+                                                                          .fromSTEB(
+                                                                      8,
+                                                                      0,
+                                                                      0,
+                                                                      0),
+                                                              child: Text(
+                                                                  'Rating',
+                                                                  style: appstyle(
+                                                                      const Color(
+                                                                          0xFF57636C),
+                                                                      14,
+                                                                      FontWeight
+                                                                          .normal)),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                16, 0, 24, 12),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            const Icon(
+                                                              Icons
+                                                                  .location_pin,
+                                                              color: Color(
+                                                                  0xFF212425),
+                                                              size: 24,
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsetsDirectional
+                                                                          .fromSTEB(
+                                                                      4,
+                                                                      0,
+                                                                      0,
+                                                                      0),
+                                                              child: Text(
+                                                                  snapshot
+                                                                      .data![
+                                                                          index]
+                                                                          [
+                                                                          'dist']
+                                                                      .toString(),
+                                                                  style: appstyle(
+                                                                      const Color(
+                                                                          0xFF101213),
+                                                                      14,
+                                                                      FontWeight
+                                                                          .normal)),
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsetsDirectional
+                                                                          .fromSTEB(
+                                                                      8,
+                                                                      0,
+                                                                      0,
+                                                                      0),
+                                                              child: Text('Km',
+                                                                  style: appstyle(
+                                                                      const Color(
+                                                                          0xFF57636C),
+                                                                      14,
+                                                                      FontWeight
+                                                                          .normal)),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                });
                       }),
                 ]))));
   }

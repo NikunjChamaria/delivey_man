@@ -223,7 +223,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                               ),
                               CustomButton(
                                   onTap: () {
-                                    Get.toNamed(RouteHelper.getFood());
+                                    Get.toNamed(RouteHelper.food);
                                     scaffoldKey.currentState!.closeDrawer();
                                   },
                                   text: "Food",
@@ -285,7 +285,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                               ),
                               CustomButton(
                                   onTap: () {
-                                    Get.toNamed(RouteHelper.getRetail());
+                                    Get.toNamed(RouteHelper.retail);
                                     scaffoldKey.currentState!.closeDrawer();
                                   },
                                   text: "Retail Store",
