@@ -3,7 +3,6 @@ import 'package:delivery_man/pages/home/home.dart';
 import 'package:delivery_man/pages/on%20board/home_page_.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
