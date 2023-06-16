@@ -64,9 +64,9 @@ class _BusinessPageState extends State<BusinessPage> {
               ),
               const HeightSpacer(height: 20),
               Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     color: lightGrey,
-                    borderRadius: const BorderRadius.all(Radius.circular(10))),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
                 child: FutureBuilder(
                     future: getOrders(),
                     builder: (context, AsyncSnapshot<List?> snapshot) {
@@ -182,24 +182,22 @@ class _BusinessPageState extends State<BusinessPage> {
                                                   setState(() {});
                                                 },
                                                 child: Container(
-                                                  decoration: BoxDecoration(
-                                                      boxShadow: [
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                          boxShadow: [
                                                         BoxShadow(
-                                                          color: lightGrey!,
+                                                          color: lightGrey,
                                                           spreadRadius: 1,
                                                           blurRadius: 2,
                                                         )
                                                       ],
-                                                      borderRadius:
-                                                          const BorderRadius
-                                                              .all(
-                                                        Radius.circular(10),
-                                                      ),
-                                                      color: white),
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            10),
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                            Radius.circular(10),
+                                                          ),
+                                                          color: white),
+                                                  child: const Padding(
+                                                    padding: EdgeInsets.all(10),
                                                     child: Text(
                                                         "Mark as Delivered"),
                                                   ),
@@ -259,7 +257,7 @@ class _BusinessPageState extends State<BusinessPage> {
                               return Padding(
                                 padding: const EdgeInsets.all(10),
                                 child: Container(
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                       color: white,
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(10))),
@@ -327,7 +325,7 @@ class _BusinessPageState extends State<BusinessPage> {
                         arguments: {'resName': widget.restaurant['resName']});
                   },
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: white,
                         borderRadius: BorderRadius.all(Radius.circular(10))),
                     child: Padding(

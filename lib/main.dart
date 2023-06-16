@@ -20,11 +20,13 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final bool isToken;
+  // ignore: prefer_typing_uninitialized_variables
   final token;
   const MyApp({super.key, required this.isToken, required this.token});
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      title: "Mr. Delivery Man",
       debugShowCheckedModeBanner: false,
       home:
           (isToken) == true ? HomeWidget(token: token) : const HomePageWidget(),

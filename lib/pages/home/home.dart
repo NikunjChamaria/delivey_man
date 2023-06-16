@@ -424,7 +424,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                       height: 600,
                       decoration: const BoxDecoration(color: transparent),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 100,
                     ),
                     Align(
@@ -513,7 +513,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                           height: 100,
                                                           decoration:
                                                               BoxDecoration(
-                                                            color: white,
+                                                            color: lightGrey,
                                                             boxShadow: const [
                                                               BoxShadow(
                                                                 blurRadius: 8,
@@ -596,7 +596,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                                 'name'],
                                                                             style: const TextStyle(
                                                                                 fontSize: 16,
-                                                                                color: black,
+                                                                                color: white,
                                                                                 fontWeight: FontWeight.normal)),
                                                                         Padding(
                                                                           padding: const EdgeInsetsDirectional.fromSTEB(
@@ -612,7 +612,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                               RatingBarIndicator(
                                                                                 itemBuilder: (context, index) => const Icon(
                                                                                   Icons.radio_button_checked_rounded,
-                                                                                  color: black,
+                                                                                  color: white,
                                                                                 ),
                                                                                 direction: Axis.horizontal,
                                                                                 rating: 4,
@@ -624,7 +624,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                                 padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
                                                                                 child: Text(
                                                                                   response![index]['rating'],
-                                                                                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.normal, color: black),
+                                                                                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.normal, color: white),
                                                                                 ),
                                                                               ),
                                                                             ],
@@ -719,7 +719,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                         width: 270,
                                                         decoration:
                                                             BoxDecoration(
-                                                          color: white,
+                                                          color: lightGrey,
                                                           boxShadow: const [
                                                             BoxShadow(
                                                               blurRadius: 8,
@@ -808,7 +808,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                             response1![index][
                                                                                 'name'],
                                                                             style:
-                                                                                const TextStyle(fontSize: 16, color: black)),
+                                                                                const TextStyle(fontSize: 16, color: white)),
                                                                         Padding(
                                                                           padding: const EdgeInsetsDirectional.fromSTEB(
                                                                               0,
@@ -823,7 +823,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                               RatingBarIndicator(
                                                                                 itemBuilder: (context, index) => const Icon(
                                                                                   Icons.radio_button_checked_rounded,
-                                                                                  color: black,
+                                                                                  color: white,
                                                                                 ),
                                                                                 direction: Axis.horizontal,
                                                                                 rating: 4,
@@ -835,7 +835,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                                 padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
                                                                                 child: Text(
                                                                                   response1![index]['rating'],
-                                                                                  style: const TextStyle(fontSize: 12, color: black),
+                                                                                  style: const TextStyle(fontSize: 12, color: white),
                                                                                 ),
                                                                               ),
                                                                             ],

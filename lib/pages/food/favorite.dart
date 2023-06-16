@@ -199,7 +199,7 @@ class _FavouritePageState extends State<FavouritePage> {
                                         Text(
                                           "ITEMS",
                                           style: appstyle(
-                                              lightGrey!, 14, FontWeight.w700),
+                                              lightGrey, 14, FontWeight.w700),
                                         ),
                                         const HeightSpacer(height: 5),
                                         ListView.builder(
@@ -226,7 +226,7 @@ class _FavouritePageState extends State<FavouritePage> {
                                         Text(
                                           "ORDERED ON",
                                           style: appstyle(
-                                              lightGrey!, 14, FontWeight.w700),
+                                              lightGrey, 14, FontWeight.w700),
                                         ),
                                         const HeightSpacer(height: 5),
                                         Text(

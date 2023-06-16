@@ -297,7 +297,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                     .width *
                                                 0.9,
                                             decoration: BoxDecoration(
-                                              color: Colors.white,
+                                              color: lightGrey,
                                               boxShadow: const [
                                                 BoxShadow(
                                                   blurRadius: 4,
@@ -368,8 +368,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                                     index]
                                                                 ['resName'],
                                                             style: appstyle(
-                                                                const Color(
-                                                                    0xFF101213),
+                                                                white,
                                                                 20,
                                                                 FontWeight
                                                                     .w500)),
@@ -392,8 +391,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                                     index]
                                                                 ['location'],
                                                             style: appstyle(
-                                                                const Color(
-                                                                    0xFF57636C),
+                                                                white,
                                                                 14,
                                                                 FontWeight
                                                                     .normal)),
@@ -424,8 +422,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                             const Icon(
                                                               Icons
                                                                   .star_rounded,
-                                                              color: Color(
-                                                                  0xFF212425),
+                                                              color: white,
                                                               size: 24,
                                                             ),
                                                             Padding(
@@ -444,8 +441,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                                           'rating']
                                                                       .toString(),
                                                                   style: appstyle(
-                                                                      const Color(
-                                                                          0xFF101213),
+                                                                      white,
                                                                       14,
                                                                       FontWeight
                                                                           .normal)),
@@ -461,8 +457,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                               child: Text(
                                                                   'Rating',
                                                                   style: appstyle(
-                                                                      const Color(
-                                                                          0xFF57636C),
+                                                                      white,
                                                                       14,
                                                                       FontWeight
                                                                           .normal)),
@@ -482,8 +477,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                             const Icon(
                                                               Icons
                                                                   .location_pin,
-                                                              color: Color(
-                                                                  0xFF212425),
+                                                              color: white,
                                                               size: 24,
                                                             ),
                                                             Padding(
@@ -502,8 +496,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                                           'dist']
                                                                       .toString(),
                                                                   style: appstyle(
-                                                                      const Color(
-                                                                          0xFF101213),
+                                                                      white,
                                                                       14,
                                                                       FontWeight
                                                                           .normal)),
@@ -518,8 +511,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                                       0),
                                                               child: Text('Km',
                                                                   style: appstyle(
-                                                                      const Color(
-                                                                          0xFF57636C),
+                                                                      white,
                                                                       14,
                                                                       FontWeight
                                                                           .normal)),

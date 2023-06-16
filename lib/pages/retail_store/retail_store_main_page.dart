@@ -334,7 +334,7 @@ class _RetailStoreMainPageState extends State<RetailStoreMainPage> {
           ? AnimatedNotchBottomBar(
               /// Provide NotchBottomBarController
               notchBottomBarController: _controller,
-              color: lightGrey!,
+              color: lightGrey,
               showLabel: false,
               notchColor: white,
 

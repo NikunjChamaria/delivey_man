@@ -351,15 +351,14 @@ class _HomePageWidgetState extends State<HomePageWidget>
                           curve: Curves.ease,
                         );
                       },
-                      effect: smooth_page_indicator.ExpandingDotsEffect(
+                      effect: const smooth_page_indicator.ExpandingDotsEffect(
                         expansionFactor: 3,
                         spacing: 8,
                         radius: 16,
                         dotWidth: 16,
                         dotHeight: 8,
-                        dotColor: lightGrey!,
-                        activeDotColor:
-                            const Color.fromARGB(255, 255, 255, 255),
+                        dotColor: lightGrey,
+                        activeDotColor: Color.fromARGB(255, 255, 255, 255),
                         paintStyle: PaintingStyle.fill,
                       ),
                     ),

@@ -380,10 +380,10 @@ class _CartHistoryState extends State<CartHistory> {
                                                                             .all(
                                                                         Radius.circular(
                                                                             10)),
-                                                                boxShadow: [
+                                                                boxShadow: const [
                                                                   BoxShadow(
                                                                       color:
-                                                                          lightGrey!,
+                                                                          lightGrey,
                                                                       offset: Offset
                                                                           .infinite)
                                                                 ],
@@ -396,7 +396,7 @@ class _CartHistoryState extends State<CartHistory> {
                                                                 child: Text(
                                                                   'Reorder',
                                                                   style: appstyle(
-                                                                      lightGrey!,
+                                                                      lightGrey,
                                                                       20,
                                                                       FontWeight
                                                                           .w700),
