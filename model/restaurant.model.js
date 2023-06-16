@@ -7,12 +7,9 @@ const { Schema }=mongoose;
 const restaurantSchema=new Schema({
     resName:{
         type:String,
-        required:true,
+        
     },
-    imageUrl:{
-        type:String,
-        required:true,
-    },
+   
     rating:{
         type:Number,
         required:false,
@@ -24,7 +21,9 @@ const restaurantSchema=new Schema({
     comments:Number,
     averagePrice:Number,
     foodType:Array,
-    location:String
+    location:String,
+    ownerEmail:String,
+    businessEmail:String
 });
 
 

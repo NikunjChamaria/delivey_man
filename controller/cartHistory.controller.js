@@ -33,10 +33,30 @@ exports.getFav=async(req,res,next)=>{
     }
 }
 
+exports.getPreparing=async(req,res,next)=>{
+    try {
+        const {restaurant}=req.body;
+        const result= await CartHistoryModel.find({'restaurant':restaurant,isDelivered:false});
+        res.send(result);
+    } catch (error) {
+        throw error;
+    }
+}
+
 exports.postFav=async(req,res,next)=>{
     try {
         const {userEmail,time,isFav}=req.body;
         const result=await CartHistoryModel.findOneAndUpdate({'userEmail':userEmail,'time':time},{'isFav':isFav});
+        res.send({'status':"yo"});
+    } catch (error) {
+        throw error;
+    }
+}
+
+exports.postDelivered=async(req,res,next)=>{
+    try {
+        const {userEmail,time}=req.body;
+        const result=await CartHistoryModel.findOneAndUpdate({'userEmail':userEmail,'time':time},{'isDelivered':true});
         res.send({'status':"yo"});
     } catch (error) {
         throw error;

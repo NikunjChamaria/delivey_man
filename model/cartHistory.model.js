@@ -14,6 +14,10 @@ const cartHistorySchema=new Schema({
     isFav:{
         type:Boolean,
         default:false
+    },
+    isDelivered:{
+        type:Boolean,
+        default:false
     }
     
 });

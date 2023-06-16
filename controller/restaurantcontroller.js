@@ -3,8 +3,8 @@ const RestaurantModel=require('../model/restaurant.model');
 
 exports.postData=async(req,res,next)=>{
     try {
-        const {resName,imageUrl,rating,dist,comments,averagePrice,foodType,location}=req.body;
-        const success=await RestaurantService.postData(resName,imageUrl,rating,dist,comments,averagePrice,foodType,location);
+        const {resName,rating,dist,comments,averagePrice,foodType,location,ownerEmail,businessEmail}=req.body;
+        const success=await RestaurantService.postData(resName,rating,dist,comments,averagePrice,foodType,location,ownerEmail,businessEmail);
         res.status(200).json({status:true,token:"yo"});
     } catch (error) {
         throw error;
@@ -13,7 +13,7 @@ exports.postData=async(req,res,next)=>{
 
 exports.getData=async(req,res,next)=>{
     try {
-        const result=await RestaurantModel.find();
+        const result=await RestaurantModel.find({},{_id:0,__v:0});
         res.send(result);
     } catch (error) {
         throw error;
@@ -34,6 +34,16 @@ exports.getData2=async(req,res,next)=>{
     try {
         const {resName}=req.body;
         const result=await RestaurantModel.find({'resName':resName},{});
+        res.send(result);
+    } catch (error) {
+        throw error;
+    }
+}
+
+exports.getData3=async(req,res,next)=>{
+    try {
+        const {ownerEmail}=req.body;
+        const result=await RestaurantModel.find({'ownerEmail':ownerEmail},{});
         res.send(result);
     } catch (error) {
         throw error;

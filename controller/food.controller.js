@@ -27,6 +27,16 @@ exports.getData=async(req,res,next)=>{
     }
 }
 
+exports.getData1=async(req,res,next)=>{
+    try {
+        const {resName,name}=req.body;
+        const resilt=await FoodModel.find({resName:resName,name:name},{});
+        res.send(resilt);
+    } catch (error) {
+        throw error;
+    }
+}
+
 exports.search=async(req,res,next)=>{
     try {
         const {text}=req.body;
