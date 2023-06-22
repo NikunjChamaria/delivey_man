@@ -6,6 +6,9 @@ import 'package:delivery_man/pages/food/chekout_page.dart';
 import 'package:delivery_man/pages/food/food_main_page.dart';
 import 'package:delivery_man/pages/food/restaurant_page.dart';
 import 'package:delivery_man/pages/home/home.dart';
+import 'package:delivery_man/pages/location/add_address.dart';
+import 'package:delivery_man/pages/location/business_map.dart';
+import 'package:delivery_man/pages/location/map.dart';
 import 'package:delivery_man/pages/on%20board/home_page_.dart';
 import 'package:delivery_man/pages/profile/business_porfile_sign_in.dart';
 import 'package:delivery_man/pages/profile/business_profile_main_page.dart';
@@ -32,6 +35,9 @@ class RouteHelper {
   static const String businessProfileMainPage = '/businessProfileMainPage';
   static const String businessPage = '/businessPage';
   static const String newFoodPage = '/newFoodPage';
+  static const String addLocation = '/addLocation';
+  static const String map = '/map';
+  static const String businessmap = '/businessmap';
 
   static List<GetPage> routes = [
     GetPage(
@@ -107,7 +113,16 @@ class RouteHelper {
         transition: Transition.rightToLeftWithFade),
     GetPage(
         name: businessProfileSigIn,
-        page: () => const BusinessProfileCreate(),
+        page: () {
+          String address = Get.arguments['address'];
+          double lat = Get.arguments['lat'];
+          double long = Get.arguments['long'];
+          return BusinessProfileCreate(
+            address: address,
+            lat: lat,
+            long: long,
+          );
+        },
         transition: Transition.rightToLeftWithFade),
     GetPage(
         name: businessProfileMainPage,
@@ -127,6 +142,36 @@ class RouteHelper {
         page: () {
           String resName = Get.arguments['resName'];
           return NewFoodPage(resName: resName);
+        },
+        transition: Transition.rightToLeftWithFade),
+    GetPage(
+        name: addLocation,
+        page: () => const AddLocation(),
+        transition: Transition.rightToLeftWithFade),
+    GetPage(
+        name: map,
+        page: () {
+          double lat = Get.arguments['lat'];
+          double long = Get.arguments['long'];
+          String address = Get.arguments['address'];
+          return MapScreen(
+            initialLatitude: lat,
+            initialLongitude: long,
+            address: address,
+          );
+        },
+        transition: Transition.rightToLeftWithFade),
+    GetPage(
+        name: businessmap,
+        page: () {
+          double lat = Get.arguments['lat'];
+          double long = Get.arguments['long'];
+          String address = Get.arguments['address'];
+          return BusinessMapScreen(
+            initialLatitude: lat,
+            initialLongitude: long,
+            address: address,
+          );
         },
         transition: Transition.rightToLeftWithFade),
   ];

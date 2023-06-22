@@ -11,8 +11,11 @@ import 'package:delivery_man/constants/textstyle.dart';
 import 'package:delivery_man/constants/width_spacer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RestaurantPage extends StatefulWidget {
   final Map restaurant;
@@ -49,6 +52,26 @@ class _RestaurantPageState extends State<RestaurantPage> {
     return response;
 
     //print(response);
+  }
+
+  Future<double> getdistinTime() async {
+    List response = [];
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var token = preferences.getString('token');
+    String email = JwtDecoder.decode(token!)['email'];
+    var data = await http.post(Uri.parse(GETCURRENT),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"useremail": email}));
+    response = jsonDecode(data.body);
+    print(response);
+    var distance = GeolocatorPlatform.instance.distanceBetween(
+        response[0]["lat"],
+        response[0]["long"],
+        widget.restaurant["lat"],
+        widget.restaurant["long"]);
+    distance = distance / 1000;
+    distance = double.parse(distance.toStringAsFixed(2));
+    return distance;
   }
 
   String getFoodType(List list) {
@@ -252,9 +275,16 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                 Container(
                                   width: 60,
                                   decoration: const BoxDecoration(color: white),
-                                  child: Text("${widget.restaurant['dist']} km",
-                                      style:
-                                          appstyle(black, 12, FontWeight.w600)),
+                                  child: FutureBuilder(
+                                      future: getdistinTime(),
+                                      builder: (context,
+                                          AsyncSnapshot<double?> snapshot) {
+                                        return Text("${snapshot.data} km",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.fade,
+                                            style: appstyle(
+                                                black, 12, FontWeight.w600));
+                                      }),
                                 ),
                                 Text('Delivery to Meena Pearl',
                                     style:
@@ -477,7 +507,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                               RatingBar.builder(
                                                 onRatingUpdate: (value) {},
                                                 itemBuilder: (context, index) =>
-                                                    Icon(
+                                                    const Icon(
                                                   Icons.star_rounded,
                                                   color: lightGrey,
                                                 ),
@@ -528,7 +558,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                                           FontWeight.w500),
                                                     ),
                                                   ),
-                                                  Icon(
+                                                  const Icon(
                                                     Icons.arrow_forward_ios,
                                                     color: lightGrey,
                                                     size: 14,
@@ -661,7 +691,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                                                       size: 22,
                                                                     ),
                                                                   ),
-                                                                  WidthSpacer(
+                                                                  const WidthSpacer(
                                                                       width: 5),
                                                                   Text(
                                                                     itemCount[snapshot.data![index]
@@ -674,7 +704,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                                                         FontWeight
                                                                             .bold),
                                                                   ),
-                                                                  WidthSpacer(
+                                                                  const WidthSpacer(
                                                                       width: 5),
                                                                   GestureDetector(
                                                                     onTap: () {

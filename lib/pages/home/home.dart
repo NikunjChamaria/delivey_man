@@ -57,7 +57,6 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
     setState(() {
       response = json.decode(data.body);
     });
-    //print(response[0]['name']);
   }
 
   void downloadData1() async {
@@ -68,7 +67,6 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
     setState(() {
       response1 = json.decode(data.body);
     });
-    //print(response[0]['name']);
   }
 
   @override
@@ -111,14 +109,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                       ),
                       const Text(
                         'Nikunj',
-                        style: TextStyle(color: white, fontSize: 20)
-                        /*FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Readex Pro',
-                              color:
-                                  FlutterFlowTheme.of(context).primaryBtnText,
-                              fontSize: 20,
-                            )*/
-                        ,
+                        style: TextStyle(color: white, fontSize: 20),
                       ),
                     ],
                   ),
@@ -166,34 +157,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                   height: 50,
                                   color: transparent,
                                   color2: white,
-                                  textSize: 22)
-                              /*FFButtonWidget(
-                                onPressed: () {
-                                  print('Button pressed ...');
-                                },
-                                text: 'Home',
-                                options: FFButtonOptions(
-                                  height: 40,
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      24, 0, 24, 0),
-                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 0),
-                                  color: Color(0xFF212425),
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        color: Colors.white,
-                                      ),
-                                  elevation: 0,
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              )*/
-                              ,
+                                  textSize: 22),
                             ],
                           ),
                         ),
@@ -230,32 +194,6 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                   color: transparent,
                                   color2: white,
                                   textSize: 22)
-                              /*FFButtonWidget(
-                                onPressed: () {
-                                  print('Button pressed ...');
-                                },
-                                text: 'Food',
-                                options: FFButtonOptions(
-                                  height: 40,
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      24, 0, 24, 0),
-                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 0),
-                                  color: Color(0xFF212425),
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        color: Colors.white,
-                                      ),
-                                  elevation: 0,
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),*/
                             ],
                           ),
                         ),
@@ -292,32 +230,6 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                   color: transparent,
                                   color2: white,
                                   textSize: 22)
-                              /*FFButtonWidget(
-                                onPressed: () {
-                                  print('Button pressed ...');
-                                },
-                                text: 'Retail Store',
-                                options: FFButtonOptions(
-                                  height: 40,
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      24, 0, 24, 0),
-                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 0),
-                                  color: Color(0xFF212425),
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        color: Colors.white,
-                                      ),
-                                  elevation: 0,
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),*/
                             ],
                           ),
                         ),
@@ -364,32 +276,6 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                   color: transparent,
                                   color2: white,
                                   textSize: 22)
-                              /*FFButtonWidget(
-                                onPressed: () {
-                                  print('Button pressed ...');
-                                },
-                                text: 'Profile',
-                                options: FFButtonOptions(
-                                  height: 40,
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      24, 0, 24, 0),
-                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 0),
-                                  color: Color(0xFF212425),
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        color: Colors.white,
-                                      ),
-                                  elevation: 0,
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),*/
                             ],
                           ),
                         ),
@@ -939,9 +825,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                           color: white,
                           size: 24,
                         ),
-                        onPressed: () {
-                          //print('IconButton pressed ...');
-                        },
+                        onPressed: () {},
                       ),
                     ),
                     const Align(
@@ -950,15 +834,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                           style: TextStyle(
                               color: white,
                               fontSize: 25,
-                              fontWeight: FontWeight
-                                  .bold) /*FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Readex Pro',
-                              color:
-                                  FlutterFlowTheme.of(context).primaryBtnText,
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                            ),*/
-                          ),
+                              fontWeight: FontWeight.bold)),
                     ),
                   ],
                 ),

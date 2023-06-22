@@ -7,6 +7,7 @@ import 'package:delivery_man/constants/route.dart';
 import 'package:delivery_man/constants/server.dart';
 import 'package:delivery_man/constants/textstyle.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,6 +37,7 @@ class _CartPageState extends State<CartPage> {
   late num totalAmount;
   late double deliveryFee;
   late double gst;
+  double distance = 0.0;
   Set pricelist = {};
   double tip = 0;
   @override
@@ -46,7 +48,7 @@ class _CartPageState extends State<CartPage> {
     itemCount = widget.itemCount;
     response = widget.response;
     totalAmount = widget.totalAmount;
-    deliveryFee = restaurant['dist'] * 18;
+    deliveryFee = distance * 18;
     deliveryFee = deliveryFee.floor().toDouble();
     gst = totalAmount * 0.05;
   }
@@ -99,8 +101,36 @@ class _CartPageState extends State<CartPage> {
     return 0;
   }
 
+  Future<double?> getdistinTime() async {
+    List response = [];
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var token = preferences.getString('token');
+    String email = JwtDecoder.decode(token!)['email'];
+    var data = await http.post(Uri.parse(GETCURRENT),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"useremail": email}));
+    response = jsonDecode(data.body);
+    print(response);
+    distance = GeolocatorPlatform.instance.distanceBetween(
+        response[0]["lat"],
+        response[0]["long"],
+        widget.restaurant["lat"],
+        widget.restaurant["long"]);
+    distance = distance / 1000;
+    distance = double.parse(distance.toStringAsFixed(2));
+
+    setState(() {
+      if (mounted) {
+        deliveryFee = distance * 18;
+      }
+    });
+    return distance;
+  }
+
   @override
   Widget build(BuildContext context) {
+    double dist;
+    print(distance);
     return Scaffold(
       backgroundColor: backGround,
       appBar: AppBar(
@@ -154,8 +184,14 @@ class _CartPageState extends State<CartPage> {
                         Padding(
                           padding:
                               const EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
-                          child: Text('${restaurant['dist']} km to Location ',
-                              style: appstyle(black, 16, FontWeight.w600)),
+                          child: FutureBuilder(
+                              future: getdistinTime(),
+                              builder:
+                                  (context, AsyncSnapshot<double?> snapshot) {
+                                return Text('${snapshot.data} km to Location ',
+                                    style:
+                                        appstyle(black, 16, FontWeight.w600));
+                              }),
                         ),
                         Text(' |  Tap to Update',
                             style: appstyle(black, 14, FontWeight.w400)),

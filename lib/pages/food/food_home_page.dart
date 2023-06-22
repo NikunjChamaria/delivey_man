@@ -10,8 +10,11 @@ import 'package:delivery_man/constants/server.dart';
 import 'package:delivery_man/constants/textstyle.dart';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FoodHomePage extends StatefulWidget {
   const FoodHomePage({Key? key}) : super(key: key);
@@ -29,7 +32,6 @@ class _FoodHomePageState extends State<FoodHomePage> {
     super.initState();
     downloadData();
     downloadData1();
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -251,6 +253,33 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                 shrinkWrap: true,
                                 itemCount: snapshot.data!.length,
                                 itemBuilder: (context, index) {
+                                  Future<double> getdistinTime() async {
+                                    List response = [];
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    var token = preferences.getString('token');
+                                    String email =
+                                        JwtDecoder.decode(token!)['email'];
+                                    var data = await http.post(
+                                        Uri.parse(GETCURRENT),
+                                        headers: {
+                                          "Content-Type": "application/json"
+                                        },
+                                        body: jsonEncode({"useremail": email}));
+                                    response = jsonDecode(data.body);
+                                    print(response);
+                                    var distance = GeolocatorPlatform.instance
+                                        .distanceBetween(
+                                            response[0]["lat"],
+                                            response[0]["long"],
+                                            snapshot.data![index]["lat"],
+                                            snapshot.data![index]["long"]);
+                                    distance = distance / 1000;
+                                    distance = double.parse(
+                                        distance.toStringAsFixed(2));
+                                    return distance;
+                                  }
+
                                   Future<Uint8List> downloadImage() async {
                                     var data = await http.post(
                                       Uri.parse(DOWNLOADIMAGE),
@@ -280,12 +309,49 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                   return snapshot.data == null
                                       ? const SizedBox.shrink()
                                       : GestureDetector(
-                                          onTap: () {
-                                            Get.toNamed(RouteHelper.restaurant,
-                                                arguments: {
-                                                  'restaurant':
-                                                      snapshot.data![index]
-                                                });
+                                          onTap: () async {
+                                            List response = [];
+                                            SharedPreferences preferences =
+                                                await SharedPreferences
+                                                    .getInstance();
+                                            var token =
+                                                preferences.getString('token');
+                                            String email = JwtDecoder.decode(
+                                                token!)['email'];
+                                            var data = await http.post(
+                                                Uri.parse(GETCURRENT),
+                                                headers: {
+                                                  "Content-Type":
+                                                      "application/json"
+                                                },
+                                                body: jsonEncode(
+                                                    {"useremail": email}));
+                                            response = jsonDecode(data.body);
+                                            if (response.isEmpty) {
+                                              Get.snackbar("Address empty",
+                                                  "Add location to continue",
+                                                  backgroundColor: white,
+                                                  mainButton: TextButton(
+                                                      onPressed: () {
+                                                        Get.toNamed(RouteHelper
+                                                            .addLocation);
+                                                      },
+                                                      child: Text(
+                                                        "Add",
+                                                        style: appstyle(
+                                                            black,
+                                                            14,
+                                                            FontWeight.bold),
+                                                      )),
+                                                  colorText: backGround);
+                                            } else {
+                                              Get.toNamed(
+                                                  RouteHelper.restaurant,
+                                                  arguments: {
+                                                    'restaurant':
+                                                        snapshot.data![index]
+                                                  });
+                                            }
                                           },
                                           child: Container(
                                             margin: const EdgeInsets.only(
@@ -488,18 +554,21 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                                       0,
                                                                       0,
                                                                       0),
-                                                              child: Text(
-                                                                  snapshot
-                                                                      .data![
-                                                                          index]
-                                                                          [
-                                                                          'dist']
-                                                                      .toString(),
-                                                                  style: appstyle(
-                                                                      white,
-                                                                      14,
-                                                                      FontWeight
-                                                                          .normal)),
+                                                              child:
+                                                                  FutureBuilder(
+                                                                      future:
+                                                                          getdistinTime(),
+                                                                      builder: (context,
+                                                                          AsyncSnapshot<double?>
+                                                                              snapshot1) {
+                                                                        return Text(
+                                                                            snapshot1.data
+                                                                                .toString(),
+                                                                            style: appstyle(
+                                                                                white,
+                                                                                14,
+                                                                                FontWeight.normal));
+                                                                      }),
                                                             ),
                                                             Padding(
                                                               padding:

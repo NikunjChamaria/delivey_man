@@ -1,5 +1,10 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:convert';
+import 'package:delivery_man/constants/route.dart';
 import 'package:delivery_man/constants/server.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 
@@ -15,7 +20,14 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BusinessProfileCreate extends StatefulWidget {
-  const BusinessProfileCreate({super.key});
+  String address;
+  double lat;
+  double long;
+  BusinessProfileCreate(
+      {super.key,
+      required this.address,
+      required this.lat,
+      required this.long});
 
   @override
   State<BusinessProfileCreate> createState() => _BusinessProfileCreateState();
@@ -32,6 +44,30 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
   TextEditingController averagePrice = TextEditingController();
   File? image;
   List foodTypeList = [];
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.bestForNavigation);
+  }
 
   Future pickImage() async {
     try {
@@ -139,6 +175,73 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                 ),
               ),
               const HeightSpacer(height: 10),
+              Text(
+                "Location :",
+                style: appstyle(white, 20, FontWeight.w600),
+              ),
+              widget.address == ""
+                  ? Container()
+                  : Padding(
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                10, 2, 10, 2),
+                            child: SizedBox(
+                              width: double.maxFinite,
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Text(
+                                    widget.address,
+                                    style:
+                                        appstyle(black, 16, FontWeight.normal),
+                                  ),
+                                ),
+                              ),
+                            )),
+                      ),
+                    ),
+              Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(10, 2, 10, 2),
+                      child: SizedBox(
+                        width: double.maxFinite,
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: () async {
+                              Position position = await _determinePosition();
+
+                              Get.toNamed(RouteHelper.businessmap, arguments: {
+                                "lat": position.latitude,
+                                "long": position.longitude,
+                                "address": ""
+                              });
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Text(
+                                "Set location from map",
+                                style: appstyle(black, 16, FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )),
+                ),
+              ),
               Text(
                 "Business Name :",
                 style: appstyle(white, 20, FontWeight.w600),
@@ -362,7 +465,7 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                 ),
               ),
               Text(
-                "Distance :",
+                "Location Name :",
                 style: appstyle(white, 20, FontWeight.w600),
               ),
               Padding(
@@ -375,17 +478,17 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                   child: Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(10, 2, 10, 2),
                     child: TextFormField(
-                      controller: dist,
+                      controller: loaction,
                       obscureText: false,
                       onChanged: (va) {
                         setState(() {});
                       },
                       decoration: InputDecoration(
-                        labelText: 'Distance',
+                        labelText: 'Average Price',
                         labelStyle: const TextStyle(
                           color: Color(0xFF060000),
                         ),
-                        hintText: 'Distance',
+                        hintText: 'Average Price',
                         hintStyle: const TextStyle(
                           color: Color(0xFF060000),
                         ),
@@ -417,15 +520,15 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                           ),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        suffixIcon: dist.text.isNotEmpty
+                        suffixIcon: loaction.text.isNotEmpty
                             ? InkWell(
                                 onTap: () async {
-                                  dist.clear();
+                                  loaction.clear();
                                   setState(() {});
                                 },
                                 child: const Icon(
                                   Icons.clear,
-                                  color: black,
+                                  color: Color(0xFF060000),
                                   size: 14,
                                 ),
                               )
@@ -607,80 +710,6 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
               ),
               const HeightSpacer(height: 10),
               Text(
-                "Location :",
-                style: appstyle(white, 20, FontWeight.w600),
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(10, 2, 10, 2),
-                    child: TextFormField(
-                      controller: loaction,
-                      obscureText: false,
-                      onChanged: (va) {
-                        setState(() {});
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Location',
-                        labelStyle: const TextStyle(
-                          color: Color(0xFF060000),
-                        ),
-                        hintText: 'Location',
-                        hintStyle: const TextStyle(
-                          color: Color(0xFF060000),
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0xFFFCFCFD),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0xFF060000),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        errorBorder: UnderlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0xFFEBFA14),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        focusedErrorBorder: UnderlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0xFFEBFA14),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        suffixIcon: loaction.text.isNotEmpty
-                            ? InkWell(
-                                onTap: () async {
-                                  loaction.clear();
-                                  setState(() {});
-                                },
-                                child: const Icon(
-                                  Icons.clear,
-                                  color: Color(0xFF060000),
-                                  size: 14,
-                                ),
-                              )
-                            : null,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Text(
                 "Average Price :",
                 style: appstyle(white, 20, FontWeight.w600),
               ),
@@ -766,13 +795,15 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                     var req = {
                       'resName': resName.text,
                       'rating': num.parse(rating.text),
-                      'dist': num.parse(dist.text),
                       'comments': num.parse(comments.text),
                       'averagePrice': num.parse(averagePrice.text),
                       'foodType': foodTypeList,
                       'location': loaction.text,
                       'ownerEmail': email,
                       'businessEmail': businessemail.text,
+                      'address': widget.address,
+                      "lat": widget.lat,
+                      'long': widget.long
                     };
                     // ignore: unused_local_variable
                     var data = await http.post(Uri.parse(RESTAURANT),
@@ -796,6 +827,13 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                   ),
                 ),
               ),
+              IconButton(
+                  onPressed: () {
+                    print(widget.address);
+                    print(widget.lat.toString());
+                    print(widget.long.toString());
+                  },
+                  icon: const Icon(Icons.access_alarm)),
             ],
           ),
         ),

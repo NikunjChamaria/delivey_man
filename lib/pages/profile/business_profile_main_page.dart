@@ -199,10 +199,11 @@ class _BusinessProfileMainPageState extends State<BusinessProfileMainPage> {
             Center(
               child: GestureDetector(
                 onTap: () {
-                  Get.toNamed(RouteHelper.businessProfileSigIn);
+                  Get.toNamed(RouteHelper.businessProfileSigIn,
+                      arguments: {"address": "", "lat": 0.0, "long": 0.0});
                 },
                 child: Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       color: white),
                   child: Padding(

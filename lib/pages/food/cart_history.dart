@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:shimmer/shimmer.dart';
 
 import '../../constants/route.dart';
 
@@ -91,11 +92,15 @@ class _CartHistoryState extends State<CartHistory> {
                   future: getData(),
                   builder: (context, AsyncSnapshot<Map?> snapshot) {
                     return snapshot.connectionState == ConnectionState.waiting
-                        ? const Center(
-                            child: CircularProgressIndicator(
-                              color: white,
-                            ),
-                          )
+                        ? Center(
+                            child: SizedBox(
+                            width: 200.0,
+                            height: 100.0,
+                            child: Shimmer.fromColors(
+                                baseColor: Colors.red,
+                                highlightColor: Colors.yellow,
+                                child: Container()),
+                          ))
                         : ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: snapshot.data!.isEmpty
@@ -172,7 +177,7 @@ class _CartHistoryState extends State<CartHistory> {
                                                                   .connectionState ==
                                                               ConnectionState
                                                                   .done
-                                                          ? Container(
+                                                          ? SizedBox(
                                                               width: 50,
                                                               height: 50,
                                                               child:

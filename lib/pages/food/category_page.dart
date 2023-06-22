@@ -10,6 +10,8 @@ import 'package:delivery_man/constants/textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/route.dart';
 
@@ -113,11 +115,41 @@ class _CategoryPageState extends State<CategoryPage> {
                               }
 
                               return GestureDetector(
-                                onTap: () {
-                                  Get.toNamed(RouteHelper.restaurant,
-                                      arguments: {
-                                        'restaurant': snapshot.data![index]
-                                      });
+                                onTap: () async {
+                                  List response = [];
+                                  SharedPreferences preferences =
+                                      await SharedPreferences.getInstance();
+                                  var token = preferences.getString('token');
+                                  String email =
+                                      JwtDecoder.decode(token!)['email'];
+                                  var data = await http.post(
+                                      Uri.parse(GETCURRENT),
+                                      headers: {
+                                        "Content-Type": "application/json"
+                                      },
+                                      body: jsonEncode({"useremail": email}));
+                                  response = jsonDecode(data.body);
+                                  if (response.isEmpty) {
+                                    Get.snackbar("Address empty",
+                                        "Add location to continue",
+                                        backgroundColor: white,
+                                        mainButton: TextButton(
+                                            onPressed: () {
+                                              Get.toNamed(
+                                                  RouteHelper.addLocation);
+                                            },
+                                            child: Text(
+                                              "Add",
+                                              style: appstyle(
+                                                  black, 14, FontWeight.bold),
+                                            )),
+                                        colorText: backGround);
+                                  } else {
+                                    Get.toNamed(RouteHelper.restaurant,
+                                        arguments: {
+                                          'restaurant': snapshot.data![index]
+                                        });
+                                  }
                                 },
                                 child: Container(
                                   margin: const EdgeInsets.only(

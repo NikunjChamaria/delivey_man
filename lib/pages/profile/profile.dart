@@ -84,7 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     Text(
                       name,
-                      style: TextStyle(color: white, fontSize: 20),
+                      style: const TextStyle(color: white, fontSize: 20),
                     ),
                   ],
                 ),
@@ -313,7 +313,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 padding: const EdgeInsetsDirectional.fromSTEB(
                                     24, 140, 0, 0),
                                 child: Text(
-                                  'Hi, ${name}',
+                                  'Hi, $name',
                                   style: appstyle(white, 28, FontWeight.normal),
                                 ),
                               ),
@@ -411,7 +411,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       body: jsonEncode({"ownerEmail": email}));
                   List response = jsonDecode(data.body);
                   response.isEmpty
-                      ? Get.toNamed(RouteHelper.businessProfileSigIn)
+                      ? Get.toNamed(RouteHelper.businessProfileSigIn,
+                          arguments: {"address": "", "lat": 0.0, "long": 0.0})
                       : Get.toNamed(RouteHelper.businessProfileMainPage);
                 },
                 child: Padding(
@@ -493,10 +494,54 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
               ),
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(RouteHelper.addLocation);
+                },
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 1, 0, 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF212425),
+                          shape: BoxShape.rectangle,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  24, 0, 0, 0),
+                              child: Text(
+                                'Address Book',
+                                style: appstyle(white, 14, FontWeight.normal),
+                              ),
+                            ),
+                            const Expanded(
+                              child: Align(
+                                alignment: AlignmentDirectional(0.9, 0),
+                                child: Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                  size: 18,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
           Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+            padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,

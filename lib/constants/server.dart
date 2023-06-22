@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-const url = 'http://192.168.139.51:3000/';
+const url = 'http://192.168.191.51:3000/';
 
 const REGISTER = "${url}register";
 
@@ -53,3 +53,11 @@ const DOWNLOADIMAGE = "${url}downloadImage";
 const UPLOADFOODIMAGE = "${url}uploadFoodImage";
 
 const DOWNLOADFOODIMAGE = "${url}downloadFoodImage";
+
+const ADDRESS = "${url}address";
+
+const GETADDRESS = "${url}getaddress";
+
+const SETCURRENT = "${url}postcurr";
+
+const GETCURRENT = "${url}getcurr";
