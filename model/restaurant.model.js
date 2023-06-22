@@ -23,7 +23,10 @@ const restaurantSchema=new Schema({
     foodType:Array,
     location:String,
     ownerEmail:String,
-    businessEmail:String
+    businessEmail:String,
+    address:String,
+    lat:Number,
+    long:Number
 });
 
 

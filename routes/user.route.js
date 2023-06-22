@@ -12,6 +12,7 @@ const FoodImageController=require('../controller/foodimage.cpntroller');
 const ImageModel = require('../model/image.model');
 const FoodImageModel=require('../model/foodimage.model');
 const multer = require('multer');
+const AddressController=require('../controller/address.controller');
 
 const storage=multer.diskStorage({
     destination:'uploads',
@@ -61,6 +62,10 @@ route.post('/postSearch',PastSearchesConstroller.postPast);
 route.post('/getSearch',PastSearchesConstroller.getPast);
 route.post('/downloadImage',ImageController.download);
 route.post('/downloadFoodImage',FoodImageController.download);
+route.post('/address',AddressController.postAddress);
+route.post('/getaddress',AddressController.getAddress);
+route.post('/postcurr',AddressController.setCurrent);
+route.post('/getcurr',AddressController.getCurrent);
 
 
 

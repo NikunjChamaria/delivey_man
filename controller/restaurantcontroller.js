@@ -3,8 +3,8 @@ const RestaurantModel=require('../model/restaurant.model');
 
 exports.postData=async(req,res,next)=>{
     try {
-        const {resName,rating,dist,comments,averagePrice,foodType,location,ownerEmail,businessEmail}=req.body;
-        const success=await RestaurantService.postData(resName,rating,dist,comments,averagePrice,foodType,location,ownerEmail,businessEmail);
+        const {resName,rating,dist,comments,averagePrice,foodType,location,ownerEmail,businessEmail,address,lat,long}=req.body;
+        const success=await RestaurantService.postData(resName,rating,dist,comments,averagePrice,foodType,location,ownerEmail,businessEmail,address,lat,long);
         res.status(200).json({status:true,token:"yo"});
     } catch (error) {
         throw error;

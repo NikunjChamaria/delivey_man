@@ -22,12 +22,12 @@ exports.login= async(req,res,next)=>{
         const user= await UserService.loginUser(email);
 
         if(!user){
-            throw new Error('User dont exist')
+            return res.status(200).json({ status: false });
         }
 
         const isMatch=await user.comparePassword(password);
         if(isMatch===false){
-            throw new Error('Password Invalid');
+            return res.status(200).json({ status: false });
         }
 
         let tokenData={_id:user._id,email:user.email,name:user.name,phone:user.phone};
