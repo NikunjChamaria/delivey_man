@@ -18,26 +18,26 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backGround,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         backgroundColor: const Color(0xFF212425),
         automaticallyImplyLeading: false,
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_rounded,
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.secondary,
             size: 18,
           ),
           onPressed: () {
             Get.back();
           },
         ),
-        title: const Align(
-          alignment: AlignmentDirectional(-1, 0),
+        title: Align(
+          alignment: const AlignmentDirectional(-1, 0),
           child: Text(
             'Your Profiles',
             style: TextStyle(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.secondary,
               fontSize: 18,
             ),
           ),
@@ -56,20 +56,21 @@ class _EditProfileState extends State<EditProfile> {
                 initialIndex: 0,
                 child: Column(
                   children: [
-                    const Align(
-                      alignment: Alignment(0, 0),
+                    Align(
+                      alignment: const Alignment(0, 0),
                       child: TabBar(
-                        indicatorColor: white,
-                        labelStyle: TextStyle(
+                        indicatorColor: Theme.of(context).colorScheme.secondary,
+                        labelStyle: const TextStyle(
                           fontSize: 16,
                         ),
-                        unselectedLabelStyle: TextStyle(
+                        unselectedLabelStyle: const TextStyle(
                           fontSize: 16,
                         ),
-                        labelColor: Colors.white,
-                        unselectedLabelColor: Color(0xFF545858),
-                        padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
-                        tabs: [
+                        labelColor: Theme.of(context).colorScheme.secondary,
+                        unselectedLabelColor: const Color(0xFF545858),
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
+                        tabs: const [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -119,7 +120,9 @@ class _EditProfileState extends State<EditProfile> {
                                             0, 0, 0, 20),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: white,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Padding(
@@ -195,7 +198,9 @@ class _EditProfileState extends State<EditProfile> {
                                             0, 0, 0, 20),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: white,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Padding(
@@ -271,7 +276,9 @@ class _EditProfileState extends State<EditProfile> {
                                             0, 0, 0, 20),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: white,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Padding(
@@ -358,7 +365,9 @@ class _EditProfileState extends State<EditProfile> {
                                             0, 0, 0, 20),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: white,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Padding(
@@ -435,7 +444,9 @@ class _EditProfileState extends State<EditProfile> {
                                             0, 0, 0, 20),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: white,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Padding(

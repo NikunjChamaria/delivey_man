@@ -1,16 +1,10 @@
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
-import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/pages/food/cart_history.dart';
 import 'package:delivery_man/pages/food/favorite.dart';
 import 'package:delivery_man/pages/food/food_home_page.dart';
 import 'package:delivery_man/pages/food/search_page.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../constants/route.dart';
-import '../../widgets/custom_button.dart';
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 
 class FoodMainPage extends StatefulWidget {
   const FoodMainPage({super.key});
@@ -45,337 +39,18 @@ class _FoodMainPageState extends State<FoodMainPage> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        backgroundColor: backGround,
+        backgroundColor: Theme.of(context).colorScheme.background,
         leading: IconButton(
           onPressed: () {
-            scaffoldKey.currentState!.openDrawer();
+            ZoomDrawer.of(context)!.open();
           },
-          icon: const Icon(Icons.menu),
-        ),
-      ),
-      backgroundColor: backGround,
-      drawer: Drawer(
-        elevation: 16,
-        child: Container(
-          width: 100,
-          height: 100,
-          decoration: const BoxDecoration(
-            color: Color(0xFF212425),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 100, 0, 0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Container(
-                      width: 120,
-                      height: 120,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
-                      child: Image.network(
-                        'https://picsum.photos/seed/52/600',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Container(
-                      height: 40,
-                      decoration: const BoxDecoration(),
-                    ),
-                    const Text(
-                      'Nikunj',
-                      style: TextStyle(color: white, fontSize: 20)
-                      /*FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Readex Pro',
-                              color:
-                                  FlutterFlowTheme.of(context).primaryBtnText,
-                              fontSize: 20,
-                            )*/
-                      ,
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 50, 0, 0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(15, 0, 0, 15),
-                      child: Container(
-                        width: 314,
-                        height: 46,
-                        decoration: const BoxDecoration(),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            const FaIcon(
-                              // ignore: deprecated_member_use
-                              FontAwesomeIcons.home,
-                              color: Colors.white,
-                              size: 24,
-                            ),
-                            Container(
-                              width: 10,
-                              decoration: const BoxDecoration(
-                                color: Color(0xFF212425),
-                              ),
-                            ),
-                            CustomButton(
-                                onTap: () async {
-                                  SharedPreferences preferences =
-                                      await SharedPreferences.getInstance();
-                                  Get.toNamed(RouteHelper.homw, arguments: {
-                                    'token': preferences.getString('token')
-                                  });
-                                  scaffoldKey.currentState!.closeDrawer();
-                                },
-                                text: "Home",
-                                width: 140,
-                                height: 50,
-                                color: transparent,
-                                color2: white,
-                                textSize: 22)
-                            /*FFButtonWidget(
-                                onPressed: () {
-                                  print('Button pressed ...');
-                                },
-                                text: 'Home',
-                                options: FFButtonOptions(
-                                  height: 40,
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      24, 0, 24, 0),
-                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 0),
-                                  color: Color(0xFF212425),
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        color: Colors.white,
-                                      ),
-                                  elevation: 0,
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              )*/
-                            ,
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(15, 0, 0, 15),
-                      child: Container(
-                        width: 314,
-                        height: 46,
-                        decoration: const BoxDecoration(),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            const Icon(
-                              Icons.no_food_sharp,
-                              color: Colors.white,
-                              size: 24,
-                            ),
-                            Container(
-                              width: 10,
-                              decoration: const BoxDecoration(
-                                color: Color(0xFF212425),
-                              ),
-                            ),
-                            CustomButton(
-                                onTap: () {
-                                  Get.toNamed(RouteHelper.food);
-                                  scaffoldKey.currentState!.closeDrawer();
-                                },
-                                text: "Food",
-                                width: 140,
-                                height: 50,
-                                color: transparent,
-                                color2: white,
-                                textSize: 22)
-                            /*FFButtonWidget(
-                                onPressed: () {
-                                  print('Button pressed ...');
-                                },
-                                text: 'Food',
-                                options: FFButtonOptions(
-                                  height: 40,
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      24, 0, 24, 0),
-                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 0),
-                                  color: Color(0xFF212425),
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        color: Colors.white,
-                                      ),
-                                  elevation: 0,
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),*/
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(15, 0, 0, 15),
-                      child: Container(
-                        width: 314,
-                        height: 46,
-                        decoration: const BoxDecoration(),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            const Icon(
-                              Icons.local_convenience_store_rounded,
-                              color: Colors.white,
-                              size: 24,
-                            ),
-                            Container(
-                              width: 10,
-                              decoration: const BoxDecoration(
-                                color: Color(0xFF212425),
-                              ),
-                            ),
-                            CustomButton(
-                                onTap: () {
-                                  Get.toNamed(RouteHelper.retail);
-                                  scaffoldKey.currentState!.closeDrawer();
-                                },
-                                text: "Retail Store",
-                                width: 200,
-                                height: 50,
-                                color: transparent,
-                                color2: white,
-                                textSize: 22)
-                            /*FFButtonWidget(
-                                onPressed: () {
-                                  print('Button pressed ...');
-                                },
-                                text: 'Retail Store',
-                                options: FFButtonOptions(
-                                  height: 40,
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      24, 0, 24, 0),
-                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 0),
-                                  color: Color(0xFF212425),
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        color: Colors.white,
-                                      ),
-                                  elevation: 0,
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),*/
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 200,
-                      decoration: const BoxDecoration(),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(15, 0, 0, 15),
-                      child: Container(
-                        width: 314,
-                        height: 46,
-                        decoration: const BoxDecoration(),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            const Icon(
-                              Icons.person,
-                              color: Colors.white,
-                              size: 24,
-                            ),
-                            Container(
-                              width: 10,
-                              decoration: const BoxDecoration(
-                                color: Color(0xFF212425),
-                              ),
-                            ),
-                            CustomButton(
-                                onTap: () async {
-                                  SharedPreferences preferences =
-                                      await SharedPreferences.getInstance();
-                                  Get.toNamed(RouteHelper.profile, arguments: {
-                                    'token': preferences.getString('token')
-                                  });
-                                  scaffoldKey.currentState!.closeDrawer();
-                                },
-                                text: "Profile",
-                                width: 140,
-                                height: 50,
-                                color: transparent,
-                                color2: white,
-                                textSize: 22)
-                            /*FFButtonWidget(
-                                onPressed: () {
-                                  print('Button pressed ...');
-                                },
-                                text: 'Profile',
-                                options: FFButtonOptions(
-                                  height: 40,
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      24, 0, 24, 0),
-                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 0),
-                                  color: Color(0xFF212425),
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        color: Colors.white,
-                                      ),
-                                  elevation: 0,
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),*/
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          icon: Icon(
+            Icons.menu,
+            color: Theme.of(context).colorScheme.secondary,
           ),
         ),
       ),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: PageView(
         controller: _pageController,
         physics: const NeverScrollableScrollPhysics(),
@@ -387,29 +62,30 @@ class _FoodMainPageState extends State<FoodMainPage> {
           ? AnimatedNotchBottomBar(
               /// Provide NotchBottomBarController
               notchBottomBarController: _controller,
-              color: yellow,
+              color: Theme.of(context).colorScheme.tertiary,
               showLabel: false,
-              notchColor: white,
+              notchColor: Theme.of(context).colorScheme.secondary,
 
               /// restart app if you change removeMargins
               removeMargins: false,
               bottomBarWidth: 500,
               durationInMilliSeconds: 300,
-              bottomBarItems: const [
+              bottomBarItems: [
                 BottomBarItem(
                   inActiveItem: Icon(
                     Icons.home_filled,
-                    color: black,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
-                  activeItem: Icon(
+                  activeItem: const Icon(
                     Icons.home_filled,
                     color: Colors.blueAccent,
                   ),
                   itemLabel: 'Page 1',
                 ),
                 BottomBarItem(
-                  inActiveItem: Icon(Icons.star, color: black),
-                  activeItem: Icon(
+                  inActiveItem: Icon(Icons.star,
+                      color: Theme.of(context).colorScheme.secondary),
+                  activeItem: const Icon(
                     Icons.star,
                     color: Colors.blueAccent,
                   ),
@@ -420,9 +96,9 @@ class _FoodMainPageState extends State<FoodMainPage> {
                 BottomBarItem(
                   inActiveItem: Icon(
                     Icons.search,
-                    color: black,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
-                  activeItem: Icon(
+                  activeItem: const Icon(
                     Icons.search,
                     color: Colors.blueGrey,
                   ),
@@ -431,9 +107,9 @@ class _FoodMainPageState extends State<FoodMainPage> {
                 BottomBarItem(
                   inActiveItem: Icon(
                     Icons.shopping_cart_outlined,
-                    color: black,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
-                  activeItem: Icon(
+                  activeItem: const Icon(
                     Icons.shopping_cart_outlined,
                     color: Colors.pink,
                   ),

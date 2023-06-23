@@ -1,15 +1,17 @@
 import 'dart:convert';
 
-import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/route.dart';
 import 'package:delivery_man/constants/server.dart';
 import 'package:delivery_man/widgets/custom_button.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 class AuthenticateSoloAltWidget extends StatefulWidget {
   const AuthenticateSoloAltWidget({Key? key}) : super(key: key);
@@ -35,11 +37,12 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
   late SharedPreferences preferences;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
+  bool isLoading = false;
+  TabController? tabController;
   @override
   void initState() {
     initSharedPref();
-
+    tabController = TabController(length: 2, vsync: this);
     super.initState();
     passwordVisibility = false;
     passwordCreateVisibility = false;
@@ -63,7 +66,59 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
     preferences = await SharedPreferences.getInstance();
   }
 
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.bestForNavigation);
+  }
+
+  Future<String> getAddressFromCoordinates(
+      double latitude, double longitude) async {
+    try {
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(latitude, longitude);
+      if (placemarks.isNotEmpty) {
+        Placemark placemark = placemarks.first;
+
+        String address = placemark.street ?? '';
+        String city = placemark.locality ?? '';
+        String state = placemark.administrativeArea ?? '';
+        String country = placemark.country ?? '';
+        String postalCode = placemark.postalCode ?? '';
+        String fullAddress = '$address, $city, $state, $country, $postalCode';
+        return fullAddress;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error: $e');
+      }
+    }
+    return '';
+  }
+
   void registerUser() async {
+    setState(() {
+      isLoading = true;
+      tabController!.index = 1;
+    });
     if (emailAddressCreateController.text.isNotEmpty &&
         passwordCreateController.text.isNotEmpty &&
         nameCreateController.text.isNotEmpty &&
@@ -84,9 +139,20 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
       if (jsonResponse['status']) {
         var myToken = jsonResponse['token'];
         preferences.setString('token', myToken);
-        Get.toNamed(RouteHelper.homw, arguments: {'token': myToken});
+        Position position = await _determinePosition();
+        String address = await getAddressFromCoordinates(
+            position.latitude, position.longitude);
+        Get.toNamed(RouteHelper.map, arguments: {
+          "lat": position.latitude,
+          "long": position.longitude,
+          "address": address,
+          "route": 0
+        });
       }
     } else {}
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void loginUser() async {
@@ -117,7 +183,6 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
 
   @override
   Widget build(BuildContext context) {
-    TabController tabController = TabController(length: 2, vsync: this);
     return GestureDetector(
       child: Scaffold(
         key: scaffoldKey,
@@ -133,16 +198,16 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
+                    SizedBox(
                       width: 240,
                       height: 60,
-                      child: const Center(
+                      child: Center(
                           child: Text(
                         "Mr. Delivery Man",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 30,
-                            color: white),
+                            color: Theme.of(context).colorScheme.secondary),
                       )),
                     ),
                   ],
@@ -158,17 +223,18 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                         alignment: const Alignment(0, 0),
                         child: TabBar(
                           controller: tabController,
-                          indicatorColor: white,
+                          indicatorColor:
+                              Theme.of(context).colorScheme.secondary,
                           isScrollable: true,
-                          labelStyle: const TextStyle(
+                          labelStyle: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
-                              color: white),
-                          unselectedLabelStyle: const TextStyle(
+                              color: Theme.of(context).colorScheme.secondary),
+                          unselectedLabelStyle: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
-                              color: white),
-                          labelColor: white,
+                              color: Theme.of(context).colorScheme.secondary),
+                          labelColor: Theme.of(context).colorScheme.secondary,
                           unselectedLabelColor: const Color(0xFF4E5657),
                           labelPadding: const EdgeInsetsDirectional.fromSTEB(
                               24, 0, 24, 0),
@@ -204,17 +270,23 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                           decoration: InputDecoration(
                                             labelText: 'Email Address',
                                             labelStyle: TextStyle(
-                                                color: lightGrey,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
                                                 fontWeight: FontWeight.normal,
                                                 fontSize: 14),
                                             hintText: 'Enter your email...',
                                             hintStyle: TextStyle(
-                                                color: lightGrey,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
                                                 fontWeight: FontWeight.normal,
                                                 fontSize: 14),
                                             enabledBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Colors.white,
+                                              borderSide: BorderSide(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
                                                 width: 1,
                                               ),
                                               borderRadius:
@@ -246,13 +318,17 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                                   BorderRadius.circular(8),
                                             ),
                                             filled: true,
-                                            fillColor: Colors.white,
+                                            fillColor: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
                                             contentPadding:
                                                 const EdgeInsetsDirectional
                                                     .fromSTEB(20, 24, 20, 24),
                                           ),
                                           style: TextStyle(
-                                              color: lightGrey,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
                                               fontWeight: FontWeight.normal,
                                               fontSize: 14),
                                           maxLines: null,
@@ -267,17 +343,23 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                         decoration: InputDecoration(
                                           labelText: 'Password',
                                           labelStyle: TextStyle(
-                                              color: lightGrey,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
                                               fontWeight: FontWeight.normal,
                                               fontSize: 14),
                                           hintText: 'Enter your password...',
                                           hintStyle: TextStyle(
-                                              color: lightGrey,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
                                               fontWeight: FontWeight.normal,
                                               fontSize: 14),
                                           enabledBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                              color: Colors.white,
+                                            borderSide: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
                                               width: 1,
                                             ),
                                             borderRadius:
@@ -309,7 +391,9 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                                 BorderRadius.circular(8),
                                           ),
                                           filled: true,
-                                          fillColor: Colors.white,
+                                          fillColor: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
                                           contentPadding:
                                               const EdgeInsetsDirectional
                                                   .fromSTEB(20, 24, 20, 24),
@@ -325,13 +409,17 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                                   ? Icons.visibility_outlined
                                                   : Icons
                                                       .visibility_off_outlined,
-                                              color: white,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
                                               size: 20,
                                             ),
                                           ),
                                         ),
                                         style: TextStyle(
-                                            color: lightGrey,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                             fontWeight: FontWeight.normal,
                                             fontSize: 14),
                                       ),
@@ -346,18 +434,25 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                             text: "Sign in",
                                             width: 230,
                                             height: 50,
-                                            color: white,
-                                            color2: black,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                            color2: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
                                             textSize: 22)),
-                                    const Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 20, 0, 0),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              0, 20, 0, 0),
                                       child: CustomButton(
                                           text: 'Forgot Password',
                                           width: 170,
                                           height: 40,
-                                          color: Color(0xFF616155),
-                                          color2: white,
+                                          color: const Color(0xFF616155),
+                                          color2: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
                                           textSize: 14),
                                     ),
                                     const Padding(
@@ -402,9 +497,11 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                             child: Container(
                                               width: 50,
                                               height: 50,
-                                              decoration: const BoxDecoration(
-                                                color: black,
-                                                boxShadow: [
+                                              decoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                                boxShadow: const [
                                                   BoxShadow(
                                                     blurRadius: 5,
                                                     color: Color(0x3314181B),
@@ -416,9 +513,11 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                               alignment:
                                                   const AlignmentDirectional(
                                                       0, 0),
-                                              child: const FaIcon(
+                                              child: FaIcon(
                                                 FontAwesomeIcons.google,
-                                                color: white,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
                                                 size: 24,
                                               ),
                                             ),
@@ -432,9 +531,11 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                             child: Container(
                                               width: 50,
                                               height: 50,
-                                              decoration: const BoxDecoration(
-                                                color: black,
-                                                boxShadow: [
+                                              decoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                                boxShadow: const [
                                                   BoxShadow(
                                                     blurRadius: 5,
                                                     color: Color(0x3314181B),
@@ -446,9 +547,11 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                               alignment:
                                                   const AlignmentDirectional(
                                                       0, 0),
-                                              child: const FaIcon(
+                                              child: FaIcon(
                                                 FontAwesomeIcons.apple,
-                                                color: white,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
                                                 size: 24,
                                               ),
                                             ),
@@ -456,9 +559,11 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                           Container(
                                             width: 50,
                                             height: 50,
-                                            decoration: const BoxDecoration(
-                                              color: black,
-                                              boxShadow: [
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              boxShadow: const [
                                                 BoxShadow(
                                                   blurRadius: 5,
                                                   color: Color(0x3314181B),
@@ -470,18 +575,22 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                             alignment:
                                                 const AlignmentDirectional(
                                                     0, 0),
-                                            child: const FaIcon(
+                                            child: FaIcon(
                                               FontAwesomeIcons.facebookF,
-                                              color: white,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
                                               size: 24,
                                             ),
                                           ),
                                           Container(
                                             width: 50,
                                             height: 50,
-                                            decoration: const BoxDecoration(
-                                              color: black,
-                                              boxShadow: [
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              boxShadow: const [
                                                 BoxShadow(
                                                   blurRadius: 5,
                                                   color: Color(0x3314181B),
@@ -493,9 +602,11 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                             alignment:
                                                 const AlignmentDirectional(
                                                     0, 0),
-                                            child: const Icon(
+                                            child: Icon(
                                               Icons.phone_sharp,
-                                              color: white,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
                                               size: 24,
                                             ),
                                           ),
@@ -531,8 +642,10 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                               fontSize: 14,
                                               fontWeight: FontWeight.normal),
                                           enabledBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                              color: Colors.white,
+                                            borderSide: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
                                               width: 1,
                                             ),
                                             borderRadius:
@@ -564,7 +677,9 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                                 BorderRadius.circular(8),
                                           ),
                                           filled: true,
-                                          fillColor: Colors.white,
+                                          fillColor: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
                                           contentPadding:
                                               const EdgeInsetsDirectional
                                                   .fromSTEB(20, 24, 20, 24),
@@ -592,8 +707,10 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                               fontSize: 14,
                                               fontWeight: FontWeight.normal),
                                           enabledBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                              color: Colors.white,
+                                            borderSide: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
                                               width: 1,
                                             ),
                                             borderRadius:
@@ -625,7 +742,9 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                                 BorderRadius.circular(8),
                                           ),
                                           filled: true,
-                                          fillColor: Colors.white,
+                                          fillColor: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
                                           contentPadding:
                                               const EdgeInsetsDirectional
                                                   .fromSTEB(20, 24, 20, 24),
@@ -641,7 +760,9 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                                   ? Icons.visibility_outlined
                                                   : Icons
                                                       .visibility_off_outlined,
-                                              color: lightGrey,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
                                               size: 20,
                                             ),
                                           ),
@@ -668,8 +789,10 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                               fontSize: 14,
                                               fontWeight: FontWeight.normal),
                                           enabledBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                              color: Colors.white,
+                                            borderSide: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
                                               width: 1,
                                             ),
                                             borderRadius:
@@ -701,7 +824,9 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                                 BorderRadius.circular(8),
                                           ),
                                           filled: true,
-                                          fillColor: Colors.white,
+                                          fillColor: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
                                           contentPadding:
                                               const EdgeInsetsDirectional
                                                   .fromSTEB(20, 24, 20, 24),
@@ -717,7 +842,9 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                                   ? Icons.visibility_outlined
                                                   : Icons
                                                       .visibility_off_outlined,
-                                              color: lightGrey,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
                                               size: 14,
                                             ),
                                           ),
@@ -744,8 +871,10 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                               fontSize: 14,
                                               fontWeight: FontWeight.normal),
                                           enabledBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                              color: Colors.white,
+                                            borderSide: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
                                               width: 1,
                                             ),
                                             borderRadius:
@@ -777,7 +906,9 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                                 BorderRadius.circular(8),
                                           ),
                                           filled: true,
-                                          fillColor: Colors.white,
+                                          fillColor: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
                                           contentPadding:
                                               const EdgeInsetsDirectional
                                                   .fromSTEB(20, 24, 20, 24),
@@ -793,7 +924,9 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                                   ? Icons.visibility_outlined
                                                   : Icons
                                                       .visibility_off_outlined,
-                                              color: lightGrey,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
                                               size: 14,
                                             ),
                                           ),
@@ -807,17 +940,42 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                       padding:
                                           const EdgeInsetsDirectional.fromSTEB(
                                               0, 24, 0, 0),
-                                      child: CustomButton(
-                                          onTap: () {
-                                            registerUser();
-                                            //Get.toNamed(RouteHelper.homw);
-                                          },
-                                          text: "Create Account",
-                                          width: 230,
-                                          height: 50,
-                                          color: white,
-                                          color2: black,
-                                          textSize: 20),
+                                      child: isLoading
+                                          ? Shimmer.fromColors(
+                                              baseColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              highlightColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .background,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                            Radius.circular(
+                                                                10)),
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary),
+                                                height: 50,
+                                                width: 230,
+                                              ))
+                                          : CustomButton(
+                                              onTap: () {
+                                                registerUser();
+
+                                                //Get.toNamed(RouteHelper.homw);
+                                              },
+                                              text: "Create Account",
+                                              width: 230,
+                                              height: 50,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              color2: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              textSize: 20),
                                     ),
                                     const Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
@@ -875,9 +1033,11 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                               alignment:
                                                   const AlignmentDirectional(
                                                       0, 0),
-                                              child: const FaIcon(
+                                              child: FaIcon(
                                                 FontAwesomeIcons.google,
-                                                color: white,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
                                                 size: 24,
                                               ),
                                             ),
@@ -905,9 +1065,11 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                               alignment:
                                                   const AlignmentDirectional(
                                                       0, 0),
-                                              child: const FaIcon(
+                                              child: FaIcon(
                                                 FontAwesomeIcons.apple,
-                                                color: white,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
                                                 size: 24,
                                               ),
                                             ),
@@ -935,9 +1097,11 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                               alignment:
                                                   const AlignmentDirectional(
                                                       0, 0),
-                                              child: const FaIcon(
+                                              child: FaIcon(
                                                 FontAwesomeIcons.facebookF,
-                                                color: white,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
                                                 size: 24,
                                               ),
                                             ),
@@ -959,9 +1123,11 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                             alignment:
                                                 const AlignmentDirectional(
                                                     0, 0),
-                                            child: const Icon(
+                                            child: Icon(
                                               Icons.phone_sharp,
-                                              color: white,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
                                               size: 24,
                                             ),
                                           ),

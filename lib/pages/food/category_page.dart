@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:cached_memory_image/cached_memory_image.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/height_spacer.dart';
 import 'package:delivery_man/constants/server.dart';
@@ -12,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../constants/route.dart';
 
@@ -47,9 +47,9 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backGround,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        backgroundColor: backGround,
+        backgroundColor: Theme.of(context).colorScheme.background,
         leading: IconButton(
             onPressed: () {
               Get.back();
@@ -57,7 +57,8 @@ class _CategoryPageState extends State<CategoryPage> {
             icon: const Icon(Icons.arrow_back_ios)),
         title: Text(
           widget.foodType,
-          style: appstyle(white, 18, FontWeight.w600),
+          style: appstyle(
+              Theme.of(context).colorScheme.secondary, 18, FontWeight.w600),
         ),
       ),
       body: SingleChildScrollView(
@@ -70,14 +71,16 @@ class _CategoryPageState extends State<CategoryPage> {
               Center(
                 child: Text(
                   "ALL RESTAURANTS DELIVERING",
-                  style: appstyle(white, 16, FontWeight.w900),
+                  style: appstyle(Theme.of(context).colorScheme.secondary, 16,
+                      FontWeight.w900),
                 ),
               ),
               const HeightSpacer(height: 5),
               Center(
                 child: Text(
                   widget.foodType.toUpperCase(),
-                  style: appstyle(white, 16, FontWeight.w900),
+                  style: appstyle(Theme.of(context).colorScheme.secondary, 16,
+                      FontWeight.w900),
                 ),
               ),
               const HeightSpacer(height: 20),
@@ -132,7 +135,9 @@ class _CategoryPageState extends State<CategoryPage> {
                                   if (response.isEmpty) {
                                     Get.snackbar("Address empty",
                                         "Add location to continue",
-                                        backgroundColor: white,
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
                                         mainButton: TextButton(
                                             onPressed: () {
                                               Get.toNamed(
@@ -141,9 +146,15 @@ class _CategoryPageState extends State<CategoryPage> {
                                             child: Text(
                                               "Add",
                                               style: appstyle(
-                                                  black, 14, FontWeight.bold),
+                                                  Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary,
+                                                  14,
+                                                  FontWeight.bold),
                                             )),
-                                        colorText: backGround);
+                                        colorText: Theme.of(context)
+                                            .colorScheme
+                                            .background);
                                   } else {
                                     Get.toNamed(RouteHelper.restaurant,
                                         arguments: {
@@ -157,11 +168,12 @@ class _CategoryPageState extends State<CategoryPage> {
                                   width:
                                       MediaQuery.of(context).size.width * 0.9,
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                     boxShadow: const [
                                       BoxShadow(
                                         blurRadius: 4,
-                                        color: Color(0x32000000),
+                                        color: Color.fromARGB(49, 0, 0, 0),
                                         offset: Offset(0, 2),
                                       )
                                     ],
@@ -170,13 +182,12 @@ class _CategoryPageState extends State<CategoryPage> {
                                   child: Column(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
-                                      ClipRRect(
-                                        borderRadius: const BorderRadius.only(
-                                          bottomLeft: Radius.circular(0),
-                                          bottomRight: Radius.circular(0),
-                                          topLeft: Radius.circular(8),
-                                          topRight: Radius.circular(8),
-                                        ),
+                                      Container(
+                                        height: 250,
+                                        decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10))),
                                         child: FutureBuilder(
                                             future: downloadImage(),
                                             builder: (context,
@@ -185,20 +196,61 @@ class _CategoryPageState extends State<CategoryPage> {
                                               return snapshot1
                                                           .connectionState ==
                                                       ConnectionState.done
-                                                  ? CachedMemoryImage(
-                                                      uniqueKey:
-                                                          snapshot.data![index]
-                                                              ['resName'],
-                                                      bytes: snapshot1.data,
-                                                      fit: BoxFit.fill,
+                                                  ? Container(
+                                                      width: double.maxFinite,
+                                                      decoration: const BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10))),
+                                                      child: CachedMemoryImage(
+                                                        uniqueKey: snapshot
+                                                                .data![index]
+                                                            ['resName'],
+                                                        bytes: snapshot1.data,
+                                                        fit: BoxFit.fill,
+                                                        placeholder:
+                                                            Shimmer.fromColors(
+                                                                baseColor: Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .primary,
+                                                                highlightColor: Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .secondary,
+                                                                child:
+                                                                    Container(
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .primary,
+                                                                  width: double
+                                                                      .maxFinite,
+                                                                  height: 200,
+                                                                )),
+                                                      ),
                                                     )
-                                                  : CachedNetworkImage(
-                                                      imageUrl:
-                                                          'https://cdn-icons-png.flaticon.com/512/147/147144.png?w=360',
-                                                      width: double.infinity,
-                                                      height: 190,
-                                                      fit: BoxFit.cover,
-                                                    );
+                                                  : Shimmer.fromColors(
+                                                      baseColor:
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .primary,
+                                                      highlightColor:
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .secondary,
+                                                      child: Container(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .primary,
+                                                        width: double.maxFinite,
+                                                        height: 200,
+                                                      ));
                                             }),
                                       ),
                                       Padding(
@@ -212,7 +264,9 @@ class _CategoryPageState extends State<CategoryPage> {
                                                   snapshot.data![index]
                                                       ['resName'],
                                                   style: appstyle(
-                                                      const Color(0xFF101213),
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .secondary,
                                                       20,
                                                       FontWeight.w500)),
                                             ),
@@ -230,7 +284,9 @@ class _CategoryPageState extends State<CategoryPage> {
                                                   snapshot.data![index]
                                                       ['location'],
                                                   style: appstyle(
-                                                      const Color(0xFF57636C),
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .secondary,
                                                       14,
                                                       FontWeight.normal)),
                                             ),
@@ -252,9 +308,11 @@ class _CategoryPageState extends State<CategoryPage> {
                                               child: Row(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
-                                                  const Icon(
+                                                  Icon(
                                                     Icons.star_rounded,
-                                                    color: Color(0xFF212425),
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary,
                                                     size: 24,
                                                   ),
                                                   Padding(
@@ -267,8 +325,9 @@ class _CategoryPageState extends State<CategoryPage> {
                                                                 ['rating']
                                                             .toString(),
                                                         style: appstyle(
-                                                            const Color(
-                                                                0xFF101213),
+                                                            Theme.of(context)
+                                                                .colorScheme
+                                                                .secondary,
                                                             14,
                                                             FontWeight.normal)),
                                                   ),
@@ -279,8 +338,9 @@ class _CategoryPageState extends State<CategoryPage> {
                                                             8, 0, 0, 0),
                                                     child: Text('Rating',
                                                         style: appstyle(
-                                                            const Color(
-                                                                0xFF57636C),
+                                                            Theme.of(context)
+                                                                .colorScheme
+                                                                .secondary,
                                                             14,
                                                             FontWeight.normal)),
                                                   ),
@@ -294,9 +354,11 @@ class _CategoryPageState extends State<CategoryPage> {
                                               child: Row(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
-                                                  const Icon(
+                                                  Icon(
                                                     Icons.location_pin,
-                                                    color: Color(0xFF212425),
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary,
                                                     size: 24,
                                                   ),
                                                   Padding(
@@ -309,8 +371,9 @@ class _CategoryPageState extends State<CategoryPage> {
                                                                 ['dist']
                                                             .toString(),
                                                         style: appstyle(
-                                                            const Color(
-                                                                0xFF101213),
+                                                            Theme.of(context)
+                                                                .colorScheme
+                                                                .secondary,
                                                             14,
                                                             FontWeight.normal)),
                                                   ),
@@ -321,8 +384,9 @@ class _CategoryPageState extends State<CategoryPage> {
                                                             8, 0, 0, 0),
                                                     child: Text('Km',
                                                         style: appstyle(
-                                                            const Color(
-                                                                0xFF57636C),
+                                                            Theme.of(context)
+                                                                .colorScheme
+                                                                .secondary,
                                                             14,
                                                             FontWeight.normal)),
                                                   ),

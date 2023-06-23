@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:delivery_man/constants/color.dart';
+import 'package:delivery_man/constants/route.dart';
 import 'package:delivery_man/constants/server.dart';
 import 'package:delivery_man/constants/textstyle.dart';
 import 'package:flutter/material.dart';
@@ -17,11 +18,13 @@ class MapScreen extends StatefulWidget {
   final double initialLatitude;
   final double initialLongitude;
   final String address;
+  final int route;
   const MapScreen(
       {super.key,
       required this.initialLatitude,
       required this.initialLongitude,
-      required this.address});
+      required this.address,
+      required this.route});
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -29,7 +32,7 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   final MapController _mapController = MapController();
-  TextEditingController search = TextEditingController();
+  TextEditingController? search;
   LatLng? _markerPosition;
   void _centerMapOnCurrentLocation() {
     _mapController.move(
@@ -41,6 +44,7 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     _markerPosition = LatLng(widget.initialLatitude, widget.initialLongitude);
     address = widget.address;
+    search = TextEditingController(text: widget.address);
     super.initState();
   }
 
@@ -85,13 +89,11 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    search.text = address!;
-
     return Stack(children: [
       Scaffold(
         appBar: AppBar(
           title: const Text('Choose Delivery Location'),
-          backgroundColor: backGround,
+          backgroundColor: Theme.of(context).colorScheme.background,
         ),
         body: FlutterMap(
           mapController: _mapController,
@@ -105,9 +107,10 @@ class _MapScreenState extends State<MapScreen> {
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: Container(
-                      decoration: const BoxDecoration(
-                          color: white,
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.secondary,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10))),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         child: TextField(
@@ -122,15 +125,15 @@ class _MapScreenState extends State<MapScreen> {
                                   LatLng(coordinates.latitude!,
                                       coordinates.longitude!),
                                   15.0);
-                              search.text = val;
+                              search!.text = val;
                             });
                           },
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             hintText: 'Search',
                             border: InputBorder.none,
                             prefixIcon: Icon(
                               Icons.search,
-                              color: backGround,
+                              color: Theme.of(context).colorScheme.background,
                             ),
                           ),
                         ),
@@ -145,13 +148,14 @@ class _MapScreenState extends State<MapScreen> {
                         _centerMapOnCurrentLocation();
                       },
                       child: Container(
-                        decoration: const ShapeDecoration(
-                            shape: CircleBorder(), color: backGround),
+                        decoration: ShapeDecoration(
+                            shape: const CircleBorder(),
+                            color: Theme.of(context).colorScheme.background),
                         height: 50,
                         width: 50,
-                        child: const Icon(
+                        child: Icon(
                           Icons.my_location,
-                          color: white,
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
                     ),
@@ -179,18 +183,27 @@ class _MapScreenState extends State<MapScreen> {
                       var data = await http.post(Uri.parse(ADDRESS),
                           headers: {"Content-Type": "application/json"},
                           body: jsonEncode(req));
-                      Get.back();
+                      if (widget.route == 1) {
+                        Get.back();
+                      }
+                      if (widget.route == 0) {
+                        Get.toNamed(RouteHelper.homw,
+                            arguments: {"token": token});
+                      }
                     },
                     child: Container(
                       margin: const EdgeInsets.only(
                           bottom: 30, left: 30, right: 30),
-                      color: backGround,
+                      color: Theme.of(context).colorScheme.background,
                       width: double.maxFinite,
                       height: 50,
                       child: Center(
                         child: Text(
                           "Save Address",
-                          style: appstyle(white, 18, FontWeight.bold),
+                          style: appstyle(
+                              Theme.of(context).colorScheme.secondary,
+                              18,
+                              FontWeight.bold),
                         ),
                       ),
                     ),

@@ -73,15 +73,15 @@ class _NewFoodPageState extends State<NewFoodPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backGround,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        backgroundColor: backGround,
-        title: const Align(
-          alignment: AlignmentDirectional(-1, 0),
+        backgroundColor: Theme.of(context).colorScheme.background,
+        title: Align(
+          alignment: const AlignmentDirectional(-1, 0),
           child: Text(
             'Create Product',
             style: TextStyle(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.secondary,
               fontSize: 18,
             ),
           ),
@@ -115,7 +115,8 @@ class _NewFoodPageState extends State<NewFoodPage> {
               const HeightSpacer(height: 10),
               Text(
                 "Upload Product photo :",
-                style: appstyle(white, 20, FontWeight.w600),
+                style: appstyle(Theme.of(context).colorScheme.secondary, 20,
+                    FontWeight.w600),
               ),
               const HeightSpacer(height: 10),
               Center(
@@ -124,14 +125,16 @@ class _NewFoodPageState extends State<NewFoodPage> {
                     pickImage();
                   },
                   child: Container(
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: white),
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        color: Theme.of(context).colorScheme.secondary),
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Text(
                         "Upload Picture",
-                        style: appstyle(black, 14, FontWeight.w500),
+                        style: appstyle(Theme.of(context).colorScheme.secondary,
+                            14, FontWeight.w500),
                       ),
                     ),
                   ),
@@ -140,13 +143,14 @@ class _NewFoodPageState extends State<NewFoodPage> {
               const HeightSpacer(height: 10),
               Text(
                 "Product Name :",
-                style: appstyle(white, 20, FontWeight.w600),
+                style: appstyle(Theme.of(context).colorScheme.secondary, 20,
+                    FontWeight.w600),
               ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
@@ -214,13 +218,14 @@ class _NewFoodPageState extends State<NewFoodPage> {
               ),
               Text(
                 "Price :",
-                style: appstyle(white, 20, FontWeight.w600),
+                style: appstyle(Theme.of(context).colorScheme.secondary, 20,
+                    FontWeight.w600),
               ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
@@ -288,13 +293,14 @@ class _NewFoodPageState extends State<NewFoodPage> {
               ),
               Text(
                 "Rating :",
-                style: appstyle(white, 20, FontWeight.w600),
+                style: appstyle(Theme.of(context).colorScheme.secondary, 20,
+                    FontWeight.w600),
               ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
@@ -362,13 +368,14 @@ class _NewFoodPageState extends State<NewFoodPage> {
               ),
               Text(
                 "Comments :",
-                style: appstyle(white, 20, FontWeight.w600),
+                style: appstyle(Theme.of(context).colorScheme.secondary, 20,
+                    FontWeight.w600),
               ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
@@ -453,14 +460,16 @@ class _NewFoodPageState extends State<NewFoodPage> {
                     uploadImage();
                   },
                   child: Container(
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: white),
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        color: Theme.of(context).colorScheme.secondary),
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Text(
                         "ADD",
-                        style: appstyle(black, 18, FontWeight.w500),
+                        style: appstyle(Theme.of(context).colorScheme.secondary,
+                            18, FontWeight.w500),
                       ),
                     ),
                   ),

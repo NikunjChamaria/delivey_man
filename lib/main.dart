@@ -1,5 +1,6 @@
+import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/route.dart';
-import 'package:delivery_man/pages/home/home.dart';
+import 'package:delivery_man/pages/home/home_page.dart';
 import 'package:delivery_man/pages/on%20board/home_page_.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,9 +28,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: "Mr. Delivery Man",
+      theme: lightTheme,
+      darkTheme: darktheme,
       debugShowCheckedModeBanner: false,
-      home:
-          (isToken) == true ? HomeWidget(token: token) : const HomePageWidget(),
+      home: (isToken) == true
+          ? HomePageZoom(token: token)
+          : const HomePageWidget(),
       //initialRoute: RouteHelper.auth,
       getPages: RouteHelper.routes,
     );

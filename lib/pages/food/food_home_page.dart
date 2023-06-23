@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/height_spacer.dart';
 import 'package:delivery_man/constants/route.dart';
 import 'package:delivery_man/constants/server.dart';
@@ -15,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 class FoodHomePage extends StatefulWidget {
   const FoodHomePage({Key? key}) : super(key: key);
@@ -68,7 +68,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
     return GestureDetector(
         child: Scaffold(
             key: scaffoldKey,
-            backgroundColor: const Color(0xFF212425),
+            backgroundColor: Theme.of(context).colorScheme.background,
             body: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 child:
@@ -80,16 +80,20 @@ class _FoodHomePageState extends State<FoodHomePage> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+                        Padding(
+                          padding:
+                              const EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
                           child: Icon(
                             Icons.location_pin,
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.secondary,
                             size: 24,
                           ),
                         ),
                         Text('Meena Pearl - 700055',
-                            style: appstyle(white, 14, FontWeight.w500)),
+                            style: appstyle(
+                                Theme.of(context).colorScheme.secondary,
+                                14,
+                                FontWeight.w500)),
                       ],
                     ),
                   ),
@@ -102,7 +106,10 @@ class _FoodHomePageState extends State<FoodHomePage> {
                         Text(
                           'Browse Categories',
                           textAlign: TextAlign.start,
-                          style: appstyle(white, 24, FontWeight.normal),
+                          style: appstyle(
+                              Theme.of(context).colorScheme.secondary,
+                              24,
+                              FontWeight.normal),
                         ),
                       ],
                     ),
@@ -117,11 +124,37 @@ class _FoodHomePageState extends State<FoodHomePage> {
                           builder: (context, AsyncSnapshot<List?> snapshot) {
                             return snapshot.connectionState ==
                                     ConnectionState.waiting
-                                ? const Center(
-                                    child: CircularProgressIndicator(
-                                      color: white,
-                                    ),
-                                  )
+                                ? Shimmer.fromColors(
+                                    baseColor: Theme.of(context)
+                                        .colorScheme
+                                        .background,
+                                    highlightColor:
+                                        Theme.of(context).colorScheme.secondary,
+                                    child: ListView.builder(
+                                      itemCount: 5,
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder: (context, index) {
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                blurRadius: 4,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .tertiary,
+                                                offset: const Offset(0, 0),
+                                              )
+                                            ],
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .background,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          height: 64,
+                                          width: 64,
+                                        );
+                                      },
+                                    ))
                                 : ListView.builder(
                                     scrollDirection: Axis.horizontal,
                                     itemCount: snapshot.data!.length,
@@ -164,7 +197,11 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                   snapshot.data![index]
                                                       ['foodType'],
                                                   textAlign: TextAlign.center,
-                                                  style: appstyle(white, 12,
+                                                  style: appstyle(
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .secondary,
+                                                      12,
                                                       FontWeight.normal)),
                                             ],
                                           ),
@@ -182,7 +219,10 @@ class _FoodHomePageState extends State<FoodHomePage> {
                       children: [
                         Text('Special Offers',
                             textAlign: TextAlign.start,
-                            style: appstyle(white, 24, FontWeight.normal)),
+                            style: appstyle(
+                                Theme.of(context).colorScheme.secondary,
+                                24,
+                                FontWeight.normal)),
                       ],
                     ),
                   ),
@@ -203,7 +243,8 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                 width: 360,
                                 height: 100,
                                 decoration: BoxDecoration(
-                                  color: black,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   image: DecorationImage(
                                     fit: BoxFit.fill,
                                     image: index == 0
@@ -233,7 +274,10 @@ class _FoodHomePageState extends State<FoodHomePage> {
                       children: [
                         Text('Businesses Near You',
                             textAlign: TextAlign.start,
-                            style: appstyle(white, 24, FontWeight.normal)),
+                            style: appstyle(
+                                Theme.of(context).colorScheme.secondary,
+                                24,
+                                FontWeight.normal)),
                       ],
                     ),
                   ),
@@ -243,9 +287,10 @@ class _FoodHomePageState extends State<FoodHomePage> {
                       builder: (context, AsyncSnapshot<List?> snapshot) {
                         return snapshot.connectionState ==
                                 ConnectionState.waiting
-                            ? const Center(
+                            ? Center(
                                 child: CircularProgressIndicator(
-                                  color: white,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                 ),
                               )
                             : ListView.builder(
@@ -267,7 +312,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                         },
                                         body: jsonEncode({"useremail": email}));
                                     response = jsonDecode(data.body);
-                                    print(response);
+
                                     var distance = GeolocatorPlatform.instance
                                         .distanceBetween(
                                             response[0]["lat"],
@@ -330,7 +375,10 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                             if (response.isEmpty) {
                                               Get.snackbar("Address empty",
                                                   "Add location to continue",
-                                                  backgroundColor: white,
+                                                  backgroundColor:
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .secondary,
                                                   mainButton: TextButton(
                                                       onPressed: () {
                                                         Get.toNamed(RouteHelper
@@ -339,11 +387,15 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                       child: Text(
                                                         "Add",
                                                         style: appstyle(
-                                                            black,
+                                                            Theme.of(context)
+                                                                .colorScheme
+                                                                .secondary,
                                                             14,
                                                             FontWeight.bold),
                                                       )),
-                                                  colorText: backGround);
+                                                  colorText: Theme.of(context)
+                                                      .colorScheme
+                                                      .background);
                                             } else {
                                               Get.toNamed(
                                                   RouteHelper.restaurant,
@@ -363,12 +415,16 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                     .width *
                                                 0.9,
                                             decoration: BoxDecoration(
-                                              color: lightGrey,
-                                              boxShadow: const [
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              boxShadow: [
                                                 BoxShadow(
                                                   blurRadius: 4,
-                                                  color: Color(0x32000000),
-                                                  offset: Offset(0, 2),
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .tertiary,
+                                                  offset: const Offset(0, 2),
                                                 )
                                               ],
                                               borderRadius:
@@ -377,17 +433,16 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                             child: Column(
                                               mainAxisSize: MainAxisSize.max,
                                               children: [
-                                                ClipRRect(
-                                                  borderRadius:
-                                                      const BorderRadius.only(
-                                                    bottomLeft:
-                                                        Radius.circular(0),
-                                                    bottomRight:
-                                                        Radius.circular(0),
-                                                    topLeft: Radius.circular(8),
-                                                    topRight:
-                                                        Radius.circular(8),
-                                                  ),
+                                                Container(
+                                                  height: 250,
+                                                  decoration: const BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(
+                                                                      10))),
                                                   child: FutureBuilder(
                                                       future: downloadImage(),
                                                       builder: (context,
@@ -398,25 +453,68 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                                     .connectionState ==
                                                                 ConnectionState
                                                                     .done
-                                                            ? CachedMemoryImage(
-                                                                uniqueKey: snapshot
-                                                                            .data![
-                                                                        index]
-                                                                    ['resName'],
-                                                                bytes: snapshot1
-                                                                    .data,
-                                                                fit:
-                                                                    BoxFit.fill,
-                                                              )
-                                                            : CachedNetworkImage(
-                                                                imageUrl:
-                                                                    'https://cdn-icons-png.flaticon.com/512/147/147144.png?w=360',
+                                                            ? Container(
                                                                 width: double
-                                                                    .infinity,
-                                                                height: 190,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              );
+                                                                    .maxFinite,
+                                                                decoration: const BoxDecoration(
+                                                                    borderRadius: BorderRadius.only(
+                                                                        topLeft:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        topRight:
+                                                                            Radius.circular(10))),
+                                                                child:
+                                                                    CachedMemoryImage(
+                                                                  uniqueKey: snapshot
+                                                                              .data![
+                                                                          index]
+                                                                      [
+                                                                      'resName'],
+                                                                  bytes:
+                                                                      snapshot1
+                                                                          .data,
+                                                                  fit: BoxFit
+                                                                      .fill,
+                                                                  placeholder: Shimmer
+                                                                      .fromColors(
+                                                                          baseColor: Theme.of(context)
+                                                                              .colorScheme
+                                                                              .primary,
+                                                                          highlightColor: Theme.of(context)
+                                                                              .colorScheme
+                                                                              .secondary,
+                                                                          child:
+                                                                              Container(
+                                                                            color:
+                                                                                Theme.of(context).colorScheme.primary,
+                                                                            width:
+                                                                                double.maxFinite,
+                                                                            height:
+                                                                                200,
+                                                                          )),
+                                                                ),
+                                                              )
+                                                            : Shimmer
+                                                                .fromColors(
+                                                                    baseColor: Theme.of(
+                                                                            context)
+                                                                        .colorScheme
+                                                                        .primary,
+                                                                    highlightColor: Theme.of(
+                                                                            context)
+                                                                        .colorScheme
+                                                                        .secondary,
+                                                                    child:
+                                                                        Container(
+                                                                      color: Theme.of(
+                                                                              context)
+                                                                          .colorScheme
+                                                                          .primary,
+                                                                      width: double
+                                                                          .maxFinite,
+                                                                      height:
+                                                                          200,
+                                                                    ));
                                                       }),
                                                 ),
                                                 Padding(
@@ -434,7 +532,10 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                                     index]
                                                                 ['resName'],
                                                             style: appstyle(
-                                                                white,
+                                                                Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .secondary,
                                                                 20,
                                                                 FontWeight
                                                                     .w500)),
@@ -457,7 +558,10 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                                     index]
                                                                 ['location'],
                                                             style: appstyle(
-                                                                white,
+                                                                Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .secondary,
                                                                 14,
                                                                 FontWeight
                                                                     .normal)),
@@ -485,10 +589,13 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                           mainAxisSize:
                                                               MainAxisSize.min,
                                                           children: [
-                                                            const Icon(
+                                                            Icon(
                                                               Icons
                                                                   .star_rounded,
-                                                              color: white,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .secondary,
                                                               size: 24,
                                                             ),
                                                             Padding(
@@ -507,7 +614,10 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                                           'rating']
                                                                       .toString(),
                                                                   style: appstyle(
-                                                                      white,
+                                                                      Theme.of(
+                                                                              context)
+                                                                          .colorScheme
+                                                                          .secondary,
                                                                       14,
                                                                       FontWeight
                                                                           .normal)),
@@ -523,7 +633,10 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                               child: Text(
                                                                   'Rating',
                                                                   style: appstyle(
-                                                                      white,
+                                                                      Theme.of(
+                                                                              context)
+                                                                          .colorScheme
+                                                                          .secondary,
                                                                       14,
                                                                       FontWeight
                                                                           .normal)),
@@ -540,10 +653,13 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                           mainAxisSize:
                                                               MainAxisSize.min,
                                                           children: [
-                                                            const Icon(
+                                                            Icon(
                                                               Icons
                                                                   .location_pin,
-                                                              color: white,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .secondary,
                                                               size: 24,
                                                             ),
                                                             Padding(
@@ -565,7 +681,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                                             snapshot1.data
                                                                                 .toString(),
                                                                             style: appstyle(
-                                                                                white,
+                                                                                Theme.of(context).colorScheme.secondary,
                                                                                 14,
                                                                                 FontWeight.normal));
                                                                       }),
@@ -580,7 +696,10 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                                                       0),
                                                               child: Text('Km',
                                                                   style: appstyle(
-                                                                      white,
+                                                                      Theme.of(
+                                                                              context)
+                                                                          .colorScheme
+                                                                          .secondary,
                                                                       14,
                                                                       FontWeight
                                                                           .normal)),

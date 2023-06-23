@@ -26,7 +26,7 @@ class BusinessMapScreen extends StatefulWidget {
 
 class _BusinessMapScreenState extends State<BusinessMapScreen> {
   final MapController _mapController = MapController();
-  TextEditingController search = TextEditingController();
+  TextEditingController? search;
   LatLng? _markerPosition;
   void _centerMapOnCurrentLocation() {
     _mapController.move(
@@ -38,6 +38,7 @@ class _BusinessMapScreenState extends State<BusinessMapScreen> {
   void initState() {
     _markerPosition = LatLng(widget.initialLatitude, widget.initialLongitude);
     address = widget.address;
+    search = TextEditingController(text: widget.address);
     super.initState();
   }
 
@@ -82,13 +83,11 @@ class _BusinessMapScreenState extends State<BusinessMapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    search.text = address!;
-
     return Stack(children: [
       Scaffold(
         appBar: AppBar(
           title: const Text('Set business Location'),
-          backgroundColor: backGround,
+          backgroundColor: Theme.of(context).colorScheme.background,
         ),
         body: FlutterMap(
           mapController: _mapController,
@@ -102,9 +101,10 @@ class _BusinessMapScreenState extends State<BusinessMapScreen> {
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: Container(
-                      decoration: const BoxDecoration(
-                          color: white,
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.secondary,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10))),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         child: TextField(
@@ -119,15 +119,15 @@ class _BusinessMapScreenState extends State<BusinessMapScreen> {
                                   LatLng(coordinates.latitude!,
                                       coordinates.longitude!),
                                   15.0);
-                              search.text = val;
+                              search!.text = val;
                             });
                           },
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             hintText: 'Search',
                             border: InputBorder.none,
                             prefixIcon: Icon(
                               Icons.search,
-                              color: backGround,
+                              color: Theme.of(context).colorScheme.background,
                             ),
                           ),
                         ),
@@ -142,13 +142,14 @@ class _BusinessMapScreenState extends State<BusinessMapScreen> {
                         _centerMapOnCurrentLocation();
                       },
                       child: Container(
-                        decoration: const ShapeDecoration(
-                            shape: CircleBorder(), color: backGround),
+                        decoration: ShapeDecoration(
+                            shape: const CircleBorder(),
+                            color: Theme.of(context).colorScheme.background),
                         height: 50,
                         width: 50,
-                        child: const Icon(
+                        child: Icon(
                           Icons.my_location,
-                          color: white,
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
                     ),
@@ -173,13 +174,16 @@ class _BusinessMapScreenState extends State<BusinessMapScreen> {
                     child: Container(
                       margin: const EdgeInsets.only(
                           bottom: 30, left: 30, right: 30),
-                      color: backGround,
+                      color: Theme.of(context).colorScheme.background,
                       width: double.maxFinite,
                       height: 50,
                       child: Center(
                         child: Text(
                           "Save Address",
-                          style: appstyle(white, 18, FontWeight.bold),
+                          style: appstyle(
+                              Theme.of(context).colorScheme.secondary,
+                              18,
+                              FontWeight.bold),
                         ),
                       ),
                     ),

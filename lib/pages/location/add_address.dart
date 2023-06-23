@@ -2,12 +2,10 @@
 
 import 'dart:convert';
 
-import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/route.dart';
 import 'package:delivery_man/constants/server.dart';
 import 'package:delivery_man/constants/textstyle.dart';
 import 'package:delivery_man/constants/width_spacer.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -16,6 +14,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:shimmer/shimmer.dart';
 
 class AddLocation extends StatefulWidget {
   const AddLocation({super.key});
@@ -49,6 +48,7 @@ class _AddLocationState extends State<AddLocation> {
         desiredAccuracy: LocationAccuracy.bestForNavigation);
   }
 
+  bool isLoading = false;
   Future<String> getAddressFromCoordinates(
       double latitude, double longitude) async {
     try {
@@ -119,14 +119,14 @@ class _AddLocationState extends State<AddLocation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backGround,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        backgroundColor: backGround,
+        backgroundColor: Theme.of(context).colorScheme.background,
         title: const Text("Address Book"),
       ),
       body: LiquidPullToRefresh(
-        color: white,
-        backgroundColor: backGround,
+        color: Theme.of(context).colorScheme.secondary,
+        backgroundColor: Theme.of(context).colorScheme.background,
         onRefresh: () async {
           setState(() {
             _getData = getAddress();
@@ -140,38 +140,61 @@ class _AddLocationState extends State<AddLocation> {
               children: [
                 Text(
                   "My addresses",
-                  style: appstyle(white, 16, FontWeight.bold),
+                  style: appstyle(Theme.of(context).colorScheme.secondary, 16,
+                      FontWeight.bold),
                 ),
                 GestureDetector(
                   onTap: () async {
-                    if (kDebugMode) {
-                      print("yo");
-                    }
+                    setState(() {
+                      isLoading = true;
+                    });
                     Position position = await _determinePosition();
                     String address = await getAddressFromCoordinates(
                         position.latitude, position.longitude);
                     Get.toNamed(RouteHelper.map, arguments: {
                       "lat": position.latitude,
                       "long": position.longitude,
-                      "address": address
+                      "address": address,
+                      "route": 1
+                    });
+                    setState(() {
+                      isLoading = false;
                     });
                   },
                   child: Container(
                     margin: const EdgeInsets.only(top: 20),
                     width: double.maxFinite,
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.add,
-                          color: white,
-                        ),
-                        const WidthSpacer(width: 10),
-                        Text(
-                          "Add address",
-                          style: appstyle(white, 14, FontWeight.bold),
-                        )
-                      ],
-                    ),
+                    child: isLoading
+                        ? Shimmer.fromColors(
+                            baseColor: Theme.of(context).colorScheme.background,
+                            loop: 10,
+                            highlightColor:
+                                Theme.of(context).colorScheme.secondary,
+                            child: Container(
+                              height: 30,
+                              width: double.maxFinite,
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
+                                  color:
+                                      Theme.of(context).colorScheme.background),
+                            ))
+                        : Row(
+                            children: [
+                              Icon(
+                                Icons.add,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                              const WidthSpacer(width: 10),
+                              Text(
+                                "Add address",
+                                style: appstyle(
+                                    Theme.of(context).colorScheme.secondary,
+                                    14,
+                                    FontWeight.bold),
+                              )
+                            ],
+                          ),
                   ),
                 ),
                 FutureBuilder(
@@ -187,15 +210,27 @@ class _AddLocationState extends State<AddLocation> {
                                   margin: const EdgeInsets.only(
                                       top: 20, bottom: 10),
                                   padding: EdgeInsets.zero,
-                                  decoration: const BoxDecoration(
-                                      border: Border(
-                                          top: BorderSide(
-                                              color: white, width: 0.2),
-                                          bottom: BorderSide(
-                                              color: white, width: 0.2))),
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 4,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .tertiary,
+                                        offset: const Offset(0, 2),
+                                      )
+                                    ],
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(10)),
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
                                   child: Padding(
                                     padding: const EdgeInsets.only(
-                                        bottom: 20, top: 20),
+                                        top: 10,
+                                        bottom: 10,
+                                        left: 10,
+                                        right: 10),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -208,7 +243,11 @@ class _AddLocationState extends State<AddLocation> {
                                             maxLines: 2,
                                             softWrap: true,
                                             style: appstyle(
-                                                white, 14, FontWeight.bold),
+                                                Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                                14,
+                                                FontWeight.bold),
                                           ),
                                         ),
                                         GestureDetector(
@@ -241,8 +280,12 @@ class _AddLocationState extends State<AddLocation> {
                                             decoration: BoxDecoration(
                                                 color: snapshot.data![index]
                                                         ['isCurrent']
-                                                    ? white
-                                                    : backGround,
+                                                    ? Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary
+                                                    : Theme.of(context)
+                                                        .colorScheme
+                                                        .background,
                                                 borderRadius:
                                                     const BorderRadius.all(
                                                         Radius.circular(10))),
@@ -253,8 +296,12 @@ class _AddLocationState extends State<AddLocation> {
                                                 style: appstyle(
                                                     snapshot.data![index]
                                                             ['isCurrent']
-                                                        ? backGround
-                                                        : white,
+                                                        ? Theme.of(context)
+                                                            .colorScheme
+                                                            .background
+                                                        : Theme.of(context)
+                                                            .colorScheme
+                                                            .secondary,
                                                     14,
                                                     FontWeight.bold),
                                               ),

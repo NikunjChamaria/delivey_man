@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:cached_memory_image/cached_memory_image.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/height_spacer.dart';
 import 'package:delivery_man/constants/route.dart';
@@ -16,6 +15,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 class RestaurantPage extends StatefulWidget {
   final Map restaurant;
@@ -94,7 +94,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
         cartItem = cartItem + value;
       });
     });
-    print(itemCount);
+    //print(itemCount);
   }
 
   void onTap2() {
@@ -123,7 +123,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
     }
 
     return Scaffold(
-        backgroundColor: backGround,
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
@@ -133,7 +133,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
               floating: true,
               snap: true,
               stretch: true,
-              backgroundColor: backGround,
+              backgroundColor: Theme.of(context).colorScheme.background,
               flexibleSpace: FlexibleSpaceBar(
                 background: FutureBuilder(
                     future: downloadImage(),
@@ -144,13 +144,15 @@ class _RestaurantPageState extends State<RestaurantPage> {
                               bytes: snapshot1.data,
                               fit: BoxFit.fill,
                             )
-                          : CachedNetworkImage(
-                              imageUrl:
-                                  'https://cdn-icons-png.flaticon.com/512/147/147144.png?w=360',
-                              width: double.infinity,
-                              height: 190,
-                              fit: BoxFit.cover,
-                            );
+                          : Shimmer.fromColors(
+                              baseColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              highlightColor:
+                                  Theme.of(context).colorScheme.primary,
+                              child: Container(
+                                color: Theme.of(context).colorScheme.primary,
+                                width: double.maxFinite,
+                              ));
                     }),
               ),
               expandedHeight: 300,
@@ -160,9 +162,9 @@ class _RestaurantPageState extends State<RestaurantPage> {
                     padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                     child: Container(
                       width: double.infinity,
-                      decoration: const BoxDecoration(
-                        color: white,
-                        borderRadius: BorderRadius.only(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(20),
                             topRight: Radius.circular(20)),
                       ),
@@ -182,22 +184,30 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(widget.restaurant['resName'],
-                                      style:
-                                          appstyle(black, 22, FontWeight.w900)),
-                                  const Row(
+                                      style: appstyle(
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                          22,
+                                          FontWeight.w900)),
+                                  Row(
                                     children: [
                                       Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            90, 0, 10, 0),
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(90, 0, 10, 0),
                                         child: Icon(
                                           Icons.share_outlined,
-                                          color: black,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
                                           size: 22,
                                         ),
                                       ),
                                       Icon(
                                         Icons.favorite_outlined,
-                                        color: black,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
                                         size: 22,
                                       ),
                                     ],
@@ -218,9 +228,11 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                       color: const Color(0xFF067525),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
-                                    child: const Icon(
+                                    child: Icon(
                                       Icons.star_rate_rounded,
-                                      color: Colors.white,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
                                       size: 10,
                                     ),
                                   ),
@@ -231,7 +243,11 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                     child: Text(
                                         '${widget.restaurant['rating']}(${widget.restaurant['comments']} + ratings)   . ',
                                         style: appstyle(
-                                            black, 14, FontWeight.w500)),
+                                            Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                            14,
+                                            FontWeight.w500)),
                                   ),
                                   Padding(
                                     padding:
@@ -239,34 +255,48 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                             10, 0, 0, 0),
                                     child: Text(
                                       '\$${widget.restaurant['averagePrice']} for two',
-                                      style:
-                                          appstyle(black, 14, FontWeight.w700),
+                                      style: appstyle(
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                          14,
+                                          FontWeight.w700),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                             Text(getFoodType(widget.restaurant['foodType']),
-                                style: appstyle(black, 14, FontWeight.w200)),
-                            const Divider(
+                                style: appstyle(
+                                    Theme.of(context).colorScheme.secondary,
+                                    14,
+                                    FontWeight.w200)),
+                            Divider(
                               thickness: 0.1,
-                              color: Colors.black,
+                              color: Theme.of(context).colorScheme.secondary,
                             ),
                             Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Container(
                                   width: 60,
-                                  decoration: const BoxDecoration(
-                                    color: white,
+                                  decoration: BoxDecoration(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                   ),
                                   child: Text('Outlet',
-                                      style:
-                                          appstyle(black, 12, FontWeight.w600)),
+                                      style: appstyle(
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                          12,
+                                          FontWeight.w600)),
                                 ),
                                 Text(widget.restaurant['location'],
-                                    style:
-                                        appstyle(black, 12, FontWeight.w300)),
+                                    style: appstyle(
+                                        Theme.of(context).colorScheme.secondary,
+                                        12,
+                                        FontWeight.w300)),
                               ],
                             ),
                             Row(
@@ -274,7 +304,10 @@ class _RestaurantPageState extends State<RestaurantPage> {
                               children: [
                                 Container(
                                   width: 60,
-                                  decoration: const BoxDecoration(color: white),
+                                  decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
                                   child: FutureBuilder(
                                       future: getdistinTime(),
                                       builder: (context,
@@ -283,12 +316,18 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                             maxLines: 1,
                                             overflow: TextOverflow.fade,
                                             style: appstyle(
-                                                black, 12, FontWeight.w600));
+                                                Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                                12,
+                                                FontWeight.w600));
                                       }),
                                 ),
                                 Text('Delivery to Meena Pearl',
-                                    style:
-                                        appstyle(black, 12, FontWeight.w300)),
+                                    style: appstyle(
+                                        Theme.of(context).colorScheme.secondary,
+                                        12,
+                                        FontWeight.w300)),
                               ],
                             ),
                           ],
@@ -312,18 +351,26 @@ class _RestaurantPageState extends State<RestaurantPage> {
                           child: Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+                                color: Theme.of(context).colorScheme.primary,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 4,
+                                    color:
+                                        Theme.of(context).colorScheme.tertiary,
+                                    offset: const Offset(0, 2),
+                                  )
+                                ]),
                             child: Padding(
                               padding: const EdgeInsetsDirectional.fromSTEB(
                                   10, 10, 10, 10),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  const Icon(
+                                  Icon(
                                     Icons.local_offer_outlined,
-                                    color: black,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
                                     size: 45,
                                   ),
                                   Column(
@@ -334,7 +381,11 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                       Text(
                                         '20% off upto \$120',
                                         style: appstyle(
-                                            black, 22, FontWeight.w800),
+                                            Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                            22,
+                                            FontWeight.w800),
                                       ),
                                       Row(
                                         mainAxisSize: MainAxisSize.max,
@@ -342,12 +393,20 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                           Text(
                                             'USE FEDERRALCC | ',
                                             style: appstyle(
-                                                black, 12, FontWeight.w400),
+                                                Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                                12,
+                                                FontWeight.w400),
                                           ),
                                           Text(
                                             'ABOVE \$249',
                                             style: appstyle(
-                                                black, 12, FontWeight.w400),
+                                                Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                                12,
+                                                FontWeight.w400),
                                           ),
                                         ],
                                       ),
@@ -366,7 +425,8 @@ class _RestaurantPageState extends State<RestaurantPage> {
                 Center(
                   child: Text(
                     "MENU",
-                    style: appstyle(white, 14, FontWeight.w300),
+                    style: appstyle(Theme.of(context).colorScheme.secondary, 14,
+                        FontWeight.w300),
                   ),
                 ),
                 const HeightSpacer(height: 20),
@@ -422,10 +482,20 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                   5, 30, 5, 0),
                               child: Container(
                                 width: double.infinity,
-                                decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20))),
+                                decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 4,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .tertiary,
+                                        offset: const Offset(0, 2),
+                                      )
+                                    ],
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(20))),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment:
@@ -456,7 +526,9 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                                   width: 20,
                                                   height: 20,
                                                   decoration: BoxDecoration(
-                                                    color: transparent,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary,
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             5),
@@ -494,12 +566,20 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                           Text(
                                             snapshot.data![index]['name'],
                                             style: appstyle(
-                                                black, 16, FontWeight.w700),
+                                                Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                                16,
+                                                FontWeight.w700),
                                           ),
                                           Text(
                                             '\$${snapshot.data![index]['price']}',
                                             style: appstyle(
-                                                black, 16, FontWeight.w300),
+                                                Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                                16,
+                                                FontWeight.w300),
                                           ),
                                           Row(
                                             mainAxisSize: MainAxisSize.max,
@@ -507,9 +587,11 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                               RatingBar.builder(
                                                 onRatingUpdate: (value) {},
                                                 itemBuilder: (context, index) =>
-                                                    const Icon(
+                                                    Icon(
                                                   Icons.star_rounded,
-                                                  color: lightGrey,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary,
                                                 ),
                                                 direction: Axis.horizontal,
                                                 initialRating: 4,
@@ -523,11 +605,19 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                                 snapshot.data![index]['rating']
                                                     .toString(),
                                                 style: appstyle(
-                                                    black, 14, FontWeight.w400),
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary,
+                                                    14,
+                                                    FontWeight.w400),
                                               ),
                                               Text(
                                                   '(${snapshot.data![index]['comments']})',
-                                                  style: appstyle(black, 14,
+                                                  style: appstyle(
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .secondary,
+                                                      14,
                                                       FontWeight.w400)),
                                             ],
                                           ),
@@ -540,7 +630,9 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                                 borderRadius:
                                                     BorderRadius.circular(5),
                                                 border: Border.all(
-                                                  color: Colors.black,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary,
                                                   width: 1,
                                                 ),
                                               ),
@@ -554,13 +646,19 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                                             3, 3, 3, 3),
                                                     child: Text(
                                                       'More Details',
-                                                      style: appstyle(black, 14,
+                                                      style: appstyle(
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .secondary,
+                                                          14,
                                                           FontWeight.w500),
                                                     ),
                                                   ),
-                                                  const Icon(
+                                                  Icon(
                                                     Icons.arrow_forward_ios,
-                                                    color: lightGrey,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary,
                                                     size: 14,
                                                   ),
                                                 ],
@@ -607,14 +705,29 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                                                   .data,
                                                               fit: BoxFit.fill,
                                                             )
-                                                          : CachedNetworkImage(
-                                                              imageUrl:
-                                                                  'https://cdn-icons-png.flaticon.com/512/147/147144.png?w=360',
-                                                              width: double
-                                                                  .infinity,
-                                                              height: 190,
-                                                              fit: BoxFit.cover,
-                                                            );
+                                                          : Shimmer.fromColors(
+                                                              baseColor: Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .primary,
+                                                              highlightColor:
+                                                                  Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .secondary,
+                                                              child: Container(
+                                                                decoration: BoxDecoration(
+                                                                    borderRadius: const BorderRadius
+                                                                            .all(
+                                                                        Radius.circular(
+                                                                            10)),
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .colorScheme
+                                                                        .primary),
+                                                                height: 100,
+                                                                width: 120,
+                                                              ));
                                                     }),
                                               ),
                                             ),
@@ -624,12 +737,16 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                                 .fromSTEB(0, 10, 0, 10),
                                             child: Container(
                                               decoration: BoxDecoration(
-                                                color: white,
-                                                boxShadow: const [
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .tertiary,
+                                                boxShadow: [
                                                   BoxShadow(
                                                     blurRadius: 1,
-                                                    color: Color(0xFF212425),
-                                                    offset: Offset(1, 1),
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .background,
+                                                    offset: const Offset(0, 1),
                                                   )
                                                 ],
                                                 borderRadius:
@@ -685,10 +802,13 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                                                               'price'],
                                                                           1);
                                                                     },
-                                                                    child:
-                                                                        const Icon(
+                                                                    child: Icon(
                                                                       Icons.add,
                                                                       size: 22,
+                                                                      color: Theme.of(
+                                                                              context)
+                                                                          .colorScheme
+                                                                          .secondary,
                                                                     ),
                                                                   ),
                                                                   const WidthSpacer(
@@ -699,7 +819,9 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                                                             'name']]
                                                                         .toString(),
                                                                     style: appstyle(
-                                                                        black,
+                                                                        Theme.of(context)
+                                                                            .colorScheme
+                                                                            .secondary,
                                                                         22,
                                                                         FontWeight
                                                                             .bold),
@@ -717,11 +839,14 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                                                               'price'],
                                                                           -1);
                                                                     },
-                                                                    child:
-                                                                        const Icon(
+                                                                    child: Icon(
                                                                       Icons
                                                                           .remove,
                                                                       size: 22,
+                                                                      color: Theme.of(
+                                                                              context)
+                                                                          .colorScheme
+                                                                          .secondary,
                                                                     ),
                                                                   )
                                                                 ],
@@ -737,7 +862,10 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                                               child: Text(
                                                                 'ADD',
                                                                 style: appstyle(
-                                                                    black,
+                                                                    Theme.of(
+                                                                            context)
+                                                                        .colorScheme
+                                                                        .secondary,
                                                                     22,
                                                                     FontWeight
                                                                         .bold),
@@ -776,8 +904,8 @@ class _RestaurantPageState extends State<RestaurantPage> {
                   child: Container(
                     width: double.infinity,
                     height: 90,
-                    decoration: const BoxDecoration(
-                      color: white,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.tertiary,
                     ),
                     child: Padding(
                       padding:
@@ -785,12 +913,12 @@ class _RestaurantPageState extends State<RestaurantPage> {
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFEBFA14),
-                          boxShadow: const [
+                          color: Theme.of(context).colorScheme.primary,
+                          boxShadow: [
                             BoxShadow(
                               blurRadius: 4,
-                              color: Color(0xFF212425),
-                              offset: Offset(1, 1),
+                              color: Theme.of(context).colorScheme.tertiary,
+                              offset: const Offset(1, 1),
                             )
                           ],
                           borderRadius: BorderRadius.circular(10),
@@ -814,19 +942,34 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                     children: [
                                       Text('$cartItem Item |  ',
                                           style: appstyle(
-                                              black, 18, FontWeight.w500)),
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              18,
+                                              FontWeight.w500)),
                                       Text('\$$totalAmount',
                                           style: appstyle(
-                                              black, 18, FontWeight.w500)),
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              18,
+                                              FontWeight.w500)),
                                     ],
                                   ),
                                   Text('Extra Chargers may apply',
-                                      style:
-                                          appstyle(black, 8, FontWeight.w600)),
+                                      style: appstyle(
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                          8,
+                                          FontWeight.w600)),
                                 ],
                               ),
                               Text(' View Cart',
-                                  style: appstyle(black, 14, FontWeight.w500)),
+                                  style: appstyle(
+                                      Theme.of(context).colorScheme.secondary,
+                                      14,
+                                      FontWeight.w500)),
                             ],
                           ),
                         ),

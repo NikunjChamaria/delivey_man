@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/height_spacer.dart';
 import 'package:delivery_man/constants/textstyle.dart';
 import 'package:delivery_man/constants/width_spacer.dart';
@@ -50,7 +49,7 @@ class _FavouritePageState extends State<FavouritePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backGround,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: Column(
@@ -61,7 +60,8 @@ class _FavouritePageState extends State<FavouritePage> {
               padding: const EdgeInsets.all(10.0),
               child: Text(
                 "Favourite Orders",
-                style: appstyle(white, 24, FontWeight.normal),
+                style: appstyle(Theme.of(context).colorScheme.secondary, 24,
+                    FontWeight.normal),
               ),
             ),
             const HeightSpacer(height: 20),
@@ -69,9 +69,9 @@ class _FavouritePageState extends State<FavouritePage> {
                 future: getData(),
                 builder: (context, AsyncSnapshot<Map?> snapshot) {
                   return snapshot.connectionState == ConnectionState.waiting
-                      ? const Center(
+                      ? Center(
                           child: CircularProgressIndicator(
-                            color: white,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                         )
                       : ListView.builder(
@@ -108,10 +108,23 @@ class _FavouritePageState extends State<FavouritePage> {
 
                             return Container(
                               decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 4,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                      offset: const Offset(0, 2),
+                                    )
+                                  ],
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(10)),
-                                  color: white,
-                                  border: Border.all(color: black, width: 1)),
+                                  color: Theme.of(context).colorScheme.primary,
+                                  border: Border.all(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                      width: 1)),
                               margin: const EdgeInsets.only(
                                   left: 10, right: 10, bottom: 30),
                               width: double.maxFinite,
@@ -169,13 +182,21 @@ class _FavouritePageState extends State<FavouritePage> {
                                             Text(
                                               keys[index]['restaurant'],
                                               style: appstyle(
-                                                  black, 16, FontWeight.bold),
+                                                  Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary,
+                                                  16,
+                                                  FontWeight.bold),
                                             ),
                                             Text(
                                               snapshot.data![keys[index]]
                                                   ['location'],
                                               style: appstyle(
-                                                  black, 12, FontWeight.normal),
+                                                  Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary,
+                                                  12,
+                                                  FontWeight.normal),
                                             )
                                           ],
                                         ),
@@ -183,13 +204,20 @@ class _FavouritePageState extends State<FavouritePage> {
                                         Text(
                                           "\$${keys[index]['amount']}",
                                           style: appstyle(
-                                              black, 20, FontWeight.bold),
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              20,
+                                              FontWeight.bold),
                                         ),
                                       ],
                                     ),
                                     const HeightSpacer(height: 10),
-                                    const Divider(
-                                      thickness: 2,
+                                    Divider(
+                                      thickness: 0.2,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
                                     ),
                                     const HeightSpacer(height: 10),
                                     Column(
@@ -199,7 +227,11 @@ class _FavouritePageState extends State<FavouritePage> {
                                         Text(
                                           "ITEMS",
                                           style: appstyle(
-                                              lightGrey, 14, FontWeight.w700),
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              14,
+                                              FontWeight.w700),
                                         ),
                                         const HeightSpacer(height: 5),
                                         ListView.builder(
@@ -217,7 +249,11 @@ class _FavouritePageState extends State<FavouritePage> {
                                                     bottom: 5),
                                                 child: Text(
                                                   '${keys[index]["items"][key[ind]]} X ${key[ind]}',
-                                                  style: appstyle(black, 12,
+                                                  style: appstyle(
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .secondary,
+                                                      12,
                                                       FontWeight.w200),
                                                 ),
                                               );
@@ -226,19 +262,30 @@ class _FavouritePageState extends State<FavouritePage> {
                                         Text(
                                           "ORDERED ON",
                                           style: appstyle(
-                                              lightGrey, 14, FontWeight.w700),
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              14,
+                                              FontWeight.w700),
                                         ),
                                         const HeightSpacer(height: 5),
                                         Text(
                                           keys[index]['time'],
                                           style: appstyle(
-                                              black, 12, FontWeight.w200),
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              12,
+                                              FontWeight.w200),
                                         )
                                       ],
                                     ),
                                     const HeightSpacer(height: 10),
-                                    const Divider(
-                                      thickness: 2,
+                                    Divider(
+                                      thickness: 0.2,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
                                     ),
                                     Row(
                                       mainAxisAlignment:
@@ -247,7 +294,11 @@ class _FavouritePageState extends State<FavouritePage> {
                                         Text(
                                           "Delivered",
                                           style: appstyle(
-                                              black, 12, FontWeight.w200),
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              12,
+                                              FontWeight.w200),
                                         ),
                                         GestureDetector(
                                           onTap: () async {
@@ -295,14 +346,20 @@ class _FavouritePageState extends State<FavouritePage> {
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(
-                                                border:
-                                                    Border.all(color: black)),
+                                                border: Border.all(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary)),
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: Text(
                                                 "Repeat Order",
-                                                style: appstyle(backGround, 16,
+                                                style: appstyle(
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary,
+                                                    16,
                                                     FontWeight.bold),
                                               ),
                                             ),

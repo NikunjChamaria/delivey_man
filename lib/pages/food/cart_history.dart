@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/server.dart';
 import 'package:delivery_man/constants/textstyle.dart';
 import 'package:delivery_man/constants/width_spacer.dart';
@@ -67,7 +66,7 @@ class _CartHistoryState extends State<CartHistory> {
   Widget build(BuildContext context) {
     final search = TextEditingController();
     return Scaffold(
-      backgroundColor: backGround,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
@@ -85,7 +84,8 @@ class _CartHistoryState extends State<CartHistory> {
                 padding: const EdgeInsets.only(top: 20, bottom: 10, left: 10),
                 child: Text(
                   "Your Recent Orders",
-                  style: appstyle(white, 30, FontWeight.normal),
+                  style: appstyle(Theme.of(context).colorScheme.secondary, 30,
+                      FontWeight.normal),
                 ),
               ),
               FutureBuilder(
@@ -143,7 +143,17 @@ class _CartHistoryState extends State<CartHistory> {
                                   width:
                                       MediaQuery.of(context).size.width * 0.95,
                                   decoration: BoxDecoration(
-                                    color: white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 4,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .tertiary,
+                                        offset: const Offset(0, 2),
+                                      )
+                                    ],
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Column(
@@ -152,7 +162,9 @@ class _CartHistoryState extends State<CartHistory> {
                                       Container(
                                         height: 80,
                                         decoration: BoxDecoration(
-                                          color: Colors.white,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),
@@ -214,19 +226,31 @@ class _CartHistoryState extends State<CartHistory> {
                                                   children: [
                                                     Text(
                                                       keys[index]['restaurant'],
-                                                      style: appstyle(black, 14,
+                                                      style: appstyle(
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .secondary,
+                                                          14,
                                                           FontWeight.w600),
                                                     ),
                                                     Text(
                                                       snapshot.data![
                                                               keys[index]]
                                                           ['location'],
-                                                      style: appstyle(black, 10,
+                                                      style: appstyle(
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .secondary,
+                                                          10,
                                                           FontWeight.w300),
                                                     ),
                                                     Text(
                                                       'Deliver to your location',
-                                                      style: appstyle(black, 10,
+                                                      style: appstyle(
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .secondary,
+                                                          10,
                                                           FontWeight.w800),
                                                     ),
                                                   ],
@@ -251,15 +275,20 @@ class _CartHistoryState extends State<CartHistory> {
                                                               2, 2, 2, 2),
                                                       child: Container(
                                                         decoration:
-                                                            const BoxDecoration(
-                                                                color: white),
+                                                            BoxDecoration(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .primary),
                                                         child: Text(
                                                           keys[index][
                                                                   'isDelivered']
                                                               ? 'Delivered'
                                                               : 'Preparing',
                                                           style: appstyle(
-                                                              black,
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .secondary,
                                                               12,
                                                               FontWeight.w500),
                                                         ),
@@ -385,10 +414,12 @@ class _CartHistoryState extends State<CartHistory> {
                                                                             .all(
                                                                         Radius.circular(
                                                                             10)),
-                                                                boxShadow: const [
+                                                                boxShadow: [
                                                                   BoxShadow(
-                                                                      color:
-                                                                          lightGrey,
+                                                                      color: Theme.of(
+                                                                              context)
+                                                                          .colorScheme
+                                                                          .primary,
                                                                       offset: Offset
                                                                           .infinite)
                                                                 ],
@@ -401,7 +432,10 @@ class _CartHistoryState extends State<CartHistory> {
                                                                 child: Text(
                                                                   'Reorder',
                                                                   style: appstyle(
-                                                                      lightGrey,
+                                                                      Theme.of(
+                                                                              context)
+                                                                          .colorScheme
+                                                                          .secondary,
                                                                       20,
                                                                       FontWeight
                                                                           .w700),
@@ -423,8 +457,10 @@ class _CartHistoryState extends State<CartHistory> {
                                         padding: const EdgeInsetsDirectional
                                             .fromSTEB(10, 0, 10, 0),
                                         child: Container(
-                                          decoration: const BoxDecoration(
-                                            color: white,
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                           ),
                                           child: Column(
                                             mainAxisSize: MainAxisSize.max,
@@ -454,7 +490,10 @@ class _CartHistoryState extends State<CartHistory> {
                                                             height: 10,
                                                             decoration:
                                                                 BoxDecoration(
-                                                              color: white,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .primary,
                                                               border:
                                                                   Border.all(
                                                                 color: const Color(
@@ -481,7 +520,10 @@ class _CartHistoryState extends State<CartHistory> {
                                                             child: Text(
                                                               '${keys[index]["items"][key[ind]]} X ${key[ind]}',
                                                               style: appstyle(
-                                                                  black,
+                                                                  Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .secondary,
                                                                   10,
                                                                   FontWeight
                                                                       .w400),
@@ -491,9 +533,11 @@ class _CartHistoryState extends State<CartHistory> {
                                                       ),
                                                     );
                                                   }),
-                                              const Divider(
+                                              Divider(
                                                 thickness: 1,
-                                                color: Colors.black,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
                                               ),
                                               Padding(
                                                 padding:
@@ -508,7 +552,11 @@ class _CartHistoryState extends State<CartHistory> {
                                                   children: [
                                                     Text(
                                                       keys[index]['time'],
-                                                      style: appstyle(black, 10,
+                                                      style: appstyle(
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .secondary,
+                                                          10,
                                                           FontWeight.w400),
                                                     ),
                                                     Padding(
@@ -519,7 +567,9 @@ class _CartHistoryState extends State<CartHistory> {
                                                       child: Text(
                                                         "\$${keys[index]['amount']}",
                                                         style: appstyle(
-                                                            black,
+                                                            Theme.of(context)
+                                                                .colorScheme
+                                                                .secondary,
                                                             10,
                                                             FontWeight.w400),
                                                       ),

@@ -5,7 +5,7 @@ import 'package:delivery_man/constants/route.dart';
 import 'package:delivery_man/constants/textstyle.dart';
 import 'package:delivery_man/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,24 +15,25 @@ import '../../constants/server.dart';
 
 // ignore: must_be_immutable
 class ProfilePage extends StatefulWidget {
-  var token;
-  ProfilePage({super.key, this.token});
+  const ProfilePage({super.key});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late String email;
-  late String name;
+  Future<String> getEmail() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var token = preferences.getString('token');
+    String email = JwtDecoder.decode(token!)['email'];
+    return email;
+  }
 
-  @override
-  void initState() {
-    super.initState();
-
-    Map<String, dynamic> jwtDecodedToekn = JwtDecoder.decode(widget.token);
-    email = jwtDecodedToekn['email'];
-    name = jwtDecodedToekn['name'];
+  Future<String> getName() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var token = preferences.getString('token');
+    String name = JwtDecoder.decode(token!)['name'];
+    return name;
   }
 
   @override
@@ -42,224 +43,14 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        backgroundColor: backGround,
+        backgroundColor: Theme.of(context).colorScheme.background,
         leading: GestureDetector(
             onTap: () {
-              scaffoldKey.currentState!.openDrawer();
+              ZoomDrawer.of(context)!.open();
             },
             child: const Icon(Icons.menu)),
       ),
-      backgroundColor: backGround,
-      drawer: Drawer(
-        elevation: 16,
-        child: Container(
-          width: 100,
-          height: 100,
-          decoration: const BoxDecoration(
-            color: Color(0xFF212425),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 100, 0, 0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Container(
-                      width: 120,
-                      height: 120,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
-                      child: Image.network(
-                        'https://picsum.photos/seed/52/600',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Container(
-                      height: 40,
-                      decoration: const BoxDecoration(),
-                    ),
-                    Text(
-                      name,
-                      style: const TextStyle(color: white, fontSize: 20),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 50, 0, 0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(15, 0, 0, 15),
-                      child: Container(
-                        width: 314,
-                        height: 46,
-                        decoration: const BoxDecoration(),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            const FaIcon(
-                              // ignore: deprecated_member_use
-                              FontAwesomeIcons.home,
-                              color: Colors.white,
-                              size: 24,
-                            ),
-                            Container(
-                              width: 10,
-                              decoration: const BoxDecoration(
-                                color: Color(0xFF212425),
-                              ),
-                            ),
-                            CustomButton(
-                                onTap: () async {
-                                  SharedPreferences preferences =
-                                      await SharedPreferences.getInstance();
-                                  Get.toNamed(RouteHelper.homw, arguments: {
-                                    'token': preferences.getString('token')
-                                  });
-                                  scaffoldKey.currentState!.closeDrawer();
-                                },
-                                text: "Home",
-                                width: 140,
-                                height: 50,
-                                color: transparent,
-                                color2: white,
-                                textSize: 22),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(15, 0, 0, 15),
-                      child: Container(
-                        width: 314,
-                        height: 46,
-                        decoration: const BoxDecoration(),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            const Icon(
-                              Icons.no_food_sharp,
-                              color: Colors.white,
-                              size: 24,
-                            ),
-                            Container(
-                              width: 10,
-                              decoration: const BoxDecoration(
-                                color: Color(0xFF212425),
-                              ),
-                            ),
-                            CustomButton(
-                                onTap: () {
-                                  Get.toNamed(RouteHelper.food);
-                                  scaffoldKey.currentState!.closeDrawer();
-                                },
-                                text: "Food",
-                                width: 140,
-                                height: 50,
-                                color: transparent,
-                                color2: white,
-                                textSize: 22)
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(15, 0, 0, 15),
-                      child: Container(
-                        width: 314,
-                        height: 46,
-                        decoration: const BoxDecoration(),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            const Icon(
-                              Icons.local_convenience_store_rounded,
-                              color: Colors.white,
-                              size: 24,
-                            ),
-                            Container(
-                              width: 10,
-                              decoration: const BoxDecoration(
-                                color: Color(0xFF212425),
-                              ),
-                            ),
-                            CustomButton(
-                                onTap: () {
-                                  Get.toNamed(RouteHelper.retail);
-                                  scaffoldKey.currentState!.closeDrawer();
-                                },
-                                text: "Retail Store",
-                                width: 200,
-                                height: 50,
-                                color: transparent,
-                                color2: white,
-                                textSize: 22)
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 200,
-                      decoration: const BoxDecoration(),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(15, 0, 0, 15),
-                      child: Container(
-                        width: 314,
-                        height: 46,
-                        decoration: const BoxDecoration(),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            const Icon(
-                              Icons.person,
-                              color: Colors.white,
-                              size: 24,
-                            ),
-                            Container(
-                              width: 10,
-                              decoration: const BoxDecoration(
-                                color: Color(0xFF212425),
-                              ),
-                            ),
-                            CustomButton(
-                                onTap: () async {
-                                  SharedPreferences preferences =
-                                      await SharedPreferences.getInstance();
-                                  Get.toNamed(RouteHelper.profile, arguments: {
-                                    'token': preferences.getString('token')
-                                  });
-                                  scaffoldKey.currentState!.closeDrawer();
-                                },
-                                text: "Profile",
-                                width: 140,
-                                height: 50,
-                                color: transparent,
-                                color2: white,
-                                textSize: 22)
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
@@ -312,22 +103,38 @@ class _ProfilePageState extends State<ProfilePage> {
                               Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(
                                     24, 140, 0, 0),
-                                child: Text(
-                                  'Hi, $name',
-                                  style: appstyle(white, 28, FontWeight.normal),
-                                ),
+                                child: FutureBuilder(
+                                    future: getName(),
+                                    builder: (context, snapshot) {
+                                      return Text(
+                                        'Hi, ${snapshot.data}',
+                                        style: appstyle(
+                                            Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                            28,
+                                            FontWeight.bold),
+                                      );
+                                    }),
                               ),
                               Align(
                                 alignment: const AlignmentDirectional(-1, 0),
                                 child: Padding(
                                   padding: const EdgeInsetsDirectional.fromSTEB(
                                       24, 174, 0, 0),
-                                  child: Text(
-                                    email,
-                                    textAlign: TextAlign.start,
-                                    style:
-                                        appstyle(white, 12, FontWeight.normal),
-                                  ),
+                                  child: FutureBuilder(
+                                      future: getEmail(),
+                                      builder: (context, snapshot) {
+                                        return Text(
+                                          '${snapshot.data}',
+                                          style: appstyle(
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              14,
+                                              FontWeight.normal),
+                                        );
+                                      }),
                                 ),
                               ),
                             ],
@@ -347,7 +154,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsetsDirectional.fromSTEB(24, 12, 0, 12),
                 child: Text(
                   'Profile Settings',
-                  style: appstyle(white, 14, FontWeight.normal),
+                  style: appstyle(Theme.of(context).colorScheme.secondary, 14,
+                      FontWeight.normal),
                 ),
               ),
             ],
@@ -380,15 +188,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                 24, 0, 0, 0),
                             child: Text(
                               'Edit Profile',
-                              style: appstyle(white, 14, FontWeight.normal),
+                              style: appstyle(
+                                  Theme.of(context).colorScheme.secondary,
+                                  14,
+                                  FontWeight.normal),
                             ),
                           ),
-                          const Expanded(
+                          Expanded(
                             child: Align(
-                              alignment: AlignmentDirectional(0.9, 0),
+                              alignment: const AlignmentDirectional(0.9, 0),
                               child: Icon(
                                 Icons.arrow_forward_ios,
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.secondary,
                                 size: 18,
                               ),
                             ),
@@ -435,15 +246,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                   24, 0, 0, 0),
                               child: Text(
                                 'Switch to Business Profile',
-                                style: appstyle(white, 14, FontWeight.normal),
+                                style: appstyle(
+                                    Theme.of(context).colorScheme.secondary,
+                                    14,
+                                    FontWeight.normal),
                               ),
                             ),
-                            const Expanded(
+                            Expanded(
                               child: Align(
-                                alignment: AlignmentDirectional(0.9, 0),
+                                alignment: const AlignmentDirectional(0.9, 0),
                                 child: Icon(
                                   Icons.arrow_forward_ios,
-                                  color: Colors.white,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   size: 18,
                                 ),
                               ),
@@ -475,15 +290,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                 24, 0, 0, 0),
                             child: Text(
                               'About App',
-                              style: appstyle(white, 14, FontWeight.normal),
+                              style: appstyle(
+                                  Theme.of(context).colorScheme.secondary,
+                                  14,
+                                  FontWeight.normal),
                             ),
                           ),
-                          const Expanded(
+                          Expanded(
                             child: Align(
-                              alignment: AlignmentDirectional(0.9, 0),
+                              alignment: const AlignmentDirectional(0.9, 0),
                               child: Icon(
                                 Icons.arrow_forward_ios,
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.secondary,
                                 size: 18,
                               ),
                             ),
@@ -518,15 +336,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                   24, 0, 0, 0),
                               child: Text(
                                 'Address Book',
-                                style: appstyle(white, 14, FontWeight.normal),
+                                style: appstyle(
+                                    Theme.of(context).colorScheme.secondary,
+                                    14,
+                                    FontWeight.normal),
                               ),
                             ),
-                            const Expanded(
+                            Expanded(
                               child: Align(
-                                alignment: AlignmentDirectional(0.9, 0),
+                                alignment: const AlignmentDirectional(0.9, 0),
                                 child: Icon(
                                   Icons.arrow_forward_ios,
-                                  color: Colors.white,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   size: 18,
                                 ),
                               ),
@@ -549,7 +371,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: white, width: 1)),
+                      border: Border.all(
+                          color: Theme.of(context).colorScheme.secondary,
+                          width: 1)),
                   child: CustomButton(
                       onTap: () async {
                         SharedPreferences sharedPreferences =
@@ -561,8 +385,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       text: "Log Out",
                       width: 90,
                       height: 40,
-                      color: backGround,
-                      color2: white,
+                      color: Theme.of(context).colorScheme.background,
+                      color2: Theme.of(context).colorScheme.secondary,
                       textSize: 14),
                 )
               ],

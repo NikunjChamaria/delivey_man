@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:cached_memory_image/cached_memory_image.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/height_spacer.dart';
 import 'package:delivery_man/constants/route.dart';
 import 'package:delivery_man/constants/textstyle.dart';
@@ -11,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../constants/server.dart';
 import 'package:http/http.dart' as http;
@@ -39,12 +38,13 @@ class _BusinessProfileMainPageState extends State<BusinessProfileMainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backGround,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        backgroundColor: backGround,
+        backgroundColor: Theme.of(context).colorScheme.background,
         title: Text(
           "Your Businesses",
-          style: appstyle(white, 16, FontWeight.bold),
+          style: appstyle(
+              Theme.of(context).colorScheme.secondary, 16, FontWeight.bold),
         ),
       ),
       body: SingleChildScrollView(
@@ -56,9 +56,25 @@ class _BusinessProfileMainPageState extends State<BusinessProfileMainPage> {
                 future: getBusiness(),
                 builder: (context, AsyncSnapshot<List?> snapshot) {
                   return snapshot.connectionState == ConnectionState.waiting
-                      ? const CircularProgressIndicator(
-                          color: white,
-                        )
+                      ? ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: 3,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Shimmer.fromColors(
+                                  baseColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  highlightColor:
+                                      Theme.of(context).colorScheme.secondary,
+                                  child: Container(
+                                    width: double.maxFinite,
+                                    height: 300,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  )),
+                            );
+                          })
                       : ListView.builder(
                           shrinkWrap: true,
                           itemCount: snapshot.data!.length,
@@ -109,9 +125,19 @@ class _BusinessProfileMainPageState extends State<BusinessProfileMainPage> {
                               child: Padding(
                                 padding: const EdgeInsets.all(10),
                                 child: Container(
-                                  decoration: const BoxDecoration(
-                                      color: white,
-                                      borderRadius: BorderRadius.all(
+                                  decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 4,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .tertiary,
+                                          offset: const Offset(0, 2),
+                                        )
+                                      ],
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      borderRadius: const BorderRadius.all(
                                           Radius.circular(10))),
                                   child: Column(
                                     children: [
@@ -122,20 +148,32 @@ class _BusinessProfileMainPageState extends State<BusinessProfileMainPage> {
                                                   snapshot1) {
                                             return snapshot1.connectionState ==
                                                     ConnectionState.done
-                                                ? CachedMemoryImage(
-                                                    uniqueKey:
-                                                        snapshot.data![index]
-                                                            ['resName'],
-                                                    bytes: snapshot1.data,
-                                                    fit: BoxFit.fill,
+                                                ? SizedBox(
+                                                    height: 250,
+                                                    width: double.maxFinite,
+                                                    child: CachedMemoryImage(
+                                                      uniqueKey:
+                                                          snapshot.data![index]
+                                                              ['resName'],
+                                                      bytes: snapshot1.data,
+                                                      fit: BoxFit.cover,
+                                                    ),
                                                   )
-                                                : CachedNetworkImage(
-                                                    imageUrl:
-                                                        'https://cdn-icons-png.flaticon.com/512/147/147144.png?w=360',
-                                                    width: double.infinity,
-                                                    height: 190,
-                                                    fit: BoxFit.cover,
-                                                  );
+                                                : Shimmer.fromColors(
+                                                    baseColor: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                    highlightColor:
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .secondary,
+                                                    child: Container(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
+                                                      height: 250,
+                                                      width: double.maxFinite,
+                                                    ));
                                           }),
                                       Padding(
                                         padding: const EdgeInsets.all(10),
@@ -151,13 +189,21 @@ class _BusinessProfileMainPageState extends State<BusinessProfileMainPage> {
                                                   Text(
                                                     snapshot.data![index]
                                                         ['resName'],
-                                                    style: appstyle(black, 16,
+                                                    style: appstyle(
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .secondary,
+                                                        16,
                                                         FontWeight.w600),
                                                   ),
                                                   Text(
                                                     snapshot.data![index]
                                                         ['location'],
-                                                    style: appstyle(black, 14,
+                                                    style: appstyle(
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .secondary,
+                                                        14,
                                                         FontWeight.w300),
                                                   )
                                                 ],
@@ -178,7 +224,10 @@ class _BusinessProfileMainPageState extends State<BusinessProfileMainPage> {
                                                                 ? "No new Orders"
                                                                 : "${snapshot.data!.length} new order(s)",
                                                             style: appstyle(
-                                                                black,
+                                                                Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .secondary,
                                                                 20,
                                                                 FontWeight
                                                                     .w300),
@@ -203,14 +252,15 @@ class _BusinessProfileMainPageState extends State<BusinessProfileMainPage> {
                       arguments: {"address": "", "lat": 0.0, "long": 0.0});
                 },
                 child: Container(
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      color: white),
+                  decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      color: Theme.of(context).colorScheme.tertiary),
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
                       "Add a new business",
-                      style: appstyle(black, 18, FontWeight.bold),
+                      style: appstyle(Theme.of(context).colorScheme.secondary,
+                          18, FontWeight.bold),
                     ),
                   ),
                 ),

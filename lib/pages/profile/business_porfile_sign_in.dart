@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 
-import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/height_spacer.dart';
 import 'package:delivery_man/constants/textstyle.dart';
 import 'package:flutter/foundation.dart';
@@ -110,15 +109,15 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backGround,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        backgroundColor: backGround,
-        title: const Align(
-          alignment: AlignmentDirectional(-1, 0),
+        backgroundColor: Theme.of(context).colorScheme.background,
+        title: Align(
+          alignment: const AlignmentDirectional(-1, 0),
           child: Text(
             'Create Business',
             style: TextStyle(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.secondary,
               fontSize: 18,
             ),
           ),
@@ -152,7 +151,8 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
               const HeightSpacer(height: 10),
               Text(
                 "Upload Business loaction photo :",
-                style: appstyle(white, 20, FontWeight.w600),
+                style: appstyle(Theme.of(context).colorScheme.secondary, 20,
+                    FontWeight.w600),
               ),
               const HeightSpacer(height: 10),
               Center(
@@ -161,14 +161,16 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                     pickImage();
                   },
                   child: Container(
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: white),
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        color: Theme.of(context).colorScheme.secondary),
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Text(
                         "Upload Picture",
-                        style: appstyle(black, 14, FontWeight.w500),
+                        style: appstyle(Theme.of(context).colorScheme.secondary,
+                            14, FontWeight.w500),
                       ),
                     ),
                   ),
@@ -177,7 +179,8 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
               const HeightSpacer(height: 10),
               Text(
                 "Location :",
-                style: appstyle(white, 20, FontWeight.w600),
+                style: appstyle(Theme.of(context).colorScheme.secondary, 20,
+                    FontWeight.w600),
               ),
               widget.address == ""
                   ? Container()
@@ -186,7 +189,7 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                           const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: white,
+                          color: Theme.of(context).colorScheme.secondary,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Padding(
@@ -199,8 +202,10 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                                   padding: const EdgeInsets.all(10),
                                   child: Text(
                                     widget.address,
-                                    style:
-                                        appstyle(black, 16, FontWeight.normal),
+                                    style: appstyle(
+                                        Theme.of(context).colorScheme.secondary,
+                                        16,
+                                        FontWeight.normal),
                                   ),
                                 ),
                               ),
@@ -211,7 +216,7 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
@@ -234,7 +239,10 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                               padding: const EdgeInsets.all(10),
                               child: Text(
                                 "Set location from map",
-                                style: appstyle(black, 16, FontWeight.bold),
+                                style: appstyle(
+                                    Theme.of(context).colorScheme.secondary,
+                                    16,
+                                    FontWeight.bold),
                               ),
                             ),
                           ),
@@ -244,13 +252,14 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
               ),
               Text(
                 "Business Name :",
-                style: appstyle(white, 20, FontWeight.w600),
+                style: appstyle(Theme.of(context).colorScheme.secondary, 20,
+                    FontWeight.w600),
               ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
@@ -318,13 +327,14 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
               ),
               Text(
                 "Business Email :",
-                style: appstyle(white, 20, FontWeight.w600),
+                style: appstyle(Theme.of(context).colorScheme.secondary, 20,
+                    FontWeight.w600),
               ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
@@ -392,13 +402,14 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
               ),
               Text(
                 "Rating :",
-                style: appstyle(white, 20, FontWeight.w600),
+                style: appstyle(Theme.of(context).colorScheme.secondary, 20,
+                    FontWeight.w600),
               ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
@@ -466,13 +477,14 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
               ),
               Text(
                 "Location Name :",
-                style: appstyle(white, 20, FontWeight.w600),
+                style: appstyle(Theme.of(context).colorScheme.secondary, 20,
+                    FontWeight.w600),
               ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
@@ -540,13 +552,14 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
               ),
               Text(
                 "Comments :",
-                style: appstyle(white, 20, FontWeight.w600),
+                style: appstyle(Theme.of(context).colorScheme.secondary, 20,
+                    FontWeight.w600),
               ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
@@ -614,13 +627,14 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
               ),
               Text(
                 "Food Type :",
-                style: appstyle(white, 20, FontWeight.w600),
+                style: appstyle(Theme.of(context).colorScheme.secondary, 20,
+                    FontWeight.w600),
               ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
@@ -695,14 +709,16 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                     foodType.clear();
                   },
                   child: Container(
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: white),
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        color: Theme.of(context).colorScheme.secondary),
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Text(
                         "ADD",
-                        style: appstyle(black, 18, FontWeight.w500),
+                        style: appstyle(Theme.of(context).colorScheme.secondary,
+                            18, FontWeight.w500),
                       ),
                     ),
                   ),
@@ -711,13 +727,14 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
               const HeightSpacer(height: 10),
               Text(
                 "Average Price :",
-                style: appstyle(white, 20, FontWeight.w600),
+                style: appstyle(Theme.of(context).colorScheme.secondary, 20,
+                    FontWeight.w600),
               ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
@@ -814,14 +831,16 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                     uploadImage();
                   },
                   child: Container(
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: white),
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        color: Theme.of(context).colorScheme.secondary),
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Text(
                         "ADD",
-                        style: appstyle(black, 18, FontWeight.w500),
+                        style: appstyle(Theme.of(context).colorScheme.secondary,
+                            18, FontWeight.w500),
                       ),
                     ),
                   ),

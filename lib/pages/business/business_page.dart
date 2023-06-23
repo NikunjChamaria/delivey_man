@@ -43,12 +43,13 @@ class _BusinessPageState extends State<BusinessPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backGround,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        backgroundColor: backGround,
+        backgroundColor: Theme.of(context).colorScheme.background,
         title: Text(
           widget.restaurant['resName'],
-          style: appstyle(white, 18, FontWeight.w600),
+          style: appstyle(
+              Theme.of(context).colorScheme.secondary, 18, FontWeight.w600),
         ),
       ),
       body: SingleChildScrollView(
@@ -60,12 +61,13 @@ class _BusinessPageState extends State<BusinessPage> {
             children: [
               Text(
                 "New Orders",
-                style: appstyle(white, 22, FontWeight.w500),
+                style: appstyle(Theme.of(context).colorScheme.secondary, 22,
+                    FontWeight.w500),
               ),
               const HeightSpacer(height: 20),
               Container(
                 decoration: const BoxDecoration(
-                    color: lightGrey,
+                    color: transparent,
                     borderRadius: BorderRadius.all(Radius.circular(10))),
                 child: FutureBuilder(
                     future: getOrders(),
@@ -80,10 +82,21 @@ class _BusinessPageState extends State<BusinessPage> {
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
-                                    decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(
+                                    decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            blurRadius: 4,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .tertiary,
+                                            offset: const Offset(0, 2),
+                                          )
+                                        ],
+                                        borderRadius: const BorderRadius.all(
                                             Radius.circular(10)),
-                                        color: white),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
                                     child: Padding(
                                       padding: const EdgeInsets.all(10),
                                       child: Column(
@@ -97,14 +110,22 @@ class _BusinessPageState extends State<BusinessPage> {
                                               Text(
                                                 "User email id:",
                                                 style: appstyle(
-                                                    black, 14, FontWeight.bold),
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary,
+                                                    14,
+                                                    FontWeight.bold),
                                               ),
                                               Text(
                                                 snapshot.data![index]
                                                     ['userEmail'],
                                                 overflow: TextOverflow.fade,
                                                 style: appstyle(
-                                                    black, 12, FontWeight.w300),
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary,
+                                                    12,
+                                                    FontWeight.w300),
                                               )
                                             ],
                                           ),
@@ -113,19 +134,31 @@ class _BusinessPageState extends State<BusinessPage> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text("Ordered On:",
-                                                  style: appstyle(black, 14,
+                                                  style: appstyle(
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .secondary,
+                                                      14,
                                                       FontWeight.bold)),
                                               Text(
                                                 snapshot.data![index]['time'],
                                                 overflow: TextOverflow.fade,
                                                 style: appstyle(
-                                                    black, 12, FontWeight.w300),
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary,
+                                                    12,
+                                                    FontWeight.w300),
                                               )
                                             ],
                                           ),
                                           Text("Items Ordered:",
                                               style: appstyle(
-                                                  black, 14, FontWeight.bold)),
+                                                  Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary,
+                                                  14,
+                                                  FontWeight.bold)),
                                           const HeightSpacer(height: 10),
                                           ListView.builder(
                                               itemCount: snapshot
@@ -139,7 +172,11 @@ class _BusinessPageState extends State<BusinessPage> {
                                                     .toList();
                                                 return Text(
                                                     "${snapshot.data![index]['items'][keys[ind]]} X ${keys[ind]}",
-                                                    style: appstyle(black, 12,
+                                                    style: appstyle(
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .secondary,
+                                                        12,
                                                         FontWeight.w300));
                                               }),
                                           const HeightSpacer(height: 10),
@@ -148,13 +185,21 @@ class _BusinessPageState extends State<BusinessPage> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text("Total Amount:",
-                                                  style: appstyle(black, 14,
+                                                  style: appstyle(
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .secondary,
+                                                      14,
                                                       FontWeight.bold)),
                                               Text(
                                                 "\$${snapshot.data![index]['amount']}",
                                                 overflow: TextOverflow.fade,
                                                 style: appstyle(
-                                                    black, 12, FontWeight.w300),
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary,
+                                                    12,
+                                                    FontWeight.w300),
                                               )
                                             ],
                                           ),
@@ -182,24 +227,38 @@ class _BusinessPageState extends State<BusinessPage> {
                                                   setState(() {});
                                                 },
                                                 child: Container(
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                          boxShadow: [
+                                                  decoration: BoxDecoration(
+                                                      boxShadow: [
                                                         BoxShadow(
-                                                          color: lightGrey,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .primary,
                                                           spreadRadius: 1,
                                                           blurRadius: 2,
                                                         )
                                                       ],
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                            Radius.circular(10),
-                                                          ),
-                                                          color: white),
-                                                  child: const Padding(
-                                                    padding: EdgeInsets.all(10),
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .all(
+                                                        Radius.circular(10),
+                                                      ),
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .tertiary),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
                                                     child: Text(
-                                                        "Mark as Delivered"),
+                                                      "Mark as Delivered",
+                                                      style: appstyle(
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .secondary,
+                                                          14,
+                                                          FontWeight.bold),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -216,7 +275,8 @@ class _BusinessPageState extends State<BusinessPage> {
               const HeightSpacer(height: 20),
               Text(
                 "Your items",
-                style: appstyle(white, 22, FontWeight.w500),
+                style: appstyle(Theme.of(context).colorScheme.secondary, 22,
+                    FontWeight.w500),
               ),
               FutureBuilder(
                   future: getFood(),
@@ -257,15 +317,25 @@ class _BusinessPageState extends State<BusinessPage> {
                               return Padding(
                                 padding: const EdgeInsets.all(10),
                                 child: Container(
-                                  decoration: const BoxDecoration(
-                                      color: white,
-                                      borderRadius: BorderRadius.all(
+                                  decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 4,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .tertiary,
+                                          offset: const Offset(0, 2),
+                                        )
+                                      ],
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      borderRadius: const BorderRadius.all(
                                           Radius.circular(10))),
                                   child: Padding(
                                     padding: const EdgeInsets.all(10),
                                     child: Row(
                                       children: [
-                                        Container(
+                                        SizedBox(
                                           height: 50,
                                           width: 50,
                                           child: FutureBuilder(
@@ -300,13 +370,21 @@ class _BusinessPageState extends State<BusinessPage> {
                                             Text(
                                               snapshot.data![index]['name'],
                                               style: appstyle(
-                                                  black, 16, FontWeight.w600),
+                                                  Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary,
+                                                  16,
+                                                  FontWeight.w600),
                                             ),
                                             Text(
                                               snapshot.data![index]['price']
                                                   .toString(),
                                               style: appstyle(
-                                                  black, 12, FontWeight.w300),
+                                                  Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary,
+                                                  12,
+                                                  FontWeight.w300),
                                             )
                                           ],
                                         ),
@@ -325,14 +403,16 @@ class _BusinessPageState extends State<BusinessPage> {
                         arguments: {'resName': widget.restaurant['resName']});
                   },
                   child: Container(
-                    decoration: const BoxDecoration(
-                        color: white,
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.tertiary,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10))),
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Text(
                         "Add new Item",
-                        style: appstyle(black, 14, FontWeight.w500),
+                        style: appstyle(Theme.of(context).colorScheme.secondary,
+                            14, FontWeight.w500),
                       ),
                     ),
                   ),

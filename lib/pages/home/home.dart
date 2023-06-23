@@ -3,23 +3,23 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/server.dart';
-import 'package:delivery_man/constants/textstyle.dart';
-import 'package:delivery_man/widgets/custom_button.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:http/http.dart' as http;
 
 import '../../constants/route.dart';
 
 // ignore: must_be_immutable
 class HomeWidget extends StatefulWidget {
-  var token;
-  HomeWidget({Key? key, this.token}) : super(key: key);
+  const HomeWidget({
+    Key? key,
+  }) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -29,8 +29,6 @@ class HomeWidget extends StatefulWidget {
 class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  late String email;
-  late String name;
   List? response;
   List? response1;
 
@@ -39,14 +37,6 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
     super.initState();
     downloadData();
     downloadData1();
-    Map<String, dynamic> jwtDecodedToekn = JwtDecoder.decode(widget.token);
-    email = jwtDecodedToekn['email'];
-    name = jwtDecodedToekn['name'];
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   void downloadData() async {
@@ -74,219 +64,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
     return GestureDetector(
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: white,
-        drawer: Drawer(
-          elevation: 16,
-          child: Container(
-            width: 100,
-            height: 100,
-            decoration: const BoxDecoration(
-              color: Color(0xFF212425),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 100, 0, 0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Container(
-                        width: 120,
-                        height: 120,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        child: Image.network(
-                          'https://picsum.photos/seed/52/600',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Container(
-                        height: 40,
-                        decoration: const BoxDecoration(),
-                      ),
-                      const Text(
-                        'Nikunj',
-                        style: TextStyle(color: white, fontSize: 20),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 50, 0, 0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(15, 0, 0, 15),
-                        child: Container(
-                          width: 314,
-                          height: 46,
-                          decoration: const BoxDecoration(),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              const FaIcon(
-                                // ignore: deprecated_member_use
-                                FontAwesomeIcons.home,
-                                color: Colors.white,
-                                size: 24,
-                              ),
-                              Container(
-                                width: 10,
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFF212425),
-                                ),
-                              ),
-                              CustomButton(
-                                  onTap: () async {
-                                    SharedPreferences preferences =
-                                        await SharedPreferences.getInstance();
-                                    Get.toNamed(RouteHelper.homw, arguments: {
-                                      'token': preferences.getString('token')
-                                    });
-                                    scaffoldKey.currentState!.closeDrawer();
-                                  },
-                                  text: "Home",
-                                  width: 140,
-                                  height: 50,
-                                  color: transparent,
-                                  color2: white,
-                                  textSize: 22),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(15, 0, 0, 15),
-                        child: Container(
-                          width: 314,
-                          height: 46,
-                          decoration: const BoxDecoration(),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              const Icon(
-                                Icons.no_food_sharp,
-                                color: Colors.white,
-                                size: 24,
-                              ),
-                              Container(
-                                width: 10,
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFF212425),
-                                ),
-                              ),
-                              CustomButton(
-                                  onTap: () {
-                                    Get.toNamed(RouteHelper.food);
-                                    scaffoldKey.currentState!.closeDrawer();
-                                  },
-                                  text: "Food",
-                                  width: 140,
-                                  height: 50,
-                                  color: transparent,
-                                  color2: white,
-                                  textSize: 22)
-                            ],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(15, 0, 0, 15),
-                        child: Container(
-                          width: 314,
-                          height: 46,
-                          decoration: const BoxDecoration(),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              const Icon(
-                                Icons.local_convenience_store_rounded,
-                                color: Colors.white,
-                                size: 24,
-                              ),
-                              Container(
-                                width: 10,
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFF212425),
-                                ),
-                              ),
-                              CustomButton(
-                                  onTap: () {
-                                    Get.toNamed(RouteHelper.retail);
-                                    scaffoldKey.currentState!.closeDrawer();
-                                  },
-                                  text: "Retail Store",
-                                  width: 200,
-                                  height: 50,
-                                  color: transparent,
-                                  color2: white,
-                                  textSize: 22)
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 200,
-                        decoration: const BoxDecoration(),
-                      ),
-                      Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(15, 0, 0, 15),
-                        child: Container(
-                          width: 314,
-                          height: 46,
-                          decoration: const BoxDecoration(),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              const Icon(
-                                Icons.person,
-                                color: Colors.white,
-                                size: 24,
-                              ),
-                              Container(
-                                width: 10,
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFF212425),
-                                ),
-                              ),
-                              CustomButton(
-                                  onTap: () async {
-                                    SharedPreferences preferences =
-                                        await SharedPreferences.getInstance();
-                                    Get.toNamed(RouteHelper.profile,
-                                        arguments: {
-                                          'token':
-                                              preferences.getString('token')
-                                        });
-                                    scaffoldKey.currentState!.closeDrawer();
-                                  },
-                                  text: "Profile",
-                                  width: 140,
-                                  height: 50,
-                                  color: transparent,
-                                  color2: white,
-                                  textSize: 22)
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -297,12 +75,15 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                   children: [
                     Align(
                       alignment: const AlignmentDirectional(0.05, -1),
-                      child: CachedNetworkImage(
-                        imageUrl:
-                            'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1286&q=80',
-                        width: double.infinity,
-                        height: 500,
-                        fit: BoxFit.cover,
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              'https://img.freepik.com/premium-photo/mix-vegetables-food-isolated-grey-background_429553-176.jpg?w=2000',
+                          width: double.infinity,
+                          height: 500,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     Container(
@@ -326,9 +107,15 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                               child: Container(
                                 width: double.infinity,
                                 height: 700,
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFF212425),
-                                  borderRadius: BorderRadius.only(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .background,
+                                      width: 0.1),
+                                  color:
+                                      Theme.of(context).colorScheme.background,
+                                  borderRadius: const BorderRadius.only(
                                     bottomLeft: Radius.circular(0),
                                     bottomRight: Radius.circular(0),
                                     topLeft: Radius.circular(16),
@@ -344,30 +131,36 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        const Divider(
+                                        Divider(
                                           height: 8,
                                           thickness: 4,
                                           indent: 140,
                                           endIndent: 140,
-                                          color: white,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
                                         ),
-                                        const Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    16, 16, 16, 0),
+                                        Padding(
+                                            padding: const EdgeInsetsDirectional
+                                                .fromSTEB(16, 16, 16, 0),
                                             child: Text(
                                               'Popular food ',
                                               style: TextStyle(
-                                                  color: white, fontSize: 24),
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary,
+                                                  fontSize: 24),
                                             )),
-                                        const Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    16, 4, 16, 0),
+                                        Padding(
+                                            padding: const EdgeInsetsDirectional
+                                                .fromSTEB(16, 4, 16, 0),
                                             child: Text(
                                               'Most searched food itmes',
                                               style: TextStyle(
-                                                  color: white, fontSize: 14),
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary,
+                                                  fontSize: 14),
                                             )),
                                         Padding(
                                           padding: const EdgeInsetsDirectional
@@ -375,8 +168,10 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                           child: Container(
                                             width: double.infinity,
                                             height: 210,
-                                            decoration: const BoxDecoration(
-                                              color: Color(0xFF212425),
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .background,
                                             ),
                                             child: ListView.builder(
                                               padding: EdgeInsets.zero,
@@ -388,25 +183,35 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                               scrollDirection: Axis.horizontal,
                                               itemBuilder: (context, index) {
                                                 return response == null
-                                                    ? SizedBox.shrink()
+                                                    ? const SizedBox.shrink()
                                                     : Padding(
                                                         padding:
                                                             const EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                 16, 8, 0, 12),
                                                         child: Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  right: 10),
                                                           width: 270,
                                                           height: 100,
                                                           decoration:
                                                               BoxDecoration(
-                                                            color: lightGrey,
-                                                            boxShadow: const [
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .primary,
+                                                            boxShadow: [
                                                               BoxShadow(
-                                                                blurRadius: 8,
-                                                                color: Color(
-                                                                    0x230F1113),
-                                                                offset: Offset(
-                                                                    0, 4),
+                                                                blurRadius: 4,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .tertiary,
+                                                                offset:
+                                                                    const Offset(
+                                                                        0, 2),
                                                               )
                                                             ],
                                                             borderRadius:
@@ -414,7 +219,10 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                     .circular(
                                                                         12),
                                                             border: Border.all(
-                                                              color: black,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .tertiary,
                                                               width: 1,
                                                             ),
                                                           ),
@@ -480,9 +288,9 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                         Text(
                                                                             response![index][
                                                                                 'name'],
-                                                                            style: const TextStyle(
+                                                                            style: TextStyle(
                                                                                 fontSize: 16,
-                                                                                color: white,
+                                                                                color: Theme.of(context).colorScheme.secondary,
                                                                                 fontWeight: FontWeight.normal)),
                                                                         Padding(
                                                                           padding: const EdgeInsetsDirectional.fromSTEB(
@@ -496,13 +304,13 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                                 MainAxisSize.max,
                                                                             children: [
                                                                               RatingBarIndicator(
-                                                                                itemBuilder: (context, index) => const Icon(
+                                                                                itemBuilder: (context, index) => Icon(
                                                                                   Icons.radio_button_checked_rounded,
-                                                                                  color: white,
+                                                                                  color: Theme.of(context).colorScheme.secondary,
                                                                                 ),
                                                                                 direction: Axis.horizontal,
                                                                                 rating: 4,
-                                                                                unratedColor: lightGrey,
+                                                                                unratedColor: Theme.of(context).colorScheme.primary,
                                                                                 itemCount: 5,
                                                                                 itemSize: 16,
                                                                               ),
@@ -510,7 +318,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                                 padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
                                                                                 child: Text(
                                                                                   response![index]['rating'],
-                                                                                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.normal, color: white),
+                                                                                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.normal, color: Theme.of(context).colorScheme.secondary),
                                                                                 ),
                                                                               ),
                                                                             ],
@@ -530,8 +338,9 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                             32,
                                                                         decoration:
                                                                             BoxDecoration(
-                                                                          color:
-                                                                              black,
+                                                                          color: Theme.of(context)
+                                                                              .colorScheme
+                                                                              .background,
                                                                           borderRadius:
                                                                               BorderRadius.circular(12),
                                                                         ),
@@ -539,8 +348,8 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                             0,
                                                                             0),
                                                                         child:
-                                                                            const Padding(
-                                                                          padding: EdgeInsetsDirectional.fromSTEB(
+                                                                            Padding(
+                                                                          padding: const EdgeInsetsDirectional.fromSTEB(
                                                                               8,
                                                                               0,
                                                                               8,
@@ -549,7 +358,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                               Text(
                                                                             'Explore Food',
                                                                             style:
-                                                                                TextStyle(fontSize: 14, color: white),
+                                                                                TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.secondary),
                                                                           ),
                                                                         ),
                                                                       ),
@@ -564,23 +373,27 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                             ),
                                           ),
                                         ),
-                                        const Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    16, 16, 16, 0),
+                                        Padding(
+                                            padding: const EdgeInsetsDirectional
+                                                .fromSTEB(16, 16, 16, 0),
                                             child: Text(
                                               'Search Products',
                                               style: TextStyle(
-                                                  color: white, fontSize: 24),
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary,
+                                                  fontSize: 24),
                                             )),
-                                        const Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    16, 4, 16, 0),
+                                        Padding(
+                                            padding: const EdgeInsetsDirectional
+                                                .fromSTEB(16, 4, 16, 0),
                                             child: Text(
                                               'Most searched products in our app',
                                               style: TextStyle(
-                                                  color: white, fontSize: 14),
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary,
+                                                  fontSize: 14),
                                             )),
                                         Padding(
                                           padding: const EdgeInsetsDirectional
@@ -595,7 +408,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                 : response1!.length,
                                             itemBuilder: (context, index) {
                                               return response1 == null
-                                                  ? SizedBox.shrink()
+                                                  ? const SizedBox.shrink()
                                                   : Padding(
                                                       padding:
                                                           const EdgeInsetsDirectional
@@ -605,21 +418,30 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                         width: 270,
                                                         decoration:
                                                             BoxDecoration(
-                                                          color: lightGrey,
-                                                          boxShadow: const [
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .primary,
+                                                          boxShadow: [
                                                             BoxShadow(
-                                                              blurRadius: 8,
-                                                              color: Color(
-                                                                  0x230F1113),
+                                                              blurRadius: 4,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .tertiary,
                                                               offset:
-                                                                  Offset(0, 4),
+                                                                  const Offset(
+                                                                      0, 2),
                                                             )
                                                           ],
                                                           borderRadius:
                                                               BorderRadius
                                                                   .circular(12),
                                                           border: Border.all(
-                                                            color: black,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .tertiary,
                                                             width: 1,
                                                           ),
                                                         ),
@@ -633,23 +455,24 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                   ['name'],
                                                               transitionOnUserGestures:
                                                                   true,
-                                                              child: ClipRRect(
-                                                                borderRadius:
-                                                                    const BorderRadius
-                                                                        .only(
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          0),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          0),
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          12),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          12),
-                                                                ),
+                                                              child: Container(
+                                                                decoration: BoxDecoration(
+                                                                    boxShadow: [
+                                                                      BoxShadow(
+                                                                        blurRadius:
+                                                                            4,
+                                                                        color: Theme.of(context)
+                                                                            .colorScheme
+                                                                            .tertiary,
+                                                                        offset: const Offset(
+                                                                            0,
+                                                                            2),
+                                                                      )
+                                                                    ],
+                                                                    borderRadius: const BorderRadius
+                                                                            .all(
+                                                                        Radius.circular(
+                                                                            10))),
                                                                 child:
                                                                     CachedNetworkImage(
                                                                   imageUrl: response1![
@@ -694,7 +517,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                             response1![index][
                                                                                 'name'],
                                                                             style:
-                                                                                const TextStyle(fontSize: 16, color: white)),
+                                                                                TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.secondary)),
                                                                         Padding(
                                                                           padding: const EdgeInsetsDirectional.fromSTEB(
                                                                               0,
@@ -707,13 +530,13 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                                 MainAxisSize.max,
                                                                             children: [
                                                                               RatingBarIndicator(
-                                                                                itemBuilder: (context, index) => const Icon(
+                                                                                itemBuilder: (context, index) => Icon(
                                                                                   Icons.radio_button_checked_rounded,
-                                                                                  color: white,
+                                                                                  color: Theme.of(context).colorScheme.secondary,
                                                                                 ),
                                                                                 direction: Axis.horizontal,
                                                                                 rating: 4,
-                                                                                unratedColor: lightGrey,
+                                                                                unratedColor: Theme.of(context).colorScheme.primary,
                                                                                 itemCount: 5,
                                                                                 itemSize: 16,
                                                                               ),
@@ -721,7 +544,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                                 padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
                                                                                 child: Text(
                                                                                   response1![index]['rating'],
-                                                                                  style: const TextStyle(fontSize: 12, color: white),
+                                                                                  style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary),
                                                                                 ),
                                                                               ),
                                                                             ],
@@ -742,8 +565,9 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                           32,
                                                                       decoration:
                                                                           BoxDecoration(
-                                                                        color:
-                                                                            black,
+                                                                        color: Theme.of(context)
+                                                                            .colorScheme
+                                                                            .tertiary,
                                                                         borderRadius:
                                                                             BorderRadius.circular(12),
                                                                       ),
@@ -752,8 +576,8 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                               0,
                                                                               0),
                                                                       child:
-                                                                          const Padding(
-                                                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                                                          Padding(
+                                                                        padding: const EdgeInsetsDirectional.fromSTEB(
                                                                             8,
                                                                             0,
                                                                             8,
@@ -762,7 +586,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                             Text(
                                                                           'Explore Store',
                                                                           style: TextStyle(
-                                                                              color: white,
+                                                                              color: Theme.of(context).colorScheme.secondary,
                                                                               fontSize: 14),
                                                                         ),
                                                                       ),
@@ -778,20 +602,6 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                             },
                                           ),
                                         ),
-                                        Center(
-                                          child: Text(
-                                            email,
-                                            style: appstyle(
-                                                white, 12, FontWeight.w800),
-                                          ),
-                                        ),
-                                        Center(
-                                          child: Text(
-                                            name,
-                                            style: appstyle(
-                                                white, 12, FontWeight.w800),
-                                          ),
-                                        )
                                       ],
                                     ),
                                   ),
@@ -806,13 +616,13 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                       alignment: const AlignmentDirectional(-0.95, -0.91),
                       child: IconButton(
                         color: transparent,
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.menu_sharp,
-                          color: white,
+                          color: Theme.of(context).colorScheme.tertiary,
                           size: 24,
                         ),
                         onPressed: () async {
-                          scaffoldKey.currentState!.openDrawer();
+                          ZoomDrawer.of(context)!.open();
                         },
                       ),
                     ),
@@ -820,19 +630,19 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                       alignment: const AlignmentDirectional(0.88, -0.90),
                       child: IconButton(
                         color: Colors.transparent,
-                        icon: const FaIcon(
+                        icon: FaIcon(
                           FontAwesomeIcons.solidBell,
-                          color: white,
+                          color: Theme.of(context).colorScheme.tertiary,
                           size: 24,
                         ),
                         onPressed: () {},
                       ),
                     ),
-                    const Align(
-                      alignment: AlignmentDirectional(-0.07, -0.89),
+                    Align(
+                      alignment: const AlignmentDirectional(-0.07, -0.89),
                       child: Text('Mr. Delivery Man',
                           style: TextStyle(
-                              color: white,
+                              color: Theme.of(context).colorScheme.tertiary,
                               fontSize: 25,
                               fontWeight: FontWeight.bold)),
                     ),

@@ -15,16 +15,16 @@ class _CheckOutPageState extends State<CheckOutPage> {
   Widget build(BuildContext context) {
     // bool isCheckOut = true;
     return Scaffold(
-        backgroundColor: backGround,
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
-          backgroundColor: backGround,
+          backgroundColor: Theme.of(context).colorScheme.background,
           leading: GestureDetector(
             onTap: () {
               Get.back();
             },
-            child: const Icon(
+            child: Icon(
               Icons.arrow_back_ios,
-              color: white,
+              color: Theme.of(context).colorScheme.secondary,
               size: 16,
             ),
           ),
@@ -40,8 +40,8 @@ class _CheckOutPageState extends State<CheckOutPage> {
             child: Container(
               width: double.infinity,
               height: 90,
-              decoration: const BoxDecoration(
-                color: white,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondary,
               ),
               child: Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(10, 10, 10, 20),
@@ -76,14 +76,19 @@ class _CheckOutPageState extends State<CheckOutPage> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Text('\$330',
-                                    style:
-                                        appstyle(black, 18, FontWeight.w500)),
+                                    style: appstyle(
+                                        Theme.of(context).colorScheme.secondary,
+                                        18,
+                                        FontWeight.w500)),
                               ],
                             ),
                           ],
                         ),
                         Text(' Proceed To Checkout',
-                            style: appstyle(black, 14, FontWeight.w500)),
+                            style: appstyle(
+                                Theme.of(context).colorScheme.secondary,
+                                14,
+                                FontWeight.w500)),
                       ],
                     ),
                   ),

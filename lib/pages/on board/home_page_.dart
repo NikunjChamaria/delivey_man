@@ -44,10 +44,10 @@ class _HomePageWidgetState extends State<HomePageWidget>
     return GestureDetector(
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: backGround,
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: SafeArea(
           top: true,
-          child: Container(
+          child: SizedBox(
             width: double.infinity,
             height: 862,
             child: Stack(
@@ -75,9 +75,9 @@ class _HomePageWidgetState extends State<HomePageWidget>
                             child: Container(
                               width: double.infinity,
                               height: 374,
-                              decoration: const BoxDecoration(
-                                color: white,
-                                borderRadius: BorderRadius.only(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.secondary,
+                                borderRadius: const BorderRadius.only(
                                   bottomLeft: Radius.circular(0),
                                   bottomRight: Radius.circular(0),
                                   topLeft: Radius.circular(120),
@@ -97,23 +97,27 @@ class _HomePageWidgetState extends State<HomePageWidget>
                               animate: true,
                             ),
                           ),
-                          const Align(
-                              alignment: AlignmentDirectional(-0.65, 0.54),
+                          Align(
+                              alignment:
+                                  const AlignmentDirectional(-0.65, 0.54),
                               child: Text(
                                 'Welcome!!!',
                                 style: TextStyle(
-                                  color: black,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   fontFamily: 'Roboto',
                                   fontSize: 40,
                                   fontWeight: FontWeight.bold,
                                 ),
                               )),
-                          const Align(
-                              alignment: AlignmentDirectional(-0.07, 0.74),
+                          Align(
+                              alignment:
+                                  const AlignmentDirectional(-0.07, 0.74),
                               child: Text(
                                 'Mr.DeliveryMan',
                                 style: TextStyle(
-                                  color: black,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   fontFamily: 'Roboto',
                                   fontSize: 45,
                                   fontWeight: FontWeight.bold,
@@ -138,9 +142,9 @@ class _HomePageWidgetState extends State<HomePageWidget>
                             child: Container(
                               width: double.infinity,
                               height: 374,
-                              decoration: const BoxDecoration(
-                                color: white,
-                                borderRadius: BorderRadius.only(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.secondary,
+                                borderRadius: const BorderRadius.only(
                                   bottomLeft: Radius.circular(0),
                                   bottomRight: Radius.circular(0),
                                   topLeft: Radius.circular(120),
@@ -160,23 +164,26 @@ class _HomePageWidgetState extends State<HomePageWidget>
                               animate: true,
                             ),
                           ),
-                          const Align(
-                              alignment: AlignmentDirectional(-0.03, 0.69),
+                          Align(
+                              alignment:
+                                  const AlignmentDirectional(-0.03, 0.69),
                               child: Text(
                                 '1000+ Restaurants',
                                 style: TextStyle(
-                                  color: black,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   fontFamily: 'Roboto',
                                   fontSize: 35,
                                   fontWeight: FontWeight.bold,
                                 ),
                               )),
-                          const Align(
-                              alignment: AlignmentDirectional(-0.2, 0.53),
+                          Align(
+                              alignment: const AlignmentDirectional(-0.2, 0.53),
                               child: Text(
                                 'Choose between',
                                 style: TextStyle(
-                                  color: black,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   fontFamily: 'Roboto',
                                   fontSize: 45,
                                   fontWeight: FontWeight.bold,
@@ -201,9 +208,9 @@ class _HomePageWidgetState extends State<HomePageWidget>
                             child: Container(
                               width: double.infinity,
                               height: 374,
-                              decoration: const BoxDecoration(
-                                color: white,
-                                borderRadius: BorderRadius.only(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.secondary,
+                                borderRadius: const BorderRadius.only(
                                   bottomLeft: Radius.circular(0),
                                   bottomRight: Radius.circular(0),
                                   topLeft: Radius.circular(120),
@@ -223,23 +230,26 @@ class _HomePageWidgetState extends State<HomePageWidget>
                               animate: true,
                             ),
                           ),
-                          const Align(
-                              alignment: AlignmentDirectional(-0.03, 0.69),
+                          Align(
+                              alignment:
+                                  const AlignmentDirectional(-0.03, 0.69),
                               child: Text(
                                 '100000+ Products',
                                 style: TextStyle(
-                                  color: black,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   fontFamily: 'Roboto',
                                   fontSize: 35,
                                   fontWeight: FontWeight.bold,
                                 ),
                               )),
-                          const Align(
-                              alignment: AlignmentDirectional(-0.2, 0.53),
+                          Align(
+                              alignment: const AlignmentDirectional(-0.2, 0.53),
                               child: Text(
                                 'SURF THROUGH',
                                 style: TextStyle(
-                                  color: black,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   fontFamily: 'Poppins',
                                   fontSize: 45,
                                   fontWeight: FontWeight.bold,
@@ -264,9 +274,9 @@ class _HomePageWidgetState extends State<HomePageWidget>
                             child: Container(
                               width: double.infinity,
                               height: 374,
-                              decoration: const BoxDecoration(
-                                color: white,
-                                borderRadius: BorderRadius.only(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.secondary,
+                                borderRadius: const BorderRadius.only(
                                   bottomLeft: Radius.circular(0),
                                   bottomRight: Radius.circular(0),
                                   topLeft: Radius.circular(120),
@@ -286,30 +296,34 @@ class _HomePageWidgetState extends State<HomePageWidget>
                               animate: true,
                             ),
                           ),
-                          const Align(
-                              alignment: AlignmentDirectional(-0.02, 0.56),
+                          Align(
+                              alignment:
+                                  const AlignmentDirectional(-0.02, 0.56),
                               child: Text(
                                 'Let\'s get started',
                                 style: TextStyle(
-                                  color: black,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   fontFamily: 'Roboto',
                                   fontSize: 45,
                                   fontWeight: FontWeight.bold,
                                 ),
                               )),
-                          const Align(
-                              alignment: AlignmentDirectional(0.14, -0.81),
+                          Align(
+                              alignment:
+                                  const AlignmentDirectional(0.14, -0.81),
                               child: Text(
                                 'ALL-IN ONE APP',
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
-                                  color: Colors.white,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   fontSize: 45,
                                   fontWeight: FontWeight.bold,
                                 ),
                               )),
                           Align(
-                            alignment: AlignmentDirectional(-0.79, 0.82),
+                            alignment: const AlignmentDirectional(-0.79, 0.82),
                             child: CustomButton(
                                 onTap: () {
                                   Get.toNamed(RouteHelper.auth);
@@ -317,18 +331,18 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                 text: "Sign Up",
                                 width: 140,
                                 height: 51,
-                                color: backGround,
-                                color2: white,
+                                color: Theme.of(context).colorScheme.background,
+                                color2: Theme.of(context).colorScheme.secondary,
                                 textSize: 20),
                           ),
-                          const Align(
-                            alignment: AlignmentDirectional(0.7, 0.81),
+                          Align(
+                            alignment: const AlignmentDirectional(0.7, 0.81),
                             child: CustomButton(
                                 text: "Log In",
                                 width: 140,
                                 height: 51,
-                                color: backGround,
-                                color2: white,
+                                color: Theme.of(context).colorScheme.background,
+                                color2: Theme.of(context).colorScheme.secondary,
                                 textSize: 20),
                           ),
                         ],
@@ -351,14 +365,15 @@ class _HomePageWidgetState extends State<HomePageWidget>
                           curve: Curves.ease,
                         );
                       },
-                      effect: const smooth_page_indicator.ExpandingDotsEffect(
+                      effect: smooth_page_indicator.ExpandingDotsEffect(
                         expansionFactor: 3,
                         spacing: 8,
                         radius: 16,
                         dotWidth: 16,
                         dotHeight: 8,
-                        dotColor: lightGrey,
-                        activeDotColor: Color.fromARGB(255, 255, 255, 255),
+                        dotColor: Theme.of(context).colorScheme.primary,
+                        activeDotColor:
+                            const Color.fromARGB(255, 255, 255, 255),
                         paintStyle: PaintingStyle.fill,
                       ),
                     ),

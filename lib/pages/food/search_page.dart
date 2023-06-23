@@ -5,7 +5,6 @@ import 'dart:typed_data';
 
 import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/height_spacer.dart';
 import 'package:delivery_man/constants/route.dart';
 import 'package:delivery_man/constants/textstyle.dart';
@@ -92,7 +91,7 @@ class _SearchPageState extends State<SearchPage> {
     }
 
     return Scaffold(
-      backgroundColor: backGround,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
@@ -100,9 +99,9 @@ class _SearchPageState extends State<SearchPage> {
           child: Column(
             children: [
               Container(
-                decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    color: white),
+                decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    color: Theme.of(context).colorScheme.secondary),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: TextFormField(
@@ -119,13 +118,17 @@ class _SearchPageState extends State<SearchPage> {
                         });
                       }
                     },
-                    cursorColor: black,
+                    cursorColor: Theme.of(context).colorScheme.tertiary,
                     controller: search,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: "Search",
-                        fillColor: white,
-                        focusColor: white),
+                        hintStyle: appstyle(
+                            Theme.of(context).colorScheme.tertiary,
+                            14,
+                            FontWeight.normal),
+                        fillColor: Theme.of(context).colorScheme.tertiary,
+                        focusColor: Theme.of(context).colorScheme.tertiary),
                   ),
                 ),
               ),
@@ -138,11 +141,17 @@ class _SearchPageState extends State<SearchPage> {
                           children: [
                             Text(
                               "PAST SEARCHES",
-                              style: appstyle(white, 16, FontWeight.w500),
+                              style: appstyle(
+                                  Theme.of(context).colorScheme.secondary,
+                                  16,
+                                  FontWeight.w500),
                             ),
                             Text(
                               "Clear",
-                              style: appstyle(white, 14, FontWeight.normal),
+                              style: appstyle(
+                                  Theme.of(context).colorScheme.secondary,
+                                  14,
+                                  FontWeight.normal),
                             )
                           ],
                         ),
@@ -265,7 +274,7 @@ class _SearchPageState extends State<SearchPage> {
                                                 bottom: 10),
                                             child: Row(
                                               children: [
-                                                Container(
+                                                SizedBox(
                                                   height: 50,
                                                   width: 50,
                                                   child: snapshot.data![index]
@@ -352,7 +361,11 @@ class _SearchPageState extends State<SearchPage> {
                                                           : snapshot
                                                                   .data![index]
                                                               ["foodName"],
-                                                      style: appstyle(white, 20,
+                                                      style: appstyle(
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .secondary,
+                                                          20,
                                                           FontWeight.w500),
                                                     ),
                                                     Text(
@@ -361,7 +374,11 @@ class _SearchPageState extends State<SearchPage> {
                                                               ""
                                                           ? "Restaurant"
                                                           : "Dish",
-                                                      style: appstyle(white, 16,
+                                                      style: appstyle(
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .secondary,
+                                                          16,
                                                           FontWeight.normal),
                                                     )
                                                   ],
@@ -385,9 +402,11 @@ class _SearchPageState extends State<SearchPage> {
                                   (context, AsyncSnapshot<List?> snapshot) {
                                 return snapshot.connectionState ==
                                         ConnectionState.waiting
-                                    ? const Center(
+                                    ? Center(
                                         child: CircularProgressIndicator(
-                                          color: white,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
                                         ),
                                       )
                                     : SizedBox(
@@ -509,7 +528,7 @@ class _SearchPageState extends State<SearchPage> {
                                                           bottom: 10),
                                                   child: Row(
                                                     children: [
-                                                      Container(
+                                                      SizedBox(
                                                         height: 50,
                                                         width: 50,
                                                         child: FutureBuilder(
@@ -556,7 +575,10 @@ class _SearchPageState extends State<SearchPage> {
                                                             snapshot.data![
                                                                 index]["name"],
                                                             style: appstyle(
-                                                                white,
+                                                                Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .secondary,
                                                                 20,
                                                                 FontWeight
                                                                     .w500),
@@ -564,7 +586,10 @@ class _SearchPageState extends State<SearchPage> {
                                                           Text(
                                                             "Food",
                                                             style: appstyle(
-                                                                white,
+                                                                Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .secondary,
                                                                 16,
                                                                 FontWeight
                                                                     .normal),
@@ -572,7 +597,10 @@ class _SearchPageState extends State<SearchPage> {
                                                           Text(
                                                             "${snapshot.data![index]["resName"]}",
                                                             style: appstyle(
-                                                                white,
+                                                                Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .secondary,
                                                                 12,
                                                                 FontWeight
                                                                     .bold),
@@ -594,9 +622,11 @@ class _SearchPageState extends State<SearchPage> {
                                   (context, AsyncSnapshot<List?> snapshot) {
                                 return snapshot.connectionState ==
                                         ConnectionState.waiting
-                                    ? const Center(
+                                    ? Center(
                                         child: CircularProgressIndicator(
-                                          color: white,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
                                         ),
                                       )
                                     : SizedBox(
@@ -680,7 +710,7 @@ class _SearchPageState extends State<SearchPage> {
                                                           bottom: 10),
                                                   child: Row(
                                                     children: [
-                                                      Container(
+                                                      SizedBox(
                                                         height: 50,
                                                         width: 50,
                                                         child: FutureBuilder(
@@ -728,7 +758,10 @@ class _SearchPageState extends State<SearchPage> {
                                                                     index]
                                                                 ["resName"],
                                                             style: appstyle(
-                                                                white,
+                                                                Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .secondary,
                                                                 20,
                                                                 FontWeight
                                                                     .w500),
@@ -736,7 +769,10 @@ class _SearchPageState extends State<SearchPage> {
                                                           Text(
                                                             "Restaurant",
                                                             style: appstyle(
-                                                                white,
+                                                                Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .secondary,
                                                                 16,
                                                                 FontWeight
                                                                     .normal),

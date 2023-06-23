@@ -5,7 +5,7 @@ import 'package:delivery_man/pages/food/category_page.dart';
 import 'package:delivery_man/pages/food/chekout_page.dart';
 import 'package:delivery_man/pages/food/food_main_page.dart';
 import 'package:delivery_man/pages/food/restaurant_page.dart';
-import 'package:delivery_man/pages/home/home.dart';
+import 'package:delivery_man/pages/home/home_page.dart';
 import 'package:delivery_man/pages/location/add_address.dart';
 import 'package:delivery_man/pages/location/business_map.dart';
 import 'package:delivery_man/pages/location/map.dart';
@@ -13,7 +13,6 @@ import 'package:delivery_man/pages/on%20board/home_page_.dart';
 import 'package:delivery_man/pages/profile/business_porfile_sign_in.dart';
 import 'package:delivery_man/pages/profile/business_profile_main_page.dart';
 import 'package:delivery_man/pages/profile/edit_profile.dart';
-import 'package:delivery_man/pages/profile/profile.dart';
 import 'package:delivery_man/pages/retail_store/retail_store_main_page.dart';
 import 'package:get/get.dart';
 
@@ -25,7 +24,6 @@ class RouteHelper {
   static const String homw = '/home';
   static const String food = '/food';
   static const String retail = '/retail';
-  static const String profile = '/profile';
   static const String restaurant = '/restaurant';
   static const String cart = '/cart';
   static const String checkout = '/checkout';
@@ -52,7 +50,7 @@ class RouteHelper {
         name: homw,
         page: () {
           var token = Get.arguments['token'];
-          return HomeWidget(
+          return HomePageZoom(
             token: token,
           );
         },
@@ -64,15 +62,6 @@ class RouteHelper {
     GetPage(
         name: retail,
         page: () => const RetailStoreMainPage(),
-        transition: Transition.rightToLeftWithFade),
-    GetPage(
-        name: profile,
-        page: () {
-          var token = Get.arguments['token'];
-          return ProfilePage(
-            token: token,
-          );
-        },
         transition: Transition.rightToLeftWithFade),
     GetPage(
         name: restaurant,
@@ -154,7 +143,9 @@ class RouteHelper {
           double lat = Get.arguments['lat'];
           double long = Get.arguments['long'];
           String address = Get.arguments['address'];
+          int route = Get.arguments['route'];
           return MapScreen(
+            route: route,
             initialLatitude: lat,
             initialLongitude: long,
             address: address,
