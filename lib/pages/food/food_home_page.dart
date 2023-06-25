@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:delivery_man/constants/height_spacer.dart';
+import 'package:delivery_man/constants/item.dart';
 import 'package:delivery_man/constants/route.dart';
 import 'package:delivery_man/constants/server.dart';
 import 'package:delivery_man/constants/textstyle.dart';
@@ -355,55 +356,12 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                       ? const SizedBox.shrink()
                                       : GestureDetector(
                                           onTap: () async {
-                                            List response = [];
-                                            SharedPreferences preferences =
-                                                await SharedPreferences
-                                                    .getInstance();
-                                            var token =
-                                                preferences.getString('token');
-                                            String email = JwtDecoder.decode(
-                                                token!)['email'];
-                                            var data = await http.post(
-                                                Uri.parse(GETCURRENT),
-                                                headers: {
-                                                  "Content-Type":
-                                                      "application/json"
-                                                },
-                                                body: jsonEncode(
-                                                    {"useremail": email}));
-                                            response = jsonDecode(data.body);
-                                            if (response.isEmpty) {
-                                              Get.snackbar("Address empty",
-                                                  "Add location to continue",
-                                                  backgroundColor:
-                                                      Theme.of(context)
-                                                          .colorScheme
-                                                          .secondary,
-                                                  mainButton: TextButton(
-                                                      onPressed: () {
-                                                        Get.toNamed(RouteHelper
-                                                            .addLocation);
-                                                      },
-                                                      child: Text(
-                                                        "Add",
-                                                        style: appstyle(
-                                                            Theme.of(context)
-                                                                .colorScheme
-                                                                .secondary,
-                                                            14,
-                                                            FontWeight.bold),
-                                                      )),
-                                                  colorText: Theme.of(context)
-                                                      .colorScheme
-                                                      .background);
-                                            } else {
-                                              Get.toNamed(
-                                                  RouteHelper.restaurant,
-                                                  arguments: {
-                                                    'restaurant':
-                                                        snapshot.data![index]
-                                                  });
-                                            }
+                                            itemCount = {};
+                                            Get.toNamed(RouteHelper.restaurant,
+                                                arguments: {
+                                                  'restaurant':
+                                                      snapshot.data![index]
+                                                });
                                           },
                                           child: Container(
                                             margin: const EdgeInsets.only(

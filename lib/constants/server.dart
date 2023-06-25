@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-const url = 'http://192.168.191.51:3000/';
+const url = 'http://192.168.105.51:3000/';
 
 const REGISTER = "${url}register";
 

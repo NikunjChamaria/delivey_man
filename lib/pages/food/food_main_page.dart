@@ -62,7 +62,7 @@ class _FoodMainPageState extends State<FoodMainPage> {
           ? AnimatedNotchBottomBar(
               /// Provide NotchBottomBarController
               notchBottomBarController: _controller,
-              color: Theme.of(context).colorScheme.tertiary,
+              color: Theme.of(context).colorScheme.surface,
               showLabel: false,
               notchColor: Theme.of(context).colorScheme.secondary,
 

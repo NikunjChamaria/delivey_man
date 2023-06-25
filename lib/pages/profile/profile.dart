@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/route.dart';
 import 'package:delivery_man/constants/textstyle.dart';
 import 'package:delivery_man/widgets/custom_button.dart';
@@ -60,8 +59,8 @@ class _ProfilePageState extends State<ProfilePage> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: 210,
-                decoration: const BoxDecoration(
-                  color: Color(0xFF212425),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.background,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
@@ -176,8 +175,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     Container(
                       width: MediaQuery.of(context).size.width,
                       height: 50,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF212425),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.background,
                         shape: BoxShape.rectangle,
                       ),
                       child: Row(
@@ -234,8 +233,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       Container(
                         width: MediaQuery.of(context).size.width,
                         height: 50,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFF212425),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.background,
                           shape: BoxShape.rectangle,
                         ),
                         child: Row(
@@ -278,8 +277,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     Container(
                       width: MediaQuery.of(context).size.width,
                       height: 50,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF212425),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.background,
                         shape: BoxShape.rectangle,
                       ),
                       child: Row(
@@ -324,8 +323,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       Container(
                         width: MediaQuery.of(context).size.width,
                         height: 50,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFF212425),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.background,
                           shape: BoxShape.rectangle,
                         ),
                         child: Row(
@@ -379,7 +378,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         SharedPreferences sharedPreferences =
                             await SharedPreferences.getInstance();
                         sharedPreferences.remove('token');
-                        print(sharedPreferences.getString('token').toString());
+                        //print(sharedPreferences.getString('token').toString());
                         Get.toNamed(RouteHelper.auth);
                       },
                       text: "Log Out",

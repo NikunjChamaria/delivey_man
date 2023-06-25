@@ -177,7 +177,7 @@ class _BusinessProfileMainPageState extends State<BusinessProfileMainPage> {
                                           }),
                                       Padding(
                                         padding: const EdgeInsets.all(10),
-                                        child: Container(
+                                        child: SizedBox(
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,

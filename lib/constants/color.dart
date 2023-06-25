@@ -7,7 +7,7 @@ const lightGrey = Color(0xFF3A3A3A);
 const transparent = Colors.transparent;
 
 const backgorundwhite = Color(0xFFf7f6f4);
-const blue = Color.fromARGB(255, 3, 192, 255);
+const blue = Color.fromARGB(255, 225, 233, 239);
 var lighterGrey = Colors.grey[500];
 
 ThemeData darktheme = ThemeData(

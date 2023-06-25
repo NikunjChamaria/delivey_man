@@ -12,16 +12,17 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+import '../../constants/item.dart';
+
 // ignore: must_be_immutable
 class CartPage extends StatefulWidget {
   final Map restaurant;
-  Map<String, dynamic> itemCount;
+
   final List response;
   num totalAmount;
   CartPage(
       {super.key,
       required this.restaurant,
-      required this.itemCount,
       required this.response,
       required this.totalAmount});
 
@@ -31,7 +32,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   late Map restaurant;
-  late Map<String, dynamic> itemCount;
+
   late List response;
   late num totalAmount;
   late double deliveryFee;
@@ -44,7 +45,7 @@ class _CartPageState extends State<CartPage> {
   void initState() {
     super.initState();
     restaurant = widget.restaurant;
-    itemCount = widget.itemCount;
+
     response = widget.response;
     totalAmount = widget.totalAmount;
     deliveryFee = distance * 18;
@@ -58,7 +59,7 @@ class _CartPageState extends State<CartPage> {
     String email = JwtDecoder.decode(token!)['email'];
     var dt = DateTime.now();
     String time = "${dt.day}/${dt.month}/${dt.year} at ${dt.hour}:${dt.minute}";
-    var keys = widget.itemCount.keys.toList();
+    var keys = itemCount.keys.toList();
     var req = {
       "userEmail": email,
       "restaurant": restaurant['resName'],
@@ -72,10 +73,17 @@ class _CartPageState extends State<CartPage> {
     //print(response);
   }
 
+  @override
+  void setState(VoidCallback fn) {
+    itemCount = itemCount;
+    print(itemCount);
+    super.setState(fn);
+  }
+
   void onTap1(String key, num n, int a) async {
     if (itemCount.containsKey(key)) {
-      int i = itemCount[key];
-      itemCount[key] = i + a;
+      int? i = itemCount[key];
+      itemCount[key] = i! + a;
     } else {
       itemCount[key] = 1;
     }
@@ -86,12 +94,14 @@ class _CartPageState extends State<CartPage> {
       widget.totalAmount = widget.totalAmount + (n * a);
       gst = widget.totalAmount * 0.05;
     });
+
     if (itemCount.isEmpty) {
       setState(() {
         isCartEmpty = true;
         Get.back();
       });
     }
+
     //print(itemCount);
   }
 
@@ -141,6 +151,9 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     double dist;
     //print(distance);
+    setState(() {
+      itemCount = itemCount;
+    });
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
@@ -267,7 +280,7 @@ class _CartPageState extends State<CartPage> {
                                 itemCount: itemCount.length,
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
-                                  var keys = widget.itemCount.keys.toList();
+                                  var keys = itemCount.keys.toList();
 
                                   return Padding(
                                     padding:
@@ -897,7 +910,14 @@ class _CartPageState extends State<CartPage> {
                   width: double.infinity,
                   height: 90,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.tertiary,
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 4,
+                        color: Theme.of(context).colorScheme.tertiary,
+                        offset: const Offset(1, 1),
+                      )
+                    ],
+                    color: Theme.of(context).colorScheme.surface,
                   ),
                   child: Padding(
                     padding:

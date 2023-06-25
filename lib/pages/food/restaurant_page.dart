@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -17,6 +19,8 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../constants/item.dart';
+
 class RestaurantPage extends StatefulWidget {
   final Map restaurant;
   const RestaurantPage({super.key, required this.restaurant});
@@ -31,7 +35,6 @@ class _RestaurantPageState extends State<RestaurantPage> {
   int cartItem = 0;
   int cartITEM = 0;
   num totalAmount = 0;
-  Map<String, int> itemCount = {};
 
   List? response1;
 
@@ -63,7 +66,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({"useremail": email}));
     response = jsonDecode(data.body);
-    print(response);
+    //print(response);
     var distance = GeolocatorPlatform.instance.distanceBetween(
         response[0]["lat"],
         response[0]["long"],
@@ -77,13 +80,13 @@ class _RestaurantPageState extends State<RestaurantPage> {
   String getFoodType(List list) {
     String s = "";
     for (var name in list) {
-      s = "$s, " + name;
+      s = "$s, $name";
     }
     return (s.substring(2));
   }
 
   void onTap1(String key, num n, int a) {
-    itemCount.update(key, (val) => val + a, ifAbsent: () => 1);
+    itemCount.update(key, (value) => value + 1, ifAbsent: () => 1);
     if (itemCount[key] == 0) {
       itemCount.remove(key);
     }
@@ -98,7 +101,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
   }
 
   void onTap2() {
-    print("y0");
+    //print("y0");
   }
 
   @override
@@ -441,15 +444,6 @@ class _RestaurantPageState extends State<RestaurantPage> {
                               snapshot.hasData ? snapshot.data!.length : 0,
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
-                            int price(String key) {
-                              for (var a in snapshot.data!) {
-                                if (a['name'] == key.trim()) {
-                                  return a['price'];
-                                }
-                              }
-                              return 0;
-                            }
-
                             Future<Uint8List> downloadImage() async {
                               var req = {
                                 'ownerEmail': widget.restaurant['ownerEmail'],
@@ -733,148 +727,154 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0, 10, 0, 10),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .tertiary,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    blurRadius: 1,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .background,
-                                                    offset: const Offset(0, 1),
-                                                  )
-                                                ],
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                              alignment:
-                                                  const AlignmentDirectional(
-                                                      0, 0),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsetsDirectional
-                                                        .fromSTEB(0, 10, 0, 10),
-                                                child: GestureDetector(
-                                                  behavior:
-                                                      HitTestBehavior.opaque,
-                                                  onTap: () {
-                                                    itemCount.containsKey(
-                                                            snapshot.data![
-                                                                index]['name'])
-                                                        ? onTap2
-                                                        : onTap1(
-                                                            snapshot.data![
-                                                                index]['name'],
-                                                            snapshot.data![
-                                                                index]['price'],
-                                                            1);
-                                                  },
-                                                  child:
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(0, 10, 0, 10),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .background,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      blurRadius: 1,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .background,
+                                                      offset:
+                                                          const Offset(0, 1),
+                                                    )
+                                                  ],
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                alignment:
+                                                    const AlignmentDirectional(
+                                                        0, 0),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                          0, 10, 0, 10),
+                                                  child: GestureDetector(
+                                                    behavior:
+                                                        HitTestBehavior.opaque,
+                                                    onTap: () {
                                                       itemCount.containsKey(
                                                               snapshot.data![
                                                                       index]
                                                                   ['name'])
-                                                          ? Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      left: 20,
-                                                                      right:
-                                                                          20),
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  GestureDetector(
-                                                                    onTap: () {
-                                                                      onTap1(
-                                                                          snapshot.data![index]
-                                                                              [
-                                                                              'name'],
-                                                                          snapshot.data![index]
-                                                                              [
-                                                                              'price'],
-                                                                          1);
-                                                                    },
-                                                                    child: Icon(
-                                                                      Icons.add,
-                                                                      size: 22,
-                                                                      color: Theme.of(
-                                                                              context)
-                                                                          .colorScheme
-                                                                          .secondary,
-                                                                    ),
-                                                                  ),
-                                                                  const WidthSpacer(
-                                                                      width: 5),
-                                                                  Text(
-                                                                    itemCount[snapshot.data![index]
-                                                                            [
-                                                                            'name']]
-                                                                        .toString(),
-                                                                    style: appstyle(
-                                                                        Theme.of(context)
+                                                          ? onTap2
+                                                          : onTap1(
+                                                              snapshot.data![
+                                                                      index]
+                                                                  ['name'],
+                                                              snapshot.data![
+                                                                      index]
+                                                                  ['price'],
+                                                              1);
+                                                    },
+                                                    child:
+                                                        itemCount.containsKey(
+                                                                snapshot.data![
+                                                                        index]
+                                                                    ['name'])
+                                                            ? Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        left:
+                                                                            20,
+                                                                        right:
+                                                                            20),
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        onTap1(
+                                                                            snapshot.data![index]['name'],
+                                                                            snapshot.data![index]['price'],
+                                                                            1);
+                                                                      },
+                                                                      child:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .add,
+                                                                        size:
+                                                                            22,
+                                                                        color: Theme.of(context)
                                                                             .colorScheme
                                                                             .secondary,
-                                                                        22,
-                                                                        FontWeight
-                                                                            .bold),
-                                                                  ),
-                                                                  const WidthSpacer(
-                                                                      width: 5),
-                                                                  GestureDetector(
-                                                                    onTap: () {
-                                                                      onTap1(
-                                                                          snapshot.data![index]
+                                                                      ),
+                                                                    ),
+                                                                    const WidthSpacer(
+                                                                        width:
+                                                                            5),
+                                                                    Text(
+                                                                      itemCount[snapshot.data![index]
                                                                               [
-                                                                              'name'],
-                                                                          snapshot.data![index]
-                                                                              [
-                                                                              'price'],
-                                                                          -1);
-                                                                    },
-                                                                    child: Icon(
-                                                                      Icons
-                                                                          .remove,
-                                                                      size: 22,
-                                                                      color: Theme.of(
+                                                                              'name']]
+                                                                          .toString(),
+                                                                      style: appstyle(
+                                                                          Theme.of(context)
+                                                                              .colorScheme
+                                                                              .secondary,
+                                                                          22,
+                                                                          FontWeight
+                                                                              .bold),
+                                                                    ),
+                                                                    const WidthSpacer(
+                                                                        width:
+                                                                            5),
+                                                                    GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        onTap1(
+                                                                            snapshot.data![index]['name'],
+                                                                            snapshot.data![index]['price'],
+                                                                            -1);
+                                                                      },
+                                                                      child:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .remove,
+                                                                        size:
+                                                                            22,
+                                                                        color: Theme.of(context)
+                                                                            .colorScheme
+                                                                            .secondary,
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              )
+                                                            : Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        left:
+                                                                            20,
+                                                                        right:
+                                                                            20),
+                                                                child: Text(
+                                                                  'ADD',
+                                                                  style: appstyle(
+                                                                      Theme.of(
                                                                               context)
                                                                           .colorScheme
                                                                           .secondary,
-                                                                    ),
-                                                                  )
-                                                                ],
+                                                                      22,
+                                                                      FontWeight
+                                                                          .bold),
+                                                                ),
                                                               ),
-                                                            )
-                                                          : Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      left: 20,
-                                                                      right:
-                                                                          20),
-                                                              child: Text(
-                                                                'ADD',
-                                                                style: appstyle(
-                                                                    Theme.of(
-                                                                            context)
-                                                                        .colorScheme
-                                                                        .secondary,
-                                                                    22,
-                                                                    FontWeight
-                                                                        .bold),
-                                                              ),
-                                                            ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
-                                          ),
+                                              )),
                                         ],
                                       ),
                                     ),
@@ -888,15 +888,20 @@ class _RestaurantPageState extends State<RestaurantPage> {
             ))
           ],
         ),
-        bottomNavigationBar: cartItem == 0
+        bottomNavigationBar: itemCount.isEmpty
             ? const SizedBox.shrink()
             : GestureDetector(
-                onTap: () {
+                onTap: () async {
                   Get.toNamed(RouteHelper.cart, arguments: {
                     'restaurant': widget.restaurant,
                     'itemCount': itemCount,
                     'response': response1,
                     'totalAmount': totalAmount
+                  })!
+                      .then((value) {
+                    setState(() {
+                      itemCount = itemCount;
+                    });
                   });
                 },
                 child: Padding(
@@ -905,7 +910,14 @@ class _RestaurantPageState extends State<RestaurantPage> {
                     width: double.infinity,
                     height: 90,
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.tertiary,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 4,
+                          color: Theme.of(context).colorScheme.tertiary,
+                          offset: const Offset(1, 1),
+                        )
+                      ],
+                      color: Theme.of(context).colorScheme.surface,
                     ),
                     child: Padding(
                       padding:
@@ -940,7 +952,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                   Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
-                                      Text('$cartItem Item |  ',
+                                      Text('${itemCount.length} Item |  ',
                                           style: appstyle(
                                               Theme.of(context)
                                                   .colorScheme

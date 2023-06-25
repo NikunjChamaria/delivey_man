@@ -1,4 +1,3 @@
-import 'package:delivery_man/constants/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

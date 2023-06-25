@@ -567,7 +567,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                           BoxDecoration(
                                                                         color: Theme.of(context)
                                                                             .colorScheme
-                                                                            .tertiary,
+                                                                            .background,
                                                                         borderRadius:
                                                                             BorderRadius.circular(12),
                                                                       ),

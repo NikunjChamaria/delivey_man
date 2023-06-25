@@ -1,5 +1,7 @@
 import 'package:delivery_man/constants/color.dart';
+
 import 'package:delivery_man/constants/route.dart';
+
 import 'package:delivery_man/pages/home/home_page.dart';
 import 'package:delivery_man/pages/on%20board/home_page_.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,7 @@ void main() async {
       ? ""
       : preferences.getString('token')!;
   bool check = token == "" ? false : true;
+
   runApp(MyApp(
     isToken: check,
     token: token,

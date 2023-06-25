@@ -67,11 +67,11 @@ class _AddLocationState extends State<AddLocation> {
         String fullAddress = '$address, $city, $state, $country, $postalCode';
 
         // Use the fullAddress value as needed
-        print('Address: $fullAddress');
+        //print('Address: $fullAddress');
         return fullAddress;
       }
     } catch (e) {
-      print('Error: $e');
+      rethrow;
     }
     return '';
   }
@@ -89,7 +89,7 @@ class _AddLocationState extends State<AddLocation> {
         return [latitude, longitude];
       }
     } catch (e) {
-      print('Error: $e');
+      rethrow;
     }
 
     // Return null if coordinates couldn't be retrieved
@@ -252,7 +252,7 @@ class _AddLocationState extends State<AddLocation> {
                                         ),
                                         GestureDetector(
                                           onTap: () async {
-                                            print("tapped");
+                                            //print("tapped");
                                             SharedPreferences preferences =
                                                 await SharedPreferences
                                                     .getInstance();

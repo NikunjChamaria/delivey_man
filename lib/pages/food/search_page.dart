@@ -82,14 +82,14 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   @override
+  void dispose() {
+    search.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    @override
-    void dispose() {
-      search.dispose();
-
-      super.dispose();
-    }
-
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(

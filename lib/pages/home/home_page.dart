@@ -36,7 +36,7 @@ class _HomePageZoomState extends State<HomePageZoom> {
       openCurve: Curves.fastOutSlowIn,
       slideWidth: MediaQuery.of(context).size.width * 0.65,
       duration: const Duration(milliseconds: 300),
-      menuBackgroundColor: Theme.of(context).colorScheme.tertiary,
+      menuBackgroundColor: Theme.of(context).colorScheme.surface,
       mainScreen: page!,
       mainScreenTapClose: true,
       menuScreenTapClose: true,
@@ -68,7 +68,7 @@ class MenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.tertiary,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: drawerItems

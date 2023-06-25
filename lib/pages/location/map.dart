@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/route.dart';
 import 'package:delivery_man/constants/server.dart';
 import 'package:delivery_man/constants/textstyle.dart';

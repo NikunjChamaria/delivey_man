@@ -4,7 +4,6 @@ import 'package:delivery_man/constants/server.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 
-import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/height_spacer.dart';
 import 'package:delivery_man/constants/textstyle.dart';
 import 'package:flutter/foundation.dart';
@@ -52,7 +51,6 @@ class _NewFoodPageState extends State<NewFoodPage> {
     var request = http.MultipartRequest('POST', url);
 
     var multiport = await http.MultipartFile.fromPath('imagefood', image!.path);
-    print(image!.path);
 
     request.files.add(multiport);
     SharedPreferences preferences = await SharedPreferences.getInstance();

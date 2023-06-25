@@ -2,11 +2,12 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:cached_memory_image/cached_memory_image.dart';
-import 'package:delivery_man/constants/color.dart';
+
 import 'package:delivery_man/constants/height_spacer.dart';
 import 'package:delivery_man/constants/server.dart';
 import 'package:delivery_man/constants/textstyle.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -94,6 +95,33 @@ class _CategoryPageState extends State<CategoryPage> {
                             itemCount: snapshot.data!.length,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
+                              Future<double> getdistinTime() async {
+                                List response = [];
+                                SharedPreferences preferences =
+                                    await SharedPreferences.getInstance();
+                                var token = preferences.getString('token');
+                                String email =
+                                    JwtDecoder.decode(token!)['email'];
+                                var data = await http.post(
+                                    Uri.parse(GETCURRENT),
+                                    headers: {
+                                      "Content-Type": "application/json"
+                                    },
+                                    body: jsonEncode({"useremail": email}));
+                                response = jsonDecode(data.body);
+
+                                var distance = GeolocatorPlatform.instance
+                                    .distanceBetween(
+                                        response[0]["lat"],
+                                        response[0]["long"],
+                                        snapshot.data![index]["lat"],
+                                        snapshot.data![index]["long"]);
+                                distance = distance / 1000;
+                                distance =
+                                    double.parse(distance.toStringAsFixed(2));
+                                return distance;
+                              }
+
                               Future<Uint8List> downloadImage() async {
                                 var data = await http.post(
                                   Uri.parse(DOWNLOADIMAGE),
@@ -119,48 +147,10 @@ class _CategoryPageState extends State<CategoryPage> {
 
                               return GestureDetector(
                                 onTap: () async {
-                                  List response = [];
-                                  SharedPreferences preferences =
-                                      await SharedPreferences.getInstance();
-                                  var token = preferences.getString('token');
-                                  String email =
-                                      JwtDecoder.decode(token!)['email'];
-                                  var data = await http.post(
-                                      Uri.parse(GETCURRENT),
-                                      headers: {
-                                        "Content-Type": "application/json"
-                                      },
-                                      body: jsonEncode({"useremail": email}));
-                                  response = jsonDecode(data.body);
-                                  if (response.isEmpty) {
-                                    Get.snackbar("Address empty",
-                                        "Add location to continue",
-                                        backgroundColor: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        mainButton: TextButton(
-                                            onPressed: () {
-                                              Get.toNamed(
-                                                  RouteHelper.addLocation);
-                                            },
-                                            child: Text(
-                                              "Add",
-                                              style: appstyle(
-                                                  Theme.of(context)
-                                                      .colorScheme
-                                                      .secondary,
-                                                  14,
-                                                  FontWeight.bold),
-                                            )),
-                                        colorText: Theme.of(context)
-                                            .colorScheme
-                                            .background);
-                                  } else {
-                                    Get.toNamed(RouteHelper.restaurant,
-                                        arguments: {
-                                          'restaurant': snapshot.data![index]
-                                        });
-                                  }
+                                  Get.toNamed(RouteHelper.restaurant,
+                                      arguments: {
+                                        'restaurant': snapshot.data![index]
+                                      });
                                 },
                                 child: Container(
                                   margin: const EdgeInsets.only(
@@ -366,16 +356,24 @@ class _CategoryPageState extends State<CategoryPage> {
                                                         const EdgeInsetsDirectional
                                                                 .fromSTEB(
                                                             4, 0, 0, 0),
-                                                    child: Text(
-                                                        snapshot.data![index]
-                                                                ['dist']
-                                                            .toString(),
-                                                        style: appstyle(
-                                                            Theme.of(context)
-                                                                .colorScheme
-                                                                .secondary,
-                                                            14,
-                                                            FontWeight.normal)),
+                                                    child: FutureBuilder(
+                                                        future: getdistinTime(),
+                                                        builder: (context,
+                                                            AsyncSnapshot<
+                                                                    double?>
+                                                                snapshot1) {
+                                                          return Text(
+                                                              snapshot1.data
+                                                                  .toString(),
+                                                              style: appstyle(
+                                                                  Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .secondary,
+                                                                  14,
+                                                                  FontWeight
+                                                                      .normal));
+                                                        }),
                                                   ),
                                                   Padding(
                                                     padding:

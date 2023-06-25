@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:convert';
 
 import 'package:delivery_man/constants/route.dart';
@@ -171,7 +173,7 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
       if (jsonResponse['status']) {
         var myToken = jsonResponse['token'];
         preferences.setString('token', myToken);
-        print(preferences.getString('token').toString());
+        //print(preferences.getString('token').toString());
         Get.toNamed(RouteHelper.homw, arguments: {'token': myToken});
       } else {
         if (kDebugMode) {

@@ -846,13 +846,6 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                   ),
                 ),
               ),
-              IconButton(
-                  onPressed: () {
-                    print(widget.address);
-                    print(widget.lat.toString());
-                    print(widget.long.toString());
-                  },
-                  icon: const Icon(Icons.access_alarm)),
             ],
           ),
         ),

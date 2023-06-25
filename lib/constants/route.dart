@@ -74,12 +74,11 @@ class RouteHelper {
         name: cart,
         page: () {
           Map restaurant = Get.arguments['restaurant'];
-          Map<String, dynamic> itemCount = Get.arguments['itemCount'];
+
           List response = Get.arguments['response'];
           num totalAmount = Get.arguments['totalAmount'];
           return CartPage(
             restaurant: restaurant,
-            itemCount: itemCount,
             response: response,
             totalAmount: totalAmount,
           );

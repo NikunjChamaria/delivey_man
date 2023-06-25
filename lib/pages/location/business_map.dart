@@ -1,6 +1,5 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/route.dart';
 import 'package:delivery_man/constants/textstyle.dart';
 import 'package:flutter/material.dart';
