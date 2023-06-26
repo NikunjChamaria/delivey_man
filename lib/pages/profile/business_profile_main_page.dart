@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:cached_memory_image/cached_memory_image.dart';
+import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/height_spacer.dart';
 import 'package:delivery_man/constants/route.dart';
 import 'package:delivery_man/constants/textstyle.dart';
@@ -253,8 +254,9 @@ class _BusinessProfileMainPageState extends State<BusinessProfileMainPage> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
+                      border: Border.all(color: lightGrey.withOpacity(0.4)),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      color: Theme.of(context).colorScheme.tertiary),
+                      color: Theme.of(context).colorScheme.background),
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Text(

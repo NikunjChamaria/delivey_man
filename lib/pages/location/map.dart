@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/route.dart';
 import 'package:delivery_man/constants/server.dart';
 import 'package:delivery_man/constants/textstyle.dart';
@@ -91,7 +92,12 @@ class _MapScreenState extends State<MapScreen> {
     return Stack(children: [
       Scaffold(
         appBar: AppBar(
-          title: const Text('Choose Delivery Location'),
+          automaticallyImplyLeading: false,
+          title: Text(
+            'Choose Delivery Location',
+            style: appstyle(
+                Theme.of(context).colorScheme.secondary, 16, FontWeight.bold),
+          ),
           backgroundColor: Theme.of(context).colorScheme.background,
         ),
         body: FlutterMap(
@@ -106,13 +112,13 @@ class _MapScreenState extends State<MapScreen> {
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.secondary,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10))),
+                      decoration: const BoxDecoration(
+                          color: white,
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         child: TextField(
+                          style: appstyle(black, 16, FontWeight.normal),
                           controller: search,
                           onSubmitted: (val) async {
                             Coordinates? coordinates;
@@ -127,12 +133,12 @@ class _MapScreenState extends State<MapScreen> {
                               search!.text = val;
                             });
                           },
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Search',
                             border: InputBorder.none,
                             prefixIcon: Icon(
                               Icons.search,
-                              color: Theme.of(context).colorScheme.background,
+                              color: black,
                             ),
                           ),
                         ),
@@ -223,6 +229,7 @@ class _MapScreenState extends State<MapScreen> {
                     builder: (context) => const Icon(
                           Icons.location_on,
                           size: 34,
+                          color: black,
                         ))
               ],
             )

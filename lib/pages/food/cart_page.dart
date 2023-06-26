@@ -766,7 +766,10 @@ class _CartPageState extends State<CartPage> {
                                       future: getDeliveryFee(),
                                       builder: (context,
                                           AsyncSnapshot<double?> snapshot) {
-                                        double fee = snapshot.data! * 15;
+                                        double fee = snapshot.connectionState ==
+                                                ConnectionState.waiting
+                                            ? 0
+                                            : snapshot.data! * 15;
                                         fee = double.parse(
                                             fee.toStringAsFixed(2));
                                         return Text(

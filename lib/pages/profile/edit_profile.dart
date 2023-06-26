@@ -1,3 +1,5 @@
+import 'package:delivery_man/constants/color.dart';
+import 'package:delivery_man/constants/textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,7 +21,7 @@ class _EditProfileState extends State<EditProfile> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF212425),
+        backgroundColor: Theme.of(context).colorScheme.background,
         automaticallyImplyLeading: false,
         leading: IconButton(
           icon: Icon(
@@ -119,9 +121,7 @@ class _EditProfileState extends State<EditProfile> {
                                             0, 0, 0, 20),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
+                                        color: white,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Padding(
@@ -133,11 +133,11 @@ class _EditProfileState extends State<EditProfile> {
                                           decoration: InputDecoration(
                                             labelText: 'Name',
                                             labelStyle: const TextStyle(
-                                              color: Color(0xFF060000),
+                                              color: black,
                                             ),
                                             hintText: 'Name',
                                             hintStyle: const TextStyle(
-                                              color: Color(0xFF060000),
+                                              color: black,
                                             ),
                                             enabledBorder: UnderlineInputBorder(
                                               borderSide: const BorderSide(
@@ -149,7 +149,7 @@ class _EditProfileState extends State<EditProfile> {
                                             ),
                                             focusedBorder: UnderlineInputBorder(
                                               borderSide: const BorderSide(
-                                                color: Color(0xFF060000),
+                                                color: black,
                                                 width: 2,
                                               ),
                                               borderRadius:
@@ -180,13 +180,14 @@ class _EditProfileState extends State<EditProfile> {
                                                     },
                                                     child: const Icon(
                                                       Icons.clear,
-                                                      color: Color(0xFF060000),
+                                                      color: black,
                                                       size: 14,
                                                     ),
                                                   )
                                                 : null,
                                           ),
-                                          style: const TextStyle(),
+                                          style: appstyle(
+                                              black, 16, FontWeight.normal),
                                         ),
                                       ),
                                     ),
@@ -197,9 +198,7 @@ class _EditProfileState extends State<EditProfile> {
                                             0, 0, 0, 20),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
+                                        color: white,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Padding(
@@ -211,11 +210,11 @@ class _EditProfileState extends State<EditProfile> {
                                           decoration: InputDecoration(
                                             labelText: 'Email',
                                             labelStyle: const TextStyle(
-                                              color: Color(0xFF060000),
+                                              color: black,
                                             ),
                                             hintText: 'Email',
                                             hintStyle: const TextStyle(
-                                              color: Color(0xFF060000),
+                                              color: black,
                                             ),
                                             enabledBorder: UnderlineInputBorder(
                                               borderSide: const BorderSide(
@@ -227,7 +226,7 @@ class _EditProfileState extends State<EditProfile> {
                                             ),
                                             focusedBorder: UnderlineInputBorder(
                                               borderSide: const BorderSide(
-                                                color: Color(0xFF060000),
+                                                color: black,
                                                 width: 2,
                                               ),
                                               borderRadius:
@@ -258,13 +257,14 @@ class _EditProfileState extends State<EditProfile> {
                                                     },
                                                     child: const Icon(
                                                       Icons.clear,
-                                                      color: Color(0xFF060000),
+                                                      color: black,
                                                       size: 14,
                                                     ),
                                                   )
                                                 : null,
                                           ),
-                                          style: const TextStyle(),
+                                          style: appstyle(
+                                              black, 16, FontWeight.normal),
                                         ),
                                       ),
                                     ),
@@ -275,9 +275,7 @@ class _EditProfileState extends State<EditProfile> {
                                             0, 0, 0, 20),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
+                                        color: white,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Padding(
@@ -289,11 +287,11 @@ class _EditProfileState extends State<EditProfile> {
                                           decoration: InputDecoration(
                                             labelText: 'Phone',
                                             labelStyle: const TextStyle(
-                                              color: Color(0xFF060000),
+                                              color: black,
                                             ),
                                             hintText: 'Phone',
                                             hintStyle: const TextStyle(
-                                              color: Color(0xFF060000),
+                                              color: black,
                                             ),
                                             enabledBorder: UnderlineInputBorder(
                                               borderSide: const BorderSide(
@@ -305,7 +303,7 @@ class _EditProfileState extends State<EditProfile> {
                                             ),
                                             focusedBorder: UnderlineInputBorder(
                                               borderSide: const BorderSide(
-                                                color: Color(0xFF060000),
+                                                color: black,
                                                 width: 2,
                                               ),
                                               borderRadius:
@@ -336,13 +334,14 @@ class _EditProfileState extends State<EditProfile> {
                                                     },
                                                     child: const Icon(
                                                       Icons.clear,
-                                                      color: Color(0xFF060000),
+                                                      color: black,
                                                       size: 14,
                                                     ),
                                                   )
                                                 : null,
                                           ),
-                                          style: const TextStyle(),
+                                          style: appstyle(
+                                              black, 16, FontWeight.normal),
                                         ),
                                       ),
                                     ),
@@ -364,9 +363,7 @@ class _EditProfileState extends State<EditProfile> {
                                             0, 0, 0, 20),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
+                                        color: white,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Padding(
@@ -378,11 +375,11 @@ class _EditProfileState extends State<EditProfile> {
                                           decoration: InputDecoration(
                                             labelText: 'Business Name',
                                             labelStyle: const TextStyle(
-                                              color: Color(0xFF060000),
+                                              color: black,
                                             ),
                                             hintText: 'Business Name',
                                             hintStyle: const TextStyle(
-                                              color: Color(0xFF060000),
+                                              color: black,
                                             ),
                                             enabledBorder: UnderlineInputBorder(
                                               borderSide: const BorderSide(
@@ -394,7 +391,7 @@ class _EditProfileState extends State<EditProfile> {
                                             ),
                                             focusedBorder: UnderlineInputBorder(
                                               borderSide: const BorderSide(
-                                                color: Color(0xFF060000),
+                                                color: black,
                                                 width: 2,
                                               ),
                                               borderRadius:
@@ -417,22 +414,23 @@ class _EditProfileState extends State<EditProfile> {
                                               borderRadius:
                                                   BorderRadius.circular(8),
                                             ),
-                                            suffixIcon: businessname
-                                                    .text.isNotEmpty
-                                                ? InkWell(
-                                                    onTap: () async {
-                                                      businessname.clear();
-                                                      setState(() {});
-                                                    },
-                                                    child: const Icon(
-                                                      Icons.clear,
-                                                      color: Color(0xFF060000),
-                                                      size: 14,
-                                                    ),
-                                                  )
-                                                : null,
+                                            suffixIcon:
+                                                businessname.text.isNotEmpty
+                                                    ? InkWell(
+                                                        onTap: () async {
+                                                          businessname.clear();
+                                                          setState(() {});
+                                                        },
+                                                        child: const Icon(
+                                                          Icons.clear,
+                                                          color: black,
+                                                          size: 14,
+                                                        ),
+                                                      )
+                                                    : null,
                                           ),
-                                          style: const TextStyle(),
+                                          style: appstyle(
+                                              black, 16, FontWeight.normal),
                                         ),
                                       ),
                                     ),
@@ -443,9 +441,7 @@ class _EditProfileState extends State<EditProfile> {
                                             0, 0, 0, 20),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
+                                        color: white,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Padding(
@@ -457,11 +453,11 @@ class _EditProfileState extends State<EditProfile> {
                                           decoration: InputDecoration(
                                             labelText: 'Business Email',
                                             labelStyle: const TextStyle(
-                                              color: Color(0xFF060000),
+                                              color: black,
                                             ),
                                             hintText: 'Business Email',
                                             hintStyle: const TextStyle(
-                                              color: Color(0xFF060000),
+                                              color: black,
                                             ),
                                             enabledBorder: UnderlineInputBorder(
                                               borderSide: const BorderSide(
@@ -473,7 +469,7 @@ class _EditProfileState extends State<EditProfile> {
                                             ),
                                             focusedBorder: UnderlineInputBorder(
                                               borderSide: const BorderSide(
-                                                color: Color(0xFF060000),
+                                                color: black,
                                                 width: 2,
                                               ),
                                               borderRadius:
@@ -496,22 +492,23 @@ class _EditProfileState extends State<EditProfile> {
                                               borderRadius:
                                                   BorderRadius.circular(8),
                                             ),
-                                            suffixIcon: businessemail
-                                                    .text.isNotEmpty
-                                                ? InkWell(
-                                                    onTap: () async {
-                                                      businessemail.clear();
-                                                      setState(() {});
-                                                    },
-                                                    child: const Icon(
-                                                      Icons.clear,
-                                                      color: Color(0xFF060000),
-                                                      size: 14,
-                                                    ),
-                                                  )
-                                                : null,
+                                            suffixIcon:
+                                                businessemail.text.isNotEmpty
+                                                    ? InkWell(
+                                                        onTap: () async {
+                                                          businessemail.clear();
+                                                          setState(() {});
+                                                        },
+                                                        child: const Icon(
+                                                          Icons.clear,
+                                                          color: black,
+                                                          size: 14,
+                                                        ),
+                                                      )
+                                                    : null,
                                           ),
-                                          style: const TextStyle(),
+                                          style: appstyle(
+                                              black, 16, FontWeight.normal),
                                         ),
                                       ),
                                     ),

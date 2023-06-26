@@ -158,14 +158,23 @@ class _FavouritePageState extends State<FavouritePage> {
                                                                     .all(Radius
                                                                         .circular(
                                                                             10))),
-                                                        child:
-                                                            CachedMemoryImage(
-                                                          uniqueKey: snapshot
-                                                                      .data![
-                                                                  keys[index]]
-                                                              ['resName'],
-                                                          bytes: snapshot1.data,
-                                                          fit: BoxFit.cover,
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                      .all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          10)),
+                                                          child:
+                                                              CachedMemoryImage(
+                                                            uniqueKey: snapshot
+                                                                        .data![
+                                                                    keys[index]]
+                                                                ['resName'],
+                                                            bytes:
+                                                                snapshot1.data,
+                                                            fit: BoxFit.cover,
+                                                          ),
                                                         ),
                                                       )
                                                     : CachedNetworkImage(

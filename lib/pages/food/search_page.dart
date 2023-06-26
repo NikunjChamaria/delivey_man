@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/height_spacer.dart';
 import 'package:delivery_man/constants/route.dart';
 import 'package:delivery_man/constants/textstyle.dart';
@@ -46,15 +47,17 @@ class _SearchPageState extends State<SearchPage> {
     return data;
   }
 
-  void postSearch(String userEmail, String resName, String foodName,
-      String imageUrl) async {
+  void postSearch(
+    String userEmail,
+    String resName,
+    String foodName,
+  ) async {
     var response = await http.post(Uri.parse(POSTSEARCH),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           'userEmail': userEmail,
           'resName': resName,
           'foodName': foodName,
-          'imageUrl': imageUrl
         }));
   }
 
@@ -100,10 +103,11 @@ class _SearchPageState extends State<SearchPage> {
             children: [
               Container(
                 decoration: BoxDecoration(
+                    border: Border.all(color: black.withOpacity(0.2)),
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    color: Theme.of(context).colorScheme.secondary),
+                    color: white),
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(5),
                   child: TextFormField(
                     onChanged: (va) {
                       searchRestaurant();
@@ -118,6 +122,7 @@ class _SearchPageState extends State<SearchPage> {
                         });
                       }
                     },
+                    style: appstyle(black, 14, FontWeight.normal),
                     cursorColor: Theme.of(context).colorScheme.tertiary,
                     controller: search,
                     decoration: InputDecoration(
@@ -492,13 +497,12 @@ class _SearchPageState extends State<SearchPage> {
                                                       JwtDecoder.decode(
                                                           token!)['email'];
                                                   postSearch(
-                                                      email,
-                                                      snapshot.data![index]
-                                                          ["resName"],
-                                                      snapshot.data![index]
-                                                          ["name"],
-                                                      snapshot.data![index]
-                                                          ["imageUrl"]);
+                                                    email,
+                                                    snapshot.data![index]
+                                                        ["resName"],
+                                                    snapshot.data![index]
+                                                        ["name"],
+                                                  );
                                                   var response =
                                                       await http.post(
                                                           Uri.parse(
@@ -691,12 +695,11 @@ class _SearchPageState extends State<SearchPage> {
                                                       JwtDecoder.decode(
                                                           token!)['email'];
                                                   postSearch(
-                                                      email,
-                                                      snapshot.data![index]
-                                                          ["resName"],
-                                                      "",
-                                                      snapshot.data![index]
-                                                          ["imageUrl"]);
+                                                    email,
+                                                    snapshot.data![index]
+                                                        ["resName"],
+                                                    "",
+                                                  );
                                                   Get.toNamed(
                                                       RouteHelper.restaurant,
                                                       arguments: {

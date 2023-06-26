@@ -20,7 +20,50 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage>
+    with SingleTickerProviderStateMixin {
+  bool _showCard = false;
+  late AnimationController _animationController;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize the animation controller
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+
+    // Create the slide animation
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 1),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _toggleCardVisibility() {
+    setState(() {
+      _showCard = !_showCard;
+    });
+
+    if (_showCard) {
+      _animationController.forward();
+    } else {
+      _animationController.reverse();
+    }
+  }
+
   Future<String> getEmail() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var token = preferences.getString('token');
@@ -47,93 +90,227 @@ class _ProfilePageState extends State<ProfilePage> {
             onTap: () {
               ZoomDrawer.of(context)!.open();
             },
-            child: const Icon(Icons.menu)),
+            child: Icon(
+              Icons.menu,
+              color: Theme.of(context).colorScheme.secondary,
+            )),
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 210,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.background,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Stack(
-                            children: [
-                              Align(
-                                alignment: const AlignmentDirectional(0, 0),
-                                child: Image.network(
-                                  'https://www.daysoftheyear.com/wp-content/uploads/national-fast-food-day.jpg',
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 130,
-                                  fit: BoxFit.cover,
+      body: Stack(children: [
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 210,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.background,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Stack(
+                              children: [
+                                Align(
+                                  alignment: const AlignmentDirectional(0, 0),
+                                  child: Image.network(
+                                    'https://www.daysoftheyear.com/wp-content/uploads/national-fast-food-day.jpg',
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 130,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                              ),
-                              Align(
-                                alignment: const AlignmentDirectional(0.85, 0),
-                                child: Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(
-                                      0, 90, 0, 0),
-                                  child: Container(
-                                    width: 80,
-                                    height: 80,
-                                    clipBehavior: Clip.antiAlias,
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Image.network(
-                                      'https://cdn-icons-png.flaticon.com/512/147/147144.png?w=360',
+                                Align(
+                                  alignment:
+                                      const AlignmentDirectional(0.85, 0),
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsetsDirectional.fromSTEB(
+                                            0, 90, 0, 0),
+                                    child: Container(
+                                      width: 80,
+                                      height: 80,
+                                      clipBehavior: Clip.antiAlias,
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Image.network(
+                                        'https://cdn-icons-png.flaticon.com/512/147/147144.png?w=360',
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    24, 140, 0, 0),
-                                child: FutureBuilder(
-                                    future: getName(),
-                                    builder: (context, snapshot) {
-                                      return Text(
-                                        'Hi, ${snapshot.data}',
-                                        style: appstyle(
-                                            Theme.of(context)
-                                                .colorScheme
-                                                .secondary,
-                                            28,
-                                            FontWeight.bold),
-                                      );
-                                    }),
-                              ),
-                              Align(
-                                alignment: const AlignmentDirectional(-1, 0),
-                                child: Padding(
+                                Padding(
                                   padding: const EdgeInsetsDirectional.fromSTEB(
-                                      24, 174, 0, 0),
+                                      24, 140, 0, 0),
                                   child: FutureBuilder(
-                                      future: getEmail(),
+                                      future: getName(),
                                       builder: (context, snapshot) {
                                         return Text(
-                                          '${snapshot.data}',
+                                          'Hi, ${snapshot.data}',
                                           style: appstyle(
                                               Theme.of(context)
                                                   .colorScheme
                                                   .secondary,
-                                              14,
-                                              FontWeight.normal),
+                                              28,
+                                              FontWeight.bold),
                                         );
                                       }),
+                                ),
+                                Align(
+                                  alignment: const AlignmentDirectional(-1, 0),
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsetsDirectional.fromSTEB(
+                                            24, 174, 0, 0),
+                                    child: FutureBuilder(
+                                        future: getEmail(),
+                                        builder: (context, snapshot) {
+                                          return Text(
+                                            '${snapshot.data}',
+                                            style: appstyle(
+                                                Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                                14,
+                                                FontWeight.normal),
+                                          );
+                                        }),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(24, 12, 0, 12),
+                  child: Text(
+                    'Profile Settings',
+                    style: appstyle(Theme.of(context).colorScheme.secondary, 14,
+                        FontWeight.normal),
+                  ),
+                ),
+              ],
+            ),
+            ListView(
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed(RouteHelper.editProfile);
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.background,
+                          shape: BoxShape.rectangle,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  24, 0, 0, 0),
+                              child: Text(
+                                'Edit Profile',
+                                style: appstyle(
+                                    Theme.of(context).colorScheme.secondary,
+                                    14,
+                                    FontWeight.normal),
+                              ),
+                            ),
+                            Expanded(
+                              child: Align(
+                                alignment: const AlignmentDirectional(0.9, 0),
+                                child: Icon(
+                                  Icons.arrow_forward_ios,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  size: 18,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    SharedPreferences preferences =
+                        await SharedPreferences.getInstance();
+                    var token = preferences.getString('token');
+
+                    String email = JwtDecoder.decode(token!)['email'];
+                    var data = await http.post(Uri.parse(RESTAURANT3),
+                        headers: {"Content-Type": "application/json"},
+                        body: jsonEncode({"ownerEmail": email}));
+                    List response = jsonDecode(data.body);
+                    response.isEmpty
+                        ? Get.toNamed(RouteHelper.businessProfileSigIn,
+                            arguments: {"address": "", "lat": 0.0, "long": 0.0})
+                        : Get.toNamed(RouteHelper.businessProfileMainPage);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 1, 0, 0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.background,
+                            shape: BoxShape.rectangle,
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                    24, 0, 0, 0),
+                                child: Text(
+                                  'Switch to Business Profile',
+                                  style: appstyle(
+                                      Theme.of(context).colorScheme.secondary,
+                                      14,
+                                      FontWeight.normal),
+                                ),
+                              ),
+                              Expanded(
+                                child: Align(
+                                  alignment: const AlignmentDirectional(0.9, 0),
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                    size: 18,
+                                  ),
                                 ),
                               ),
                             ],
@@ -141,258 +318,181 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(24, 12, 0, 12),
-                child: Text(
-                  'Profile Settings',
-                  style: appstyle(Theme.of(context).colorScheme.secondary, 14,
-                      FontWeight.normal),
-                ),
-              ),
-            ],
-          ),
-          ListView(
-            padding: EdgeInsets.zero,
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Get.toNamed(RouteHelper.editProfile);
-                },
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.background,
-                        shape: BoxShape.rectangle,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                24, 0, 0, 0),
-                            child: Text(
-                              'Edit Profile',
-                              style: appstyle(
-                                  Theme.of(context).colorScheme.secondary,
-                                  14,
-                                  FontWeight.normal),
-                            ),
-                          ),
-                          Expanded(
-                            child: Align(
-                              alignment: const AlignmentDirectional(0.9, 0),
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                color: Theme.of(context).colorScheme.secondary,
-                                size: 18,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              GestureDetector(
-                onTap: () async {
-                  SharedPreferences preferences =
-                      await SharedPreferences.getInstance();
-                  var token = preferences.getString('token');
-
-                  String email = JwtDecoder.decode(token!)['email'];
-                  var data = await http.post(Uri.parse(RESTAURANT3),
-                      headers: {"Content-Type": "application/json"},
-                      body: jsonEncode({"ownerEmail": email}));
-                  List response = jsonDecode(data.body);
-                  response.isEmpty
-                      ? Get.toNamed(RouteHelper.businessProfileSigIn,
-                          arguments: {"address": "", "lat": 0.0, "long": 0.0})
-                      : Get.toNamed(RouteHelper.businessProfileMainPage);
-                },
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 1, 0, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.background,
-                          shape: BoxShape.rectangle,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  24, 0, 0, 0),
-                              child: Text(
-                                'Switch to Business Profile',
-                                style: appstyle(
-                                    Theme.of(context).colorScheme.secondary,
-                                    14,
-                                    FontWeight.normal),
-                              ),
-                            ),
-                            Expanded(
-                              child: Align(
-                                alignment: const AlignmentDirectional(0.9, 0),
-                                child: Icon(
-                                  Icons.arrow_forward_ios,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                  size: 18,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 1, 0, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.background,
-                        shape: BoxShape.rectangle,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                24, 0, 0, 0),
-                            child: Text(
-                              'About App',
-                              style: appstyle(
-                                  Theme.of(context).colorScheme.secondary,
-                                  14,
-                                  FontWeight.normal),
-                            ),
+                GestureDetector(
+                  onTap: () {
+                    _toggleCardVisibility();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 1, 0, 0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.background,
+                            shape: BoxShape.rectangle,
                           ),
-                          Expanded(
-                            child: Align(
-                              alignment: const AlignmentDirectional(0.9, 0),
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                color: Theme.of(context).colorScheme.secondary,
-                                size: 18,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Get.toNamed(RouteHelper.addLocation);
-                },
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 1, 0, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.background,
-                          shape: BoxShape.rectangle,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  24, 0, 0, 0),
-                              child: Text(
-                                'Address Book',
-                                style: appstyle(
-                                    Theme.of(context).colorScheme.secondary,
-                                    14,
-                                    FontWeight.normal),
-                              ),
-                            ),
-                            Expanded(
-                              child: Align(
-                                alignment: const AlignmentDirectional(0.9, 0),
-                                child: Icon(
-                                  Icons.arrow_forward_ios,
-                                  color:
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                    24, 0, 0, 0),
+                                child: Text(
+                                  'About App',
+                                  style: appstyle(
                                       Theme.of(context).colorScheme.secondary,
-                                  size: 18,
+                                      14,
+                                      FontWeight.normal),
                                 ),
                               ),
-                            ),
-                          ],
+                              Expanded(
+                                child: Align(
+                                  alignment: const AlignmentDirectional(0.9, 0),
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                    size: 18,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                          color: Theme.of(context).colorScheme.secondary,
-                          width: 1)),
-                  child: CustomButton(
-                      onTap: () async {
-                        SharedPreferences sharedPreferences =
-                            await SharedPreferences.getInstance();
-                        sharedPreferences.remove('token');
-                        //print(sharedPreferences.getString('token').toString());
-                        Get.toNamed(RouteHelper.auth);
-                      },
-                      text: "Log Out",
-                      width: 90,
-                      height: 40,
-                      color: Theme.of(context).colorScheme.background,
-                      color2: Theme.of(context).colorScheme.secondary,
-                      textSize: 14),
-                )
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed(RouteHelper.addLocation);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 1, 0, 0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.background,
+                            shape: BoxShape.rectangle,
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                    24, 0, 0, 0),
+                                child: Text(
+                                  'Address Book',
+                                  style: appstyle(
+                                      Theme.of(context).colorScheme.secondary,
+                                      14,
+                                      FontWeight.normal),
+                                ),
+                              ),
+                              Expanded(
+                                child: Align(
+                                  alignment: const AlignmentDirectional(0.9, 0),
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                    size: 18,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                            color: Theme.of(context).colorScheme.secondary,
+                            width: 1)),
+                    child: CustomButton(
+                        onTap: () async {
+                          SharedPreferences sharedPreferences =
+                              await SharedPreferences.getInstance();
+                          sharedPreferences.remove('token');
+                          //print(sharedPreferences.getString('token').toString());
+                          Get.toNamed(RouteHelper.auth);
+                        },
+                        text: "Log Out",
+                        width: 90,
+                        height: 40,
+                        color: Theme.of(context).colorScheme.background,
+                        color2: Theme.of(context).colorScheme.secondary,
+                        textSize: 14),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: SlideTransition(
+            position: _slideAnimation,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 500),
+              height: _showCard ? MediaQuery.of(context).size.height / 3 : 0,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.tertiary,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20.0),
+                  topRight: Radius.circular(20.0),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        "Made by:",
+                        style: appstyle(Theme.of(context).colorScheme.secondary,
+                            22, FontWeight.bold),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
-        ],
-      ),
+        )
+      ]),
     );
   }
 }

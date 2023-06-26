@@ -14,6 +14,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../constants/color.dart';
+
 class NewFoodPage extends StatefulWidget {
   final String resName;
   const NewFoodPage({super.key, required this.resName});
@@ -73,6 +75,7 @@ class _NewFoodPageState extends State<NewFoodPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Theme.of(context).colorScheme.background,
         title: Align(
           alignment: const AlignmentDirectional(-1, 0),
@@ -124,9 +127,10 @@ class _NewFoodPageState extends State<NewFoodPage> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
+                        border: Border.all(color: lightGrey),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(10)),
-                        color: Theme.of(context).colorScheme.secondary),
+                        color: white),
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Text(
@@ -148,7 +152,7 @@ class _NewFoodPageState extends State<NewFoodPage> {
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: white,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
@@ -223,7 +227,7 @@ class _NewFoodPageState extends State<NewFoodPage> {
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: white,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
@@ -298,7 +302,7 @@ class _NewFoodPageState extends State<NewFoodPage> {
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: white,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
@@ -373,7 +377,7 @@ class _NewFoodPageState extends State<NewFoodPage> {
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: white,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
@@ -459,9 +463,10 @@ class _NewFoodPageState extends State<NewFoodPage> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
+                        border: Border.all(color: lightGrey),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(10)),
-                        color: Theme.of(context).colorScheme.secondary),
+                        color: white),
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Text(

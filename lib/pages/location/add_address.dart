@@ -121,8 +121,13 @@ class _AddLocationState extends State<AddLocation> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Theme.of(context).colorScheme.background,
-        title: const Text("Address Book"),
+        title: Text(
+          "Address Book",
+          style: appstyle(
+              Theme.of(context).colorScheme.secondary, 16, FontWeight.bold),
+        ),
       ),
       body: LiquidPullToRefresh(
         color: Theme.of(context).colorScheme.secondary,

@@ -65,7 +65,6 @@ class _CartHistoryState extends State<CartHistory> {
 
   @override
   Widget build(BuildContext context) {
-    final search = TextEditingController();
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(
@@ -74,13 +73,7 @@ class _CartHistoryState extends State<CartHistory> {
           padding: const EdgeInsets.all(12.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SearchBar(
-                onTap: () {},
-                controller: search,
-                leading: const Icon(Icons.search),
-                hintText: "Search",
-              ),
+            children: [
               Padding(
                 padding: const EdgeInsets.only(top: 20, bottom: 10, left: 10),
                 child: Text(
@@ -190,18 +183,36 @@ class _CartHistoryState extends State<CartHistory> {
                                                                   .connectionState ==
                                                               ConnectionState
                                                                   .done
-                                                          ? SizedBox(
+                                                          ? Container(
                                                               width: 50,
                                                               height: 50,
-                                                              child:
-                                                                  CachedMemoryImage(
-                                                                uniqueKey: snapshot
-                                                                            .data![
-                                                                        keys[
-                                                                            index]]
-                                                                    ['resName'],
-                                                                bytes: snapshot1
-                                                                    .data!,
+                                                              decoration:
+                                                                  const BoxDecoration(
+                                                                borderRadius: BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            10)),
+                                                              ),
+                                                              child: ClipRRect(
+                                                                borderRadius:
+                                                                    const BorderRadius
+                                                                            .all(
+                                                                        Radius.circular(
+                                                                            10)),
+                                                                child:
+                                                                    CachedMemoryImage(
+                                                                  uniqueKey: snapshot
+                                                                              .data![
+                                                                          keys[
+                                                                              index]]
+                                                                      [
+                                                                      'resName'],
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                  bytes:
+                                                                      snapshot1
+                                                                          .data!,
+                                                                ),
                                                               ),
                                                             )
                                                           : CachedNetworkImage(
@@ -602,7 +613,7 @@ class _CartHistoryState extends State<CartHistory> {
                                 ),
                               );
                             });
-                  })
+                  }),
             ],
           ),
         ),

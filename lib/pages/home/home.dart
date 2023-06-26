@@ -474,16 +474,23 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                         Radius.circular(
                                                                             10))),
                                                                 child:
-                                                                    CachedNetworkImage(
-                                                                  imageUrl: response1![
-                                                                          index]
-                                                                      [
-                                                                      'imageUrl'],
-                                                                  width: double
-                                                                      .infinity,
-                                                                  height: 200,
-                                                                  fit: BoxFit
-                                                                      .cover,
+                                                                    ClipRRect(
+                                                                  borderRadius: const BorderRadius
+                                                                          .all(
+                                                                      Radius.circular(
+                                                                          12)),
+                                                                  child:
+                                                                      CachedNetworkImage(
+                                                                    imageUrl: response1![
+                                                                            index]
+                                                                        [
+                                                                        'imageUrl'],
+                                                                    width: double
+                                                                        .infinity,
+                                                                    height: 200,
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),

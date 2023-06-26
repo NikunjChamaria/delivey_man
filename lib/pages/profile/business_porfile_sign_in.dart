@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'dart:convert';
+import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/route.dart';
 import 'package:delivery_man/constants/server.dart';
 import 'package:geolocator/geolocator.dart';
@@ -111,6 +112,7 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Theme.of(context).colorScheme.background,
         title: Align(
           alignment: const AlignmentDirectional(-1, 0),
@@ -161,16 +163,14 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                     pickImage();
                   },
                   child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        color: Theme.of(context).colorScheme.secondary),
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: white),
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Text(
                         "Upload Picture",
-                        style: appstyle(Theme.of(context).colorScheme.secondary,
-                            14, FontWeight.w500),
+                        style: appstyle(black, 14, FontWeight.w500),
                       ),
                     ),
                   ),
@@ -189,7 +189,7 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                           const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.secondary,
+                          color: white,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Padding(
@@ -216,7 +216,7 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: white,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
@@ -239,10 +239,7 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                               padding: const EdgeInsets.all(10),
                               child: Text(
                                 "Set location from map",
-                                style: appstyle(
-                                    Theme.of(context).colorScheme.secondary,
-                                    16,
-                                    FontWeight.bold),
+                                style: appstyle(black, 16, FontWeight.bold),
                               ),
                             ),
                           ),
@@ -259,12 +256,13 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: white,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(10, 2, 10, 2),
                     child: TextFormField(
+                      style: appstyle(black, 16, FontWeight.normal),
                       controller: resName,
                       onChanged: (va) {
                         setState(() {});
@@ -334,12 +332,13 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: white,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(10, 2, 10, 2),
                     child: TextFormField(
+                      style: appstyle(black, 16, FontWeight.normal),
                       controller: businessemail,
                       obscureText: false,
                       onChanged: (va) {
@@ -409,12 +408,13 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: white,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(10, 2, 10, 2),
                     child: TextFormField(
+                      style: appstyle(black, 16, FontWeight.normal),
                       controller: rating,
                       obscureText: false,
                       onChanged: (va) {
@@ -484,12 +484,13 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: white,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(10, 2, 10, 2),
                     child: TextFormField(
+                      style: appstyle(black, 16, FontWeight.normal),
                       controller: loaction,
                       obscureText: false,
                       onChanged: (va) {
@@ -559,12 +560,13 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: white,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(10, 2, 10, 2),
                     child: TextFormField(
+                      style: appstyle(black, 16, FontWeight.normal),
                       controller: comments,
                       obscureText: false,
                       onChanged: (va) {
@@ -634,12 +636,13 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: white,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(10, 2, 10, 2),
                     child: TextFormField(
+                      style: appstyle(black, 16, FontWeight.normal),
                       controller: foodType,
                       onChanged: (va) {
                         setState(() {});
@@ -709,16 +712,14 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                     foodType.clear();
                   },
                   child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        color: Theme.of(context).colorScheme.secondary),
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: white),
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Text(
                         "ADD",
-                        style: appstyle(Theme.of(context).colorScheme.secondary,
-                            18, FontWeight.w500),
+                        style: appstyle(black, 18, FontWeight.w500),
                       ),
                     ),
                   ),
@@ -734,12 +735,13 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: white,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(10, 2, 10, 2),
                     child: TextFormField(
+                      style: appstyle(black, 16, FontWeight.normal),
                       controller: averagePrice,
                       obscureText: false,
                       onChanged: (va) {
@@ -831,16 +833,14 @@ class _BusinessProfileCreateState extends State<BusinessProfileCreate> {
                     uploadImage();
                   },
                   child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        color: Theme.of(context).colorScheme.secondary),
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: white),
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Text(
                         "ADD",
-                        style: appstyle(Theme.of(context).colorScheme.secondary,
-                            18, FontWeight.w500),
+                        style: appstyle(black, 18, FontWeight.w500),
                       ),
                     ),
                   ),

@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:delivery_man/constants/color.dart';
 import 'package:delivery_man/constants/route.dart';
 import 'package:delivery_man/constants/textstyle.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +86,12 @@ class _BusinessMapScreenState extends State<BusinessMapScreen> {
     return Stack(children: [
       Scaffold(
         appBar: AppBar(
-          title: const Text('Set business Location'),
+          automaticallyImplyLeading: false,
+          title: Text(
+            'Set business Location',
+            style: appstyle(
+                Theme.of(context).colorScheme.secondary, 16, FontWeight.bold),
+          ),
           backgroundColor: Theme.of(context).colorScheme.background,
         ),
         body: FlutterMap(
@@ -100,14 +106,14 @@ class _BusinessMapScreenState extends State<BusinessMapScreen> {
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.secondary,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10))),
+                      decoration: const BoxDecoration(
+                          color: white,
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         child: TextField(
                           controller: search,
+                          style: appstyle(black, 16, FontWeight.normal),
                           onSubmitted: (val) async {
                             Coordinates? coordinates;
                             coordinates = await getCoordinatesFromAddress(val);
@@ -121,12 +127,12 @@ class _BusinessMapScreenState extends State<BusinessMapScreen> {
                               search!.text = val;
                             });
                           },
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Search',
                             border: InputBorder.none,
                             prefixIcon: Icon(
                               Icons.search,
-                              color: Theme.of(context).colorScheme.background,
+                              color: black,
                             ),
                           ),
                         ),
@@ -203,6 +209,7 @@ class _BusinessMapScreenState extends State<BusinessMapScreen> {
                     builder: (context) => const Icon(
                           Icons.location_on,
                           size: 34,
+                          color: black,
                         ))
               ],
             )

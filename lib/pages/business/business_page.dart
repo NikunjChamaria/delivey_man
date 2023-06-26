@@ -45,6 +45,7 @@ class _BusinessPageState extends State<BusinessPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Theme.of(context).colorScheme.background,
         title: Text(
           widget.restaurant['resName'],
@@ -245,7 +246,7 @@ class _BusinessPageState extends State<BusinessPage> {
                                                       ),
                                                       color: Theme.of(context)
                                                           .colorScheme
-                                                          .tertiary),
+                                                          .background),
                                                   child: Padding(
                                                     padding:
                                                         const EdgeInsets.all(
@@ -404,7 +405,8 @@ class _BusinessPageState extends State<BusinessPage> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.tertiary,
+                        border: Border.all(color: lightGrey.withOpacity(0.8)),
+                        color: Theme.of(context).colorScheme.background,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(10))),
                     child: Padding(
