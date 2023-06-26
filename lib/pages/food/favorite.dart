@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../constants/item.dart';
 import '../../constants/route.dart';
 import '../../constants/server.dart';
 
@@ -133,6 +134,8 @@ class _FavouritePageState extends State<FavouritePage> {
                                 child: Column(
                                   children: [
                                     Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
                                           height: 50,
@@ -200,7 +203,7 @@ class _FavouritePageState extends State<FavouritePage> {
                                             )
                                           ],
                                         ),
-                                        const WidthSpacer(width: 100),
+                                        const WidthSpacer(width: 130),
                                         Text(
                                           "\$${keys[index]['amount']}",
                                           style: appstyle(
@@ -321,8 +324,13 @@ class _FavouritePageState extends State<FavouritePage> {
                                                     json.decode(data.body);
                                               }
                                             }
-                                            Map<String, dynamic> itemCount =
+                                            Map<String, dynamic> itemdy =
                                                 keys[index]['items'];
+                                            itemCount = itemdy
+                                                .map<String, int>((key, value) {
+                                              return MapEntry<String, int>(
+                                                  key, value as int);
+                                            });
                                             num totalAmount = 0;
                                             var key = keys[index]["items"]
                                                 .keys

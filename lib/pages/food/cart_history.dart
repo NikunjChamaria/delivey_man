@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:delivery_man/constants/item.dart';
 import 'package:delivery_man/constants/server.dart';
 import 'package:delivery_man/constants/textstyle.dart';
 import 'package:delivery_man/constants/width_spacer.dart';
@@ -174,7 +175,7 @@ class _CartHistoryState extends State<CartHistory> {
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               ClipRRect(
                                                 borderRadius:
@@ -224,14 +225,20 @@ class _CartHistoryState extends State<CartHistory> {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(
-                                                      keys[index]['restaurant'],
-                                                      style: appstyle(
-                                                          Theme.of(context)
-                                                              .colorScheme
-                                                              .secondary,
-                                                          14,
-                                                          FontWeight.w600),
+                                                    SizedBox(
+                                                      width: 100,
+                                                      child: Text(
+                                                        keys[index]
+                                                            ['restaurant'],
+                                                        style: appstyle(
+                                                            Theme.of(context)
+                                                                .colorScheme
+                                                                .secondary,
+                                                            14,
+                                                            FontWeight.w600),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
                                                     ),
                                                     Text(
                                                       snapshot.data![
@@ -356,9 +363,19 @@ class _CartHistoryState extends State<CartHistory> {
                                                               }
                                                             }
                                                             Map<String, dynamic>
-                                                                itemCount =
+                                                                itemdy =
                                                                 keys[index]
                                                                     ['items'];
+                                                            itemCount = itemdy
+                                                                .map<String,
+                                                                        int>(
+                                                                    (key,
+                                                                        value) {
+                                                              return MapEntry<
+                                                                      String,
+                                                                      int>(key,
+                                                                  value as int);
+                                                            });
                                                             num totalAmount = 0;
                                                             var key = keys[
                                                                         index]
@@ -389,8 +406,6 @@ class _CartHistoryState extends State<CartHistory> {
                                                                       snapshot.data![
                                                                           keys[
                                                                               index]],
-                                                                  'itemCount':
-                                                                      itemCount,
                                                                   'response':
                                                                       response,
                                                                   'totalAmount':
@@ -449,6 +464,7 @@ class _CartHistoryState extends State<CartHistory> {
                                                   ],
                                                 ),
                                               ),
+                                              const WidthSpacer(width: 10),
                                             ],
                                           ),
                                         ),

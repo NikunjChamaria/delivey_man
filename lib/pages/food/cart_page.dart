@@ -764,9 +764,16 @@ class _CartPageState extends State<CartPage> {
                                   ),
                                   FutureBuilder(
                                       future: getDeliveryFee(),
-                                      builder: (context, snapshot) {
+                                      builder: (context,
+                                          AsyncSnapshot<double?> snapshot) {
+                                        double fee = snapshot.data! * 15;
+                                        fee = double.parse(
+                                            fee.toStringAsFixed(2));
                                         return Text(
-                                          '\$${snapshot.data}',
+                                          snapshot.connectionState ==
+                                                  ConnectionState.waiting
+                                              ? ""
+                                              : '\$$fee',
                                           style: appstyle(
                                               Theme.of(context)
                                                   .colorScheme
@@ -876,7 +883,7 @@ class _CartPageState extends State<CartPage> {
                                             snapshot.connectionState ==
                                                     ConnectionState.waiting
                                                 ? 0
-                                                : snapshot.data as num;
+                                                : snapshot.data! * 15;
                                         return Text(
                                           '\$${widget.totalAmount + deliverfee + tip + 2 + gst}',
                                           style: appstyle(
@@ -960,7 +967,7 @@ class _CartPageState extends State<CartPage> {
                                               snapshot.connectionState ==
                                                       ConnectionState.waiting
                                                   ? 0
-                                                  : snapshot.data as num;
+                                                  : snapshot.data! * 15;
                                           num total = deliverfee +
                                               widget.totalAmount +
                                               tip +
