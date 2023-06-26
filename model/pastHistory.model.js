@@ -10,7 +10,7 @@ const PastSearchesSchema=new Schema({
         type:String,
         
     },
-    imageUrl:String
+    
 });
 
 

@@ -3,8 +3,8 @@ const PastSearchModel=require('../model/pastHistory.model');
 
 exports.postPast=async(req,res,next)=>{
     try {
-        const{userEmail,resName,foodName,imageUrl}=req.body;
-        const success= await PastSearchesService.postSearch(userEmail,resName,foodName,imageUrl);
+        const{userEmail,resName,foodName}=req.body;
+        const success= await PastSearchesService.postSearch(userEmail,resName,foodName);
         res.status(200).json({status:true,token:"yo"});
     } catch (error) {
         throw error;
