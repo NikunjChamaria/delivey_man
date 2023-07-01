@@ -441,7 +441,7 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                                 .secondary,
                                             color2: Theme.of(context)
                                                 .colorScheme
-                                                .secondary,
+                                                .tertiary,
                                             textSize: 22)),
                                     Padding(
                                       padding:
@@ -976,7 +976,7 @@ class _AuthenticateSoloAltWidgetState extends State<AuthenticateSoloAltWidget>
                                                   .secondary,
                                               color2: Theme.of(context)
                                                   .colorScheme
-                                                  .secondary,
+                                                  .tertiary,
                                               textSize: 20),
                                     ),
                                     const Padding(
